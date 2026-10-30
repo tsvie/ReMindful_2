@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Re:Mindful</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="toast-container"></div>
+
+    <!-- Splash Screen -->
+    <div id="screen-splash" class="overlay-screen" style="display:none;">
+        <div class="splash-content">
+            <h1>👋</h1>
+            <h2 id="splash-title">Willkommen!</h2>
+            <p data-i18n="splash_subtitle">Wie geht es dir heute?</p>
+            <button onclick="app.closeSplash()" data-i18n="splash_btn">Einen Eintrag erstellen</button>
+        </div>
+    </div>
+
+    <!-- Custom Modal -->
+    <div id="custom-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modal-title">Titel</h3>
+            <div id="modal-body">Inhalt</div>
+            <div class="modal-actions">
+                <button id="modal-cancel" class="outline-btn" style="display:none;">Abbrechen</button>
+                <button id="modal-confirm">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-container">
+        <!-- Onboarding Screen -->
+        <div id="screen-onboarding" class="screen">
+            <div class="onboarding-content">
+                <h1>🌱 Re:Mindful</h1>
+                <p data-i18n="onboarding_desc">Willkommen zu deiner Achtsamkeitsreise.</p>
+
+                <div class="lang-selector">
+                    <button class="lang-btn active" onclick="app.setLang('de')">🇩🇪 Deutsch</button>
+                    <button class="lang-btn" onclick="app.setLang('en')">🇬🇧 English</button>
+                </div>
+
+                <input type="text" id="input-username" data-i18n-placeholder="onboarding_name_ph" placeholder="Wie dürfen wir dich nennen?">
+                <button onclick="app.finishOnboarding()" data-i18n="onboarding_start">Starten</button>
+            </div>
+        </div>
+
+        <!-- Main App Screens (Tabs) -->
+        <div id="screen-main" class="screen" style="display:none;">
+            <!-- Tab 1: Mood Tracker -->
+            <div id="tab-mood" class="tab-content active">
+                <h2 data-i18n="mood_title">Wie fühlst du dich heute?</h2>
+                <div class="mood-selector">
+                    <button data-val="1" onclick="app.selectMood(1)">😢</button>
+                    <button data-val="2" onclick="app.selectMood(2)">😕</button>
+                    <button data-val="3" onclick="app.selectMood(3)">😐</button>
+                    <button data-val="4" onclick="app.selectMood(4)">🙂</button>
+                    <button data-val="5" onclick="app.selectMood(5)">😄</button>
+                </div>
+
+                <button class="nlp-btn" onclick="app.openMoodNLP()" data-i18n="mood_nlp_btn">✨ Gefühle in Worte fassen</button>
+
+                <textarea id="mood-text" data-i18n-placeholder="mood_ph_happened" placeholder="Was ist passiert?"></textarea>
+                <textarea id="mood-pos" data-i18n-placeholder="mood_ph_pos" placeholder="Was war positiv?"></textarea>
+                <textarea id="mood-neg" data-i18n-placeholder="mood_ph_neg" placeholder="Was war negativ?"></textarea>
+
+                <button class="save-btn" onclick="app.saveMood()" data-i18n="save_entry">Eintrag speichern</button>
+            </div>
+
+            <!-- Tab 2: Goals -->
+            <div id="tab-goals" class="tab-content" style="display:none;">
+                <h2 data-i18n="goals_title">Meine Ziele</h2>
+
+                <div class="segment-control">
+                    <button id="seg-daily" class="active" onclick="app.switchGoalType('daily')" data-i18n="goals_daily">Tagesziele</button>
+                    <button id="seg-weekly" onclick="app.switchGoalType('weekly')" data-i18n="goals_weekly">Wochenziele</button>
+                </div>
+
+                <input type="text" id="goal-input" data-i18n-placeholder="goals_ph" placeholder="Neues Ziel eingeben...">
+                <button class="nlp-btn" onclick="app.nlpAnalyzeGoal()" data-i18n="goals_nlp_btn">✨ Ziel in kleine Schritte zerlegen</button>
+                <div id="goal-nlp-suggestions" class="nlp-suggestions"></div>
+
+                <div id="custom-step-container" style="display:none; margin-top:10px;">
+                    <input type="text" id="custom-step-input" data-i18n-placeholder="goals_custom_step_ph" placeholder="Eigenen kleinen Schritt hinzufügen...">
+                    <button class="outline-btn" onclick="app.addCustomStep()" data-i18n="goals_add_step">Hinzufügen</button>
+                </div>
+
+                <button class="save-btn" id="btn-save-goal-direct" onclick="app.saveGoalDirect()" style="display:none;" data-i18n="goals_save_btn">Ziel direkt speichern</button>
+
+                <h3 data-i18n="goals_active_title" style="margin-top:24px;">Aktive Ziele</h3>
+                <div id="active-goals-list"></div>
+            </div>
+
+            <!-- Tab 3: Success -->
+            <div id="tab-success" class="tab-content" style="display:none;">
+                <h2 data-i18n="success_title">Erfolge feiern</h2>
+                <p data-i18n="success_subtitle">Jeder kleine Schritt zählt!</p>
+
+                <div style="background: var(--soft-amber); padding: 16px; border-radius: 16px; margin-bottom: 16px;">
+                    <h3 style="color: var(--primary-amber); margin-bottom: 8px;" data-i18n="success_motivate_title">Du bist großartig! 🌟</h3>
+                    <p style="font-size: 14px; opacity: 0.8; margin-bottom: 0;" data-i18n="success_motivate_desc">Nimm dir einen Moment Zeit, um stolz auf dich zu sein. Was hast du geschafft, egal wie klein es erscheinen mag?</p>
+                </div>
+
+                <input type="text" id="success-input" data-i18n-placeholder="success_ph" placeholder="Was war dein Erfolg?">
+                <textarea id="success-reason" data-i18n-placeholder="success_reason_ph" placeholder="Was hat zu diesem Erfolg geführt?"></textarea>
+
+                <button onclick="app.saveSuccess()" data-i18n="success_btn">🎉 Erfolg feiern & speichern</button>
+            </div>
+
+            <!-- Tab 4: Journal -->
+            <div id="tab-journal" class="tab-content" style="display:none;">
+                <h2 data-i18n="journal_title">Tagebuch</h2>
+                <button onclick="app.exportPdf()" data-i18n="journal_pdf_btn">📄 Als PDF exportieren</button>
+                <div id="journal-list"></div>
+            </div>
+
+            <!-- Tab 5: Settings -->
+            <div id="tab-settings" class="tab-content" style="display:none;">
+                <h2 data-i18n="settings_title">Einstellungen</h2>
+
+                <!-- System & Profile -->
+                <div class="settings-card">
+                    <h3 data-i18n="settings_profile">👤 Profil & Sprache</h3>
+                    <input type="text" id="settings-name" placeholder="Dein Name">
+                    <button onclick="app.updateName()" data-i18n="settings_name_btn">Name speichern</button>
+
+                    <div class="lang-selector" style="margin-top: 16px;">
+                        <button id="set-lang-de" class="lang-btn" onclick="app.changeLang('de')">🇩🇪 Deutsch</button>
+                        <button id="set-lang-en" class="lang-btn" onclick="app.changeLang('en')">🇬🇧 English</button>
+                    </div>
+                </div>
+
+                <!-- Design -->
+                <div class="settings-card" style="margin-top: 16px;">
+                    <h3 data-i18n="settings_design">🎨 Design & Farben</h3>
+                    <p data-i18n="settings_design_desc">Wähle dein bevorzugtes Farbschema:</p>
+                    <div class="color-picker-grid">
+                        <button class="color-btn" style="background: #0d9488" onclick="app.setManualColor('#0d9488', '#f0fdfa', '#f8fafc', '#334155')">Teal</button>
+                        <button class="color-btn" style="background: #4f46e5" onclick="app.setManualColor('#4f46e5', '#eef2ff', '#f8fafc', '#312e81')">Indigo</button>
+                        <button class="color-btn" style="background: #d97706" onclick="app.setManualColor('#d97706', '#fffbeb', '#fefce8', '#78350f')">Amber</button>
+                        <button class="color-btn" style="background: #e11d48" onclick="app.setManualColor('#e11d48', '#fff1f2', '#fdf2f8', '#881337')">Rose</button>
+                        <button class="color-btn" style="background: #059669" onclick="app.setManualColor('#059669', '#ecfdf5', '#f0fdf4', '#064e3b')">Emerald</button>
+                        <button class="color-btn" style="background: #7c3aed" onclick="app.setManualColor('#7c3aed', '#f5f3ff', '#faf5ff', '#4c1d95')">Violet</button>
+                    </div>
+                    <button class="outline-btn" onclick="app.resetToMaterialYou()" data-i18n="settings_material_btn">📱 System "Material You" wiederherstellen</button>
+                </div>
+
+                <!-- System -->
+                <div class="settings-card" style="margin-top: 16px;">
+                    <h3 data-i18n="settings_system">🛠️ System</h3>
+                    <div style="display:flex; align-items:center; gap: 12px; margin-bottom: 12px;">
+                        <input type="time" id="reminder-time" value="19:00" style="margin-bottom:0; flex:1;">
+                        <button onclick="app.toggleDailyReminder()" data-i18n="settings_reminder" style="flex:2; margin-bottom:0;">⏰ Aktivieren</button>
+                    </div>
+                    <button class="danger-btn" onclick="app.confirmReset()" data-i18n="settings_delete">🗑️ Alle Daten löschen</button>
+                </div>
+
+                <!-- Help -->
+                <div class="settings-card" style="margin-top: 16px;">
+                    <h3 data-i18n="settings_help">❓ Hilfe & Erklärung</h3>
+                    <details>
+                        <summary data-i18n="help_q1">Wie funktioniert der Mood-Tracker?</summary>
+                        <p data-i18n="help_a1" style="margin-top:8px; font-size:14px; opacity:0.8;">Wähle einen Emoji und beschreibe deinen Tag. Der Button "Gefühle in Worte fassen" hilft dir, deine Emotionen besser zu benennen.</p>
+                    </details>
+                    <details style="margin-top: 8px;">
+                        <summary data-i18n="help_q2">Wie nutze ich die Ziele?</summary>
+                        <p data-i18n="help_a2" style="margin-top:8px; font-size:14px; opacity:0.8;">Setze Tages- oder Wochenziele. Lass große Ziele von der App in kleine machbare Schritte zerlegen. Du kannst auch eigene Schritte hinzufügen. Wenn du fertig bist, bewerte das Ziel, damit es im Tagebuch landet.</p>
+                    </details>
+                    <details style="margin-top: 8px;">
+                        <summary data-i18n="help_q3">Wie funktioniert die "KI" (NLP)?</summary>
+                        <p data-i18n="help_a3" style="margin-top:8px; font-size:14px; opacity:0.8;">Die App analysiert deine Eingaben auf bestimmte Wörter und generiert daraus kleine, positive Vorschläge. Alles passiert direkt auf deinem Handy, ohne Internetverbindung.</p>
+                    </details>
+                    <details style="margin-top: 8px;">
+                        <summary data-i18n="help_q4">Was passiert beim PDF-Export?</summary>
+                        <p data-i18n="help_a4" style="margin-top:8px; font-size:14px; opacity:0.8;">Deine Einträge werden auf Knopfdruck in ein schönes PDF-Dokument formatiert und sicher in deinem Download-Ordner gespeichert.</p>
+                    </details>
+                    <details style="margin-top: 8px;">
+                        <summary data-i18n="help_q5">Wofür ist diese App gedacht?</summary>
+                        <p data-i18n="help_a5" style="margin-top:8px; font-size:14px; opacity:0.8;">Re:Mindful dient deinem persönlichen Wachstum und der Selbstreflexion. Hinweis: Sie ist kein Ersatz für eine professionelle Therapie oder einen Arzt.</p>
+                    </details>
+                </div>
+
+                <!-- About -->
+                <div class="settings-card" style="margin-top: 16px; text-align:center; opacity:0.7;">
+                    <h3>ℹ️ Über diese App</h3>
+                    <p style="font-size:14px;"><strong>Re:Mindful</strong><br>Entwickelt von Tian Svenja Vieth<br><br>Diese App ist Open-Source und darf frei verteilt und modifiziert werden. Alle Daten bleiben 100% lokal auf deinem Gerät.</p>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation (Material 3) -->
+            <nav class="bottom-nav">
+                <button onclick="app.switchTab('mood', this)" class="active" data-i18n="nav_mood">Mood</button>
+                <button onclick="app.switchTab('goals', this)" data-i18n="nav_goals">Ziele</button>
+                <button onclick="app.switchTab('success', this)" data-i18n="nav_success">Erfolge</button>
+                <button onclick="app.switchTab('journal', this)" data-i18n="nav_journal">Tagebuch</button>
+                <button onclick="app.switchTab('settings', this)" data-i18n="nav_settings">Einstellungen</button>
+            </nav>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

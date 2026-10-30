@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Äußerer, weißer Tropfen -->
+    <path
+        android:fillColor="#F5F9F8"
+        android:pathData="M 54,28 C 54,28 32,58 32,74 C 32,86.15 41.85,96 54,96 C 66.15,96 76,86.15 76,74 C 76,58 54,28 54,28 Z" />
+
+    <!-- Innerer, helltürkiser Tropfen -->
+    <path
+        android:fillColor="#D4F4EA"
+        android:pathData="M 54,42 C 54,42 40,62 40,74 C 40,81.73 46.27,88 54,88 C 61.73,88 68,81.73 68,74 C 68,62 54,42 54,42 Z" />
+
+    <!-- Oranger Ring / Kreis -->
+    <path
+        android:fillColor="#D97706"
+        android:pathData="M 54,66 a 8,8 0 1,0 0,16 a 8,8 0 1,0 0,-16" />
+
+    <!-- Weißer innerer Punkt (Auge) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 54,71 a 3,3 0 1,0 0,6 a 3,3 0 1,0 0,-6" />
+</vector>
