@@ -66,8 +66,9 @@ class MainActivity : AppCompatActivity() {
         ViewCompat.setOnApplyWindowInsetsListener(webView) { v, insets ->
             val types = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout() or WindowInsetsCompat.Type.ime()
             val safeInsets = insets.getInsets(types)
+            // Die WebView wird durch das Padding perfekt eingekapselt, keine Überlagerung von Notch oder System-Bars
             v.setPadding(safeInsets.left, safeInsets.top, safeInsets.right, safeInsets.bottom)
-            WindowInsetsCompat.CONSUMED
+            insets
         }
 
         webView.loadUrl("file:///android_asset/index.html")
