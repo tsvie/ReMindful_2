@@ -1,8 +1,8 @@
 # 🌱 Re:Mindful – Mindfulness & Personal Growth
 
-[![Version](https://img.shields.io/badge/version-2.0.5-blue.svg)](https://github.com/tsvie/ReMindful_2/releases)
+[![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)](https://github.com/tsvie/ReMindful_2/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Platform](https://img.shields.io/badge/platform-Android-green.svg)](https://github.com/DeinName/ReMindful)
+[![Platform](https://img.shields.io/badge/platform-Android-green.svg)](https://github.com/tsvie/ReMindful_2)
 
 *(🇬🇧 English description below)*
 
@@ -21,8 +21,8 @@
 
 ### 🚀 Installation
 Du kannst die fertige App direkt installieren, ohne sie selbst kompilieren zu müssen:
-1. Gehe zu den [Releases](https://github.com/DeinName/ReMindful/releases).
-2. Lade dir die neueste `app-release.apk` (v2.0.3) herunter.
+1. Gehe zu den [Releases](https://github.com/tsvie/ReMindful_2/releases).
+2. Lade dir die neueste `ReMindful.apk` (v2.1.0) herunter.
 3. Führe die Datei auf deinem Android Smartphone aus.
 
 ### 🛠 Tech-Stack
@@ -49,7 +49,7 @@ Du kannst die fertige App direkt installieren, ohne sie selbst kompilieren zu m�
 ### 🚀 Installation
 You can install the ready-to-use app without compiling it yourself:
 1. Go to the [Releases](https://github.com/tsvie/ReMindful_2/releases) page.
-2. Download the latest `ReMindful.apk` (v2.0.5).
+2. Download the latest `ReMindful.apk` (v2.1.0).
 3. Run the file on your Android smartphone to install.
 
 ### 🛠 Tech Stack
