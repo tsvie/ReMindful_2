@@ -1,6 +1,6 @@
 # 🌱 Re:Mindful – Mindfulness & Personal Growth
 
-[![Version](https://img.shields.io/badge/version-2.0.3-blue.svg)](https://github.com/DeinName/ReMindful/releases)
+[![Version](https://img.shields.io/badge/version-2.0.5-blue.svg)](https://github.com/tsvie/ReMindful_2/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-Android-green.svg)](https://github.com/DeinName/ReMindful)
 
@@ -48,8 +48,8 @@ Du kannst die fertige App direkt installieren, ohne sie selbst kompilieren zu m�
 
 ### 🚀 Installation
 You can install the ready-to-use app without compiling it yourself:
-1. Go to the [Releases](https://github.com/DeinName/ReMindful/releases) page.
-2. Download the latest `app-release.apk` (v2.0.3).
+1. Go to the [Releases](https://github.com/tsvie/ReMindful_2/releases) page.
+2. Download the latest `ReMindful.apk` (v2.0.5).
 3. Run the file on your Android smartphone to install.
 
 ### 🛠 Tech Stack
