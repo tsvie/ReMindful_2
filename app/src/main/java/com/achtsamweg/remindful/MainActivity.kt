@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // System Bars transparent machen, um dahinter zeichnen zu können (Edge-to-Edge)
         enableEdgeToEdge()
 
         createNotificationChannel()
@@ -53,6 +54,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onPageFinished(view: WebView?, url: String?) {
                     super.onPageFinished(view, url)
                     injectMaterialYouColors()
+                    injectWindowInsets()
                 }
             }
             webChromeClient = WebChromeClient()
@@ -63,15 +65,42 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(webView)
 
-        ViewCompat.setOnApplyWindowInsetsListener(webView) { v, insets ->
-            val types = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout() or WindowInsetsCompat.Type.ime()
+        // WindowInsets an den WebView weiterleiten
+        ViewCompat.setOnApplyWindowInsetsListener(webView) { _, insets ->
+            val types = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
             val safeInsets = insets.getInsets(types)
-            // Die WebView wird durch das Padding perfekt eingekapselt, keine Überlagerung von Notch oder System-Bars
-            v.setPadding(safeInsets.left, safeInsets.top, safeInsets.right, safeInsets.bottom)
+            
+            // Sende die echten Pixel-Werte als CSS-Variablen an das Frontend
+            val js = """
+                if (document.documentElement) {
+                    document.documentElement.style.setProperty('--sat', '${safeInsets.top}px');
+                    document.documentElement.style.setProperty('--sab', '${safeInsets.bottom}px');
+                    document.documentElement.style.setProperty('--sar', '${safeInsets.right}px');
+                    document.documentElement.style.setProperty('--sal', '${safeInsets.left}px');
+                }
+            """.trimIndent()
+            webView.evaluateJavascript(js, null)
+            
             insets
         }
 
         webView.loadUrl("file:///android_asset/index.html")
+    }
+
+    private fun injectWindowInsets() {
+        val insets = ViewCompat.getRootWindowInsets(webView) ?: return
+        val types = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+        val safeInsets = insets.getInsets(types)
+        
+        val js = """
+            if (document.documentElement) {
+                document.documentElement.style.setProperty('--sat', '${safeInsets.top}px');
+                document.documentElement.style.setProperty('--sab', '${safeInsets.bottom}px');
+                document.documentElement.style.setProperty('--sar', '${safeInsets.right}px');
+                document.documentElement.style.setProperty('--sal', '${safeInsets.left}px');
+            }
+        """.trimIndent()
+        webView.evaluateJavascript(js, null)
     }
 
     private fun injectMaterialYouColors() {

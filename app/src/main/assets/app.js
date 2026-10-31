@@ -180,55 +180,70 @@ const i18n = {
 const nlpData = {
     de: {
         moods: [
-            { rx: /(chef|arbeit|stress|kollege|kunde|projekt|druck|überfordert|viel|aufgaben|job)/i, text: "Ich fühle mich gestresst und überfordert. Die Last der Verantwortung drückt mich. Ich wünsche mir Entlastung, Anerkennung für meine Leistung und Zeit zum Durchatmen." },
+            { rx: /(chef|arbeit|stress|kollege|kunde|projekt|druck|überfordert|viel|aufgaben|job|büro)/i, text: "Ich fühle mich gestresst und überfordert. Die Last der Verantwortung drückt mich. Ich wünsche mir Entlastung, Anerkennung für meine Leistung und Zeit zum Durchatmen." },
             { rx: /(streit|partner|freund|familie|allein|einsam|beziehung|trennung|diskussion|missverständnis)/i, text: "Ich bin traurig und verletzt wegen zwischenmenschlicher Spannungen. Ich fühle mich unverstanden und sehne mich nach Harmonie, Liebe und einer echten Verbindung." },
-            { rx: /(müde|erschöpft|schlaf|kaputt|energie|kraftlos|ausgebrannt|burnout|schwach)/i, text: "Ich bin physisch und mental völlig erschöpft. Mein Körper und mein Geist haben keine Reserven mehr und verlangen dringend nach tiefer Erholung und bedingungsloser Ruhe." },
-            { rx: /(angst|panik|sorgen|zukunft|ungewiss|schlimm|nervös|unruhig|herzrasen)/i, text: "Ich spüre eine starke innere Unruhe und Ängstlichkeit. Die Ungewissheit belastet mich. Ich brauche jetzt Sicherheit, Erdung im gegenwärtigen Moment und das Wissen, dass ich sicher bin." },
-            { rx: /(wütend|sauer|ungerecht|aggressiv|genervt|wut|hass|zornig|aufgeregt)/i, text: "Ich bin extrem wütend und frustriert, weil meine Grenzen überschritten wurden. Ich erlaube mir, diese Wut zu spüren, und nutze sie als Kraftquelle, ohne mich von ihr kontrollieren zu lassen." },
-            { rx: /(traurig|weinen|verlust|schmerz|tiefpunkt|deprimiert|vermissen|trauer)/i, text: "Ich durchlebe eine tiefe, schwere Traurigkeit. Ich umarme diesen Schmerz mit Sanftmut, verurteile mich nicht dafür und gebe mir alle Zeit der Welt, die ich zum Heilen brauche." },
-            { rx: /(glücklich|freude|stolz|erfolg|schön|liebe|dankbar|toll|super|gut)/i, text: "Ich spüre pure Freude und Dankbarkeit. Ich erlaube mir, diesen glücklichen Moment voll und ganz auszukosten und die positive Energie in meinem Körper abzuspeichern." }
+            { rx: /(müde|erschöpft|schlaf|kaputt|energie|kraftlos|ausgebrannt|burnout|schwach|antriebslos)/i, text: "Ich bin physisch und mental völlig erschöpft. Mein Körper und mein Geist haben keine Reserven mehr und verlangen dringend nach tiefer Erholung und bedingungsloser Ruhe." },
+            { rx: /(angst|panik|sorgen|zukunft|ungewiss|schlimm|nervös|unruhig|herzrasen|gedankenkarussell)/i, text: "Ich spüre eine starke innere Unruhe und Ängstlichkeit. Die Ungewissheit belastet mich. Ich brauche jetzt Sicherheit, Erdung im gegenwärtigen Moment und das Wissen, dass ich sicher bin." },
+            { rx: /(wütend|sauer|ungerecht|aggressiv|genervt|wut|hass|zornig|aufgeregt|ungerechtigkeit)/i, text: "Ich bin extrem wütend und frustriert, weil meine Grenzen überschritten wurden. Ich erlaube mir, diese Wut zu spüren, und nutze sie als Kraftquelle, ohne mich von ihr kontrollieren zu lassen." },
+            { rx: /(traurig|weinen|verlust|schmerz|tiefpunkt|deprimiert|vermissen|trauer|schwer)/i, text: "Ich durchlebe eine tiefe, schwere Traurigkeit. Ich umarme diesen Schmerz mit Sanftmut, verurteile mich nicht dafür und gebe mir alle Zeit der Welt, die ich zum Heilen brauche." },
+            { rx: /(glücklich|freude|stolz|erfolg|schön|liebe|dankbar|toll|super|gut|entspannt)/i, text: "Ich spüre pure Freude und Dankbarkeit. Ich erlaube mir, diesen glücklichen Moment voll und ganz auszukosten und die positive Energie in meinem Körper abzuspeichern." }
         ],
         mood_fallback: "Ich nehme eine diffuse, schwer greifbare Emotion in mir wahr. Es ist okay, nicht immer alles sofort benennen zu können. Ich atme tief durch und gebe dem Gefühl Raum.",
         goals: [
-            { rx: /(aufräumen|putzen|sauber|müll|spülen|staubsaugen|wäsche|waschen|küche|bad|zimmer|haushalt|ordnung)/i, steps: [
-                "Einen Timer auf 5 Minuten stellen und nur eine winzige Fläche (z.B. den Couchtisch) für '{goal}' klären",
-                "Einen Müllbeutel holen und ausschließlich offensichtlichen Müll für '{goal}' einsammeln",
-                "Nur die Putzmittel für '{goal}' bereitstellen, ohne die Verpflichtung direkt anzufangen"
+            { rx: /(aufräumen|putzen|sauber|müll|spülen|staubsaugen|wäsche|waschen|küche|bad|zimmer|haushalt|ordnung|wischen|fenster|spülmaschine)/i, steps: [
+                "Einen Timer auf 5 Minuten stellen und nur eine winzige Fläche (z.B. ein Waschbecken) für '{goal}' klären",
+                "Einen Müllbeutel holen und ausschließlich offensichtlichen Müll in einem Raum einsammeln",
+                "Nur die Putzmittel oder den Korb für '{goal}' bereitstellen, ohne die Verpflichtung direkt anzufangen"
             ]},
-            { rx: /(steuer|rechnung|email|mail|post|brief|anruf|telefon|amt|bank|überweisung|orga|bewerbung|papierkram)/i, steps: [
-                "Alle benötigten Unterlagen für '{goal}' auf einen Stapel legen (und sie heute noch nicht öffnen!)",
-                "Nur das Programm öffnen oder die Nummer für '{goal}' eintippen (ohne anzurufen oder zu senden)",
+            { rx: /(steuer|rechnung|email|mail|post|brief|anruf|telefon|amt|bank|überweisung|orga|bewerbung|papierkram|vertrag|kündigen|abo)/i, steps: [
+                "Alle benötigten Unterlagen oder Passwörter für '{goal}' zusammensuchen (und heute nicht mehr tun!)",
+                "Nur das Programm öffnen, die E-Mail-Adresse oder die Nummer für '{goal}' eintippen (ohne anzurufen oder zu senden)",
                 "Einen Timer auf 2 Minuten stellen und nur den allerersten Satz für '{goal}' schreiben"
             ]},
-            { rx: /(sport|laufen|training|fitness|joggen|yoga|workout|dehnen|spazieren|gym|bewegen)/i, steps: [
-                "Nur die Sportkleidung für '{goal}' anziehen und 2 Minuten im Haus spüren, wie es sich anfühlt",
-                "Eine Trinkflasche füllen und die Matte/Schuhe für '{goal}' gut sichtbar bereitlegen",
+            { rx: /(sport|laufen|training|fitness|joggen|yoga|workout|dehnen|spazieren|gym|bewegen|pilates|radfahren)/i, steps: [
+                "Nur die Sportkleidung oder die Schuhe für '{goal}' anziehen und 2 Minuten im Haus spüren, wie es sich anfühlt",
+                "Eine Trinkflasche füllen und die Matte/Ausrüstung für '{goal}' gut sichtbar bereitlegen",
                 "Für exakt 2 Minuten sanft mit '{goal}' beginnen (danach hast du die Erlaubnis aufzuhören)"
             ]},
-            { rx: /(lernen|hausaufgaben|studium|arbeiten|präsentation|schreiben|lesen|programmieren|projekt|klausur)/i, steps: [
+            { rx: /(lernen|hausaufgaben|studium|arbeiten|präsentation|schreiben|lesen|programmieren|projekt|klausur|vokabeln|sprache)/i, steps: [
                 "Das Handy für 10 Minuten in einen anderen Raum legen, um ungestörten Raum für '{goal}' zu schaffen",
-                "Das Dokument/Buch öffnen und sich vornehmen, exakt nur einen Absatz für '{goal}' zu lesen/schreiben",
+                "Das Dokument, die App oder das Buch öffnen und exakt nur einen Absatz/Satz für '{goal}' lesen oder schreiben",
                 "Auf einem leeren Zettel den allerkleinsten, nächsten physischen Schritt für '{goal}' notieren"
             ]},
-            { rx: /(entspannen|schlafen|meditation|baden|pause|ausruhen|abschalten|selfcare|metime)/i, steps: [
+            { rx: /(entspannen|schlafen|meditation|baden|pause|ausruhen|abschalten|selfcare|metime|schlafrhythmus|wecker)/i, steps: [
                 "Alle Bildschirme und grellen Lichter für 5 Minuten ausschalten, um sanft in '{goal}' zu gleiten",
                 "Ein großes Glas Wasser trinken und 5 sehr tiefe, bewusste Atemzüge nehmen",
                 "Für 2 Minuten einfach nur aus dem Fenster schauen und die Gedanken ziehen lassen, bevor '{goal}' startet"
             ]},
-            { rx: /(kochen|essen|einkaufen|supermarkt|ernährung|rezept|mahlzeit|backen)/i, steps: [
+            { rx: /(kochen|essen|einkaufen|supermarkt|ernährung|rezept|mahlzeit|backen|trinken|wasser|prep)/i, steps: [
                 "Einen Zettel nehmen und maximal 3-5 Zutaten für '{goal}' aufschreiben (nicht das ganze Gericht)",
-                "Nur die Pfanne, den Topf oder das Brett für '{goal}' auf die Arbeitsfläche legen",
-                "Ein Rezept für '{goal}' wählen, das garantiert unter 15 Minuten Zubereitungszeit hat"
+                "Nur die Pfanne, den Topf oder das Schneidebrett für '{goal}' auf die Arbeitsfläche legen",
+                "Ein Rezept für '{goal}' wählen, das garantiert unter 15 Minuten Zubereitungszeit hat oder direkt ein Glas Wasser trinken"
             ]},
-            { rx: /(freunde|treffen|date|geschenk|eltern|familie|anrufen|schreiben|sozial|geburtstag)/i, steps: [
+            { rx: /(freunde|treffen|date|geschenk|eltern|familie|anrufen|schreiben|sozial|geburtstag|konflikt)/i, steps: [
                 "Nur eine sehr kurze Textnachricht tippen (z.B. 'Wir müssen bald {goal} planen!')",
                 "Den Kalender öffnen und 2 völlig unverbindliche Zeitfenster für '{goal}' blocken",
                 "Dir eine Minute Zeit nehmen, um dir eine winzige, mühelose Geste für '{goal}' auszudenken"
             ]},
-            { rx: /(malen|zeichnen|musik|gitarre|klavier|basteln|hobby|kreativ|buch|kunst)/i, steps: [
-                "Das Instrument, das Buch oder die Stifte für '{goal}' einfach nur auspacken und auf den Tisch legen",
+            { rx: /(malen|zeichnen|musik|gitarre|klavier|basteln|hobby|kreativ|buch|kunst|handwerken|reparieren|garten)/i, steps: [
+                "Das Instrument, das Werkzeug oder die Stifte für '{goal}' einfach nur auspacken und auf den Tisch legen",
                 "Einen Timer auf 3 Minuten stellen und völlig ohne Anspruch an das Ergebnis mit '{goal}' starten",
-                "Sich vornehmen, heute nur einen Akkord, eine Skizze oder eine Seite für '{goal}' zu schaffen"
+                "Sich vornehmen, heute nur einen Akkord, einen Pinselstrich oder eine kleine Schraube für '{goal}' zu schaffen"
+            ]},
+            { rx: /(arzt|doktor|zahnarzt|termin|apotheke|gesundheit|therapie)/i, steps: [
+                "Die Telefonnummer oder die Website für '{goal}' heraussuchen und als Lesezeichen speichern",
+                "Den Kalender öffnen und prüfen, wann du in den nächsten 2 Wochen überhaupt Zeit für '{goal}' hättest",
+                "Dir selbst erlauben, nur für '{goal}' anzurufen und noch keinen festen Termin auszumachen, falls es sich falsch anfühlt"
+            ]},
+            { rx: /(sparen|budget|geld|finanzen|konto|ausgaben)/i, steps: [
+                "Nur das Online-Banking öffnen und den aktuellen Kontostand für '{goal}' notieren (nicht mehr)",
+                "Die Unterlagen für '{goal}' bereitlegen, aber die Prüfung auf morgen verschieben",
+                "Aufschreiben, wofür genau du bei '{goal}' anfangen möchtest (z.B. einen einzigen Kaffee weniger diese Woche)"
+            ]},
+            { rx: /(ausmisten|kleiderschrank|wegwerfen|spenden|keller|dachboden|minimalismus)/i, steps: [
+                "Exakt 3 Gegenstände für '{goal}' aussuchen, die du nicht mehr brauchst, und in eine Box legen",
+                "Nur eine einzige, sehr kleine Schublade öffnen und für '{goal}' inspizieren",
+                "Einen Korb bereitstellen und ihn mit der Aufschrift 'Zu Spenden' für '{goal}' versehen"
             ]}
         ],
         goal_fallback: [
@@ -239,55 +254,70 @@ const nlpData = {
     },
     en: {
         moods: [
-            { rx: /(boss|work|stress|colleague|client|project|pressure|overwhelmed|much|tasks|job)/i, text: "I feel stressed and overwhelmed. The burden of responsibility is heavy. I desire relief, recognition for my efforts, and time to breathe." },
+            { rx: /(boss|work|stress|colleague|client|project|pressure|overwhelmed|much|tasks|job|office)/i, text: "I feel stressed and overwhelmed. The burden of responsibility is heavy. I desire relief, recognition for my efforts, and time to breathe." },
             { rx: /(fight|partner|friend|family|alone|lonely|relationship|breakup|argument|misunderstanding)/i, text: "I am sad and hurt due to interpersonal tension. I feel misunderstood and long for harmony, love, and a genuine connection." },
-            { rx: /(tired|exhausted|sleep|broken|energy|weak|burnout)/i, text: "I am physically and mentally completely exhausted. My body and mind have no reserves left and urgently demand deep recovery and unconditional rest." },
-            { rx: /(fear|panic|worries|future|uncertain|bad|nervous|restless|anxiety)/i, text: "I feel a strong inner restlessness and anxiety. The uncertainty is weighing on me. I need safety, grounding in the present moment, and the knowledge that I am secure." },
-            { rx: /(angry|mad|unfair|aggressive|annoyed|anger|hate|furious|upset)/i, text: "I am extremely angry and frustrated because my boundaries were crossed. I allow myself to feel this anger, using it as a source of strength, without letting it control me." },
-            { rx: /(sad|cry|loss|pain|low|depressed|miss|grief)/i, text: "I am going through a deep, heavy sadness. I embrace this pain with gentleness, do not judge myself for it, and give myself all the time in the world to heal." },
-            { rx: /(happy|joy|proud|success|beautiful|love|grateful|great|super|good)/i, text: "I feel pure joy and gratitude. I allow myself to fully savor this happy moment and store this positive energy in my body." }
+            { rx: /(tired|exhausted|sleep|broken|energy|weak|burnout|lethargic)/i, text: "I am physically and mentally completely exhausted. My body and mind have no reserves left and urgently demand deep recovery and unconditional rest." },
+            { rx: /(fear|panic|worries|future|uncertain|bad|nervous|restless|anxiety|overthinking)/i, text: "I feel a strong inner restlessness and anxiety. The uncertainty is weighing on me. I need safety, grounding in the present moment, and the knowledge that I am secure." },
+            { rx: /(angry|mad|unfair|aggressive|annoyed|anger|hate|furious|upset|injustice)/i, text: "I am extremely angry and frustrated because my boundaries were crossed. I allow myself to feel this anger, using it as a source of strength, without letting it control me." },
+            { rx: /(sad|cry|loss|pain|low|depressed|miss|grief|heavy)/i, text: "I am going through a deep, heavy sadness. I embrace this pain with gentleness, do not judge myself for it, and give myself all the time in the world to heal." },
+            { rx: /(happy|joy|proud|success|beautiful|love|grateful|great|super|good|relaxed)/i, text: "I feel pure joy and gratitude. I allow myself to fully savor this happy moment and store this positive energy in my body." }
         ],
         mood_fallback: "I notice a diffuse, hard-to-grasp emotion within me. It's okay not to be able to name everything immediately. I take a deep breath and give the feeling space.",
         goals: [
-            { rx: /(clean|tidy|wash|vacuum|laundry|kitchen|bathroom|room|chores|organize)/i, steps: [
-                "Set a timer for exactly 5 minutes, tackle one tiny surface for '{goal}', and then proudly stop",
-                "Grab a trash bag and only throw away obvious garbage related to '{goal}'",
-                "Gather the cleaning supplies for '{goal}' and just leave them on the counter for now"
+            { rx: /(clean|tidy|wash|vacuum|laundry|kitchen|bathroom|room|chores|organize|wipe|window|dishwasher)/i, steps: [
+                "Set a timer for exactly 5 minutes, tackle one tiny surface (like a sink) for '{goal}', and then proudly stop",
+                "Grab a trash bag and only throw away obvious garbage related to '{goal}' in one room",
+                "Gather the cleaning supplies or laundry basket for '{goal}' and just leave them out for now"
             ]},
-            { rx: /(tax|bill|email|mail|letter|call|phone|bank|transfer|admin|application|paperwork)/i, steps: [
-                "Stack all necessary documents for '{goal}' into one neat pile (don't process them yet!)",
-                "Open the app or type the phone number for '{goal}' without hitting send or call",
-                "Draft only the very first sentence of the email/message for '{goal}'"
+            { rx: /(tax|bill|email|mail|letter|call|phone|bank|transfer|admin|application|paperwork|contract|cancel|subscription)/i, steps: [
+                "Stack all necessary documents or find passwords for '{goal}' (and don't process them today!)",
+                "Open the app, the email draft, or type the phone number for '{goal}' without hitting send or call",
+                "Set a timer for 2 minutes and write only the very first sentence for '{goal}'"
             ]},
-            { rx: /(sport|run|training|fitness|jog|yoga|workout|stretch|walk|gym|move)/i, steps: [
-                "Put on your activewear for '{goal}' and just wear it around the house for 2 minutes",
-                "Fill a water bottle and place your shoes/mat in plain sight for '{goal}'",
+            { rx: /(sport|run|training|fitness|jog|yoga|workout|stretch|walk|gym|move|pilates|cycling)/i, steps: [
+                "Put on your activewear or shoes for '{goal}' and just wear them around the house for 2 minutes",
+                "Fill a water bottle and place your gear/mat in plain sight for '{goal}'",
                 "Commit to doing '{goal}' for exactly 2 minutes, with full permission to quit afterwards"
             ]},
-            { rx: /(learn|homework|study|work|presentation|write|read|code|project|exam)/i, steps: [
+            { rx: /(learn|homework|study|work|presentation|write|read|code|project|exam|vocabulary|language|duolingo)/i, steps: [
                 "Put your phone in another room for 10 minutes to create focused space for '{goal}'",
-                "Open the file or book for '{goal}' and read/write just one single paragraph",
+                "Open the app, file or book for '{goal}' and read/write just one single paragraph or sentence",
                 "Write down the absolute smallest next physical step for '{goal}' on a sticky note"
             ]},
-            { rx: /(relax|sleep|meditation|bath|break|rest|unwind|selfcare|metime)/i, steps: [
+            { rx: /(relax|sleep|meditation|bath|break|rest|unwind|selfcare|metime|routine|alarm)/i, steps: [
                 "Turn off all screens and dim the lights for 5 minutes to ease into '{goal}'",
                 "Drink a full glass of water and take 5 deep, intentional breaths",
                 "Stare out the window for 2 minutes and let your mind wander before starting '{goal}'"
             ]},
-            { rx: /(cook|eat|shop|supermarket|diet|recipe|meal|bake)/i, steps: [
+            { rx: /(cook|eat|shop|supermarket|diet|recipe|meal|bake|drink|water|prep)/i, steps: [
                 "Grab a piece of paper and write down a maximum of 3-5 ingredients for '{goal}'",
                 "Place the pan, pot, or cutting board on the counter for '{goal}' (and do nothing else)",
-                "Find a recipe for '{goal}' that takes less than 15 minutes to make"
+                "Find a recipe for '{goal}' that takes less than 15 minutes, or simply drink a glass of water right now"
             ]},
-            { rx: /(friend|meet|date|gift|parents|family|call|text|social|birthday)/i, steps: [
+            { rx: /(friend|meet|date|gift|parents|family|call|text|social|birthday|conflict)/i, steps: [
                 "Draft a 1-sentence text message (e.g., 'We need to plan {goal} soon!')",
                 "Open your calendar and highlight 2 potential, no-pressure time slots for '{goal}'",
                 "Take one minute to think of a tiny, effortless gesture for '{goal}'"
             ]},
-            { rx: /(paint|draw|music|guitar|piano|craft|hobby|read|book|art)/i, steps: [
+            { rx: /(paint|draw|music|guitar|piano|craft|hobby|read|book|art|repair|garden)/i, steps: [
                 "Take the instrument, tools, or book out of its case for '{goal}' and lay it out",
                 "Set a 3-minute timer and start '{goal}' with zero expectations for the result",
-                "Commit to playing one chord, sketching one line, or reading one page for '{goal}'"
+                "Commit to playing one chord, sketching one line, or tightening one screw for '{goal}'"
+            ]},
+            { rx: /(doctor|dentist|appointment|pharmacy|health|therapy)/i, steps: [
+                "Look up the phone number or website for '{goal}' and save it as a bookmark",
+                "Open your calendar and see when you would even have time for '{goal}' in the next 2 weeks",
+                "Give yourself permission to just call for '{goal}' without making a firm appointment if it feels wrong"
+            ]},
+            { rx: /(save|budget|money|finance|account|expenses)/i, steps: [
+                "Just open your online banking app and note down the current balance for '{goal}' (nothing more)",
+                "Gather the paperwork for '{goal}', but postpone reviewing it until tomorrow",
+                "Write down exactly one tiny thing you want to start with for '{goal}' (e.g., one less coffee this week)"
+            ]},
+            { rx: /(declutter|closet|throw away|donate|basement|attic|minimalism)/i, steps: [
+                "Pick exactly 3 items for '{goal}' that you no longer need and put them in a box",
+                "Open just one single, very small drawer and inspect it for '{goal}'",
+                "Set up a basket and label it 'To Donate' for '{goal}'"
             ]}
         ],
         goal_fallback: [
