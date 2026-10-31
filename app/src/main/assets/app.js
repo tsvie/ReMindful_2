@@ -365,6 +365,15 @@ const app = {
         this.data.entries = this.safeParse('aw_entries', []);
         this.data.activeGoals = this.safeParse('aw_active_goals', []);
         if(this.data.user && this.data.user.lang) this.data.currentLang = this.data.user.lang;
+
+        // Farbe sofort beim Start wiederherstellen!
+        const manualColor = localStorage.getItem('aw_manual_colors');
+        if (manualColor) {
+            try {
+                const c = JSON.parse(manualColor);
+                this.setCssVariables(c.primary, c.surface, c.bg, c.text);
+            } catch (e) {}
+        }
     },
     saveData: function() {
         localStorage.setItem('aw_user', JSON.stringify(this.data.user));

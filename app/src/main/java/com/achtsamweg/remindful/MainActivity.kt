@@ -72,24 +72,20 @@ class MainActivity : AppCompatActivity() {
 
             setContentView(webView)
 
-            // WindowInsets an den WebView weiterleiten, aber JS erst aufrufen, wenn Seite geladen ist
-            ViewCompat.setOnApplyWindowInsetsListener(webView) { _, insets ->
+            // Bulletproof Edge-to-Edge: WebView direkt mit Padding versehen
+            ViewCompat.setOnApplyWindowInsetsListener(webView) { v, insets ->
                 try {
-                    val types = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+                    val types = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout() or WindowInsetsCompat.Type.ime()
                     val safeInsets = insets.getInsets(types)
                     
-                    // Speichere die Insets, um sie später (in onPageFinished) an JS zu senden
-                    currentSafeInsets = safeInsets
+                    // Verhindert jegliche Überlagerung durch Notch, Statusleiste und Navigation
+                    v.setPadding(safeInsets.left, safeInsets.top, safeInsets.right, safeInsets.bottom)
                     
-                    // Wenn die Seite bereits geladen wurde, können wir auch updaten
-                    if (webView.progress == 100) {
-                        injectWindowInsets()
-                    }
                 } catch (e: Throwable) {
                     e.printStackTrace()
                 }
                 
-                insets
+                WindowInsetsCompat.CONSUMED
             }
 
             webView.loadUrl("file:///android_asset/index.html")
@@ -100,21 +96,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun injectWindowInsets() {
-        try {
-            val safeInsets = currentSafeInsets ?: return
-            
-            val js = """
-                if (document.documentElement) {
-                    document.documentElement.style.setProperty('--sat', '${safeInsets.top}px');
-                    document.documentElement.style.setProperty('--sab', '${safeInsets.bottom}px');
-                    document.documentElement.style.setProperty('--sar', '${safeInsets.right}px');
-                    document.documentElement.style.setProperty('--sal', '${safeInsets.left}px');
-                }
-            """.trimIndent()
-            webView.evaluateJavascript(js, null)
-        } catch (e: Throwable) {
-            e.printStackTrace()
-        }
+        // Obsolete, da Padding nativ angewendet wird. Kann für künftige JS-Anpassungen bleiben.
     }
 
     private fun injectMaterialYouColors() {
