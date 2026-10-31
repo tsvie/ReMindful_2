@@ -27,9 +27,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import android.widget.FrameLayout
 import org.json.JSONArray
 import java.util.Calendar
 import androidx.annotation.Keep
+import kotlin.math.max
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,14 +42,27 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
             super.onCreate(savedInstanceState)
-            // System Bars transparent machen, um dahinter zeichnen zu können (Edge-to-Edge)
             enableEdgeToEdge()
 
             createNotificationChannel()
             requestPermissionsIfNecessary()
 
+            // Root-Container erstellen, der das Padding aufnimmt
+            val rootLayout = FrameLayout(this).apply {
+                layoutParams = FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT
+                )
+                // Hintergrundfarbe passend zur App setzen, damit es beim Starten nicht blitzt
+                setBackgroundColor(android.graphics.Color.parseColor("#f8fafc"))
+            }
+
             // Create WebView programmatically
             webView = WebView(this).apply {
+                layoutParams = FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT
+                )
                 settings.javaScriptEnabled = true
                 settings.domStorageEnabled = true
                 settings.allowFileAccess = true
@@ -58,7 +73,6 @@ class MainActivity : AppCompatActivity() {
                         super.onPageFinished(view, url)
                         try {
                             injectMaterialYouColors()
-                            injectWindowInsets()
                         } catch (e: Throwable) {
                             e.printStackTrace()
                         }
@@ -70,21 +84,23 @@ class MainActivity : AppCompatActivity() {
                 addJavascriptInterface(WebAppInterface(this@MainActivity), "AndroidApp")
             }
 
-            setContentView(webView)
+            rootLayout.addView(webView)
+            setContentView(rootLayout)
 
-            // Bulletproof Edge-to-Edge: WebView direkt mit Padding versehen
-            ViewCompat.setOnApplyWindowInsetsListener(webView) { v, insets ->
+            // 100% kugelsicheres Inset-Handling: Der äußere FrameLayout erhält das Padding.
+            // Dadurch wird der WebView niemals von der Notch, Statusleiste oder Tastatur überlagert.
+            ViewCompat.setOnApplyWindowInsetsListener(rootLayout) { v, insets ->
                 try {
-                    val types = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout() or WindowInsetsCompat.Type.ime()
-                    val safeInsets = insets.getInsets(types)
+                    val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout())
+                    val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
                     
-                    // Verhindert jegliche Überlagerung durch Notch, Statusleiste und Navigation
-                    v.setPadding(safeInsets.left, safeInsets.top, safeInsets.right, safeInsets.bottom)
+                    // Der untere Abstand ist das Maximum aus Navigationsleiste und aufklappender Tastatur
+                    val bottomPadding = max(systemBars.bottom, ime.bottom)
                     
+                    v.setPadding(systemBars.left, systemBars.top, systemBars.right, bottomPadding)
                 } catch (e: Throwable) {
                     e.printStackTrace()
                 }
-                
                 WindowInsetsCompat.CONSUMED
             }
 
@@ -93,10 +109,6 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
             Toast.makeText(this, "Crash prevented: ${e.message}", Toast.LENGTH_LONG).show()
         }
-    }
-
-    private fun injectWindowInsets() {
-        // Obsolete, da Padding nativ angewendet wird. Kann für künftige JS-Anpassungen bleiben.
     }
 
     private fun injectMaterialYouColors() {
