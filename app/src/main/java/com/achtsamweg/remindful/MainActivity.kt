@@ -29,6 +29,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import org.json.JSONArray
 import java.util.Calendar
+import androidx.annotation.Keep
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,66 +38,83 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // System Bars transparent machen, um dahinter zeichnen zu können (Edge-to-Edge)
-        enableEdgeToEdge()
+        try {
+            super.onCreate(savedInstanceState)
+            // System Bars transparent machen, um dahinter zeichnen zu können (Edge-to-Edge)
+            enableEdgeToEdge()
 
-        createNotificationChannel()
-        requestPermissionsIfNecessary()
+            createNotificationChannel()
+            requestPermissionsIfNecessary()
 
-        // Create WebView programmatically
-        webView = WebView(this).apply {
-            settings.javaScriptEnabled = true
-            settings.domStorageEnabled = true
-            settings.allowFileAccess = true
-            settings.allowContentAccess = true
-            
-            webViewClient = object : WebViewClient() {
-                override fun onPageFinished(view: WebView?, url: String?) {
-                    super.onPageFinished(view, url)
-                    injectMaterialYouColors()
-                    injectWindowInsets()
+            // Create WebView programmatically
+            webView = WebView(this).apply {
+                settings.javaScriptEnabled = true
+                settings.domStorageEnabled = true
+                settings.allowFileAccess = true
+                settings.allowContentAccess = true
+                
+                webViewClient = object : WebViewClient() {
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        super.onPageFinished(view, url)
+                        try {
+                            injectMaterialYouColors()
+                            injectWindowInsets()
+                        } catch (e: Throwable) {
+                            e.printStackTrace()
+                        }
+                    }
                 }
+                webChromeClient = WebChromeClient()
+                
+                // Inject JS Bridge
+                addJavascriptInterface(WebAppInterface(this@MainActivity), "AndroidApp")
             }
-            webChromeClient = WebChromeClient()
-            
-            // Inject JS Bridge
-            addJavascriptInterface(WebAppInterface(this@MainActivity), "AndroidApp")
-        }
 
-        setContentView(webView)
+            setContentView(webView)
 
-        // WindowInsets an den WebView weiterleiten, aber JS erst aufrufen, wenn Seite geladen ist
-        ViewCompat.setOnApplyWindowInsetsListener(webView) { _, insets ->
-            val types = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
-            val safeInsets = insets.getInsets(types)
-            
-            // Speichere die Insets, um sie später (in onPageFinished) an JS zu senden
-            currentSafeInsets = safeInsets
-            
-            // Wenn die Seite bereits geladen wurde, können wir auch updaten
-            if (webView.progress == 100) {
-                injectWindowInsets()
+            // WindowInsets an den WebView weiterleiten, aber JS erst aufrufen, wenn Seite geladen ist
+            ViewCompat.setOnApplyWindowInsetsListener(webView) { _, insets ->
+                try {
+                    val types = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+                    val safeInsets = insets.getInsets(types)
+                    
+                    // Speichere die Insets, um sie später (in onPageFinished) an JS zu senden
+                    currentSafeInsets = safeInsets
+                    
+                    // Wenn die Seite bereits geladen wurde, können wir auch updaten
+                    if (webView.progress == 100) {
+                        injectWindowInsets()
+                    }
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                }
+                
+                insets
             }
-            
-            insets
-        }
 
-        webView.loadUrl("file:///android_asset/index.html")
+            webView.loadUrl("file:///android_asset/index.html")
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            Toast.makeText(this, "Crash prevented: ${e.message}", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun injectWindowInsets() {
-        val safeInsets = currentSafeInsets ?: return
-        
-        val js = """
-            if (document.documentElement) {
-                document.documentElement.style.setProperty('--sat', '${safeInsets.top}px');
-                document.documentElement.style.setProperty('--sab', '${safeInsets.bottom}px');
-                document.documentElement.style.setProperty('--sar', '${safeInsets.right}px');
-                document.documentElement.style.setProperty('--sal', '${safeInsets.left}px');
-            }
-        """.trimIndent()
-        webView.evaluateJavascript(js, null)
+        try {
+            val safeInsets = currentSafeInsets ?: return
+            
+            val js = """
+                if (document.documentElement) {
+                    document.documentElement.style.setProperty('--sat', '${safeInsets.top}px');
+                    document.documentElement.style.setProperty('--sab', '${safeInsets.bottom}px');
+                    document.documentElement.style.setProperty('--sar', '${safeInsets.right}px');
+                    document.documentElement.style.setProperty('--sal', '${safeInsets.left}px');
+                }
+            """.trimIndent()
+            webView.evaluateJavascript(js, null)
+        } catch (e: Throwable) {
+            e.printStackTrace()
+        }
     }
 
     private fun injectMaterialYouColors() {
@@ -140,8 +158,10 @@ class MainActivity : AppCompatActivity() {
     }
     
     // JS Bridge class
+    @Keep
     inner class WebAppInterface(private val activity: AppCompatActivity) {
         
+        @Keep
         @JavascriptInterface
         fun triggerTestNotification(text: String) {
             val intent = Intent(activity, NotificationReceiver::class.java).apply {
@@ -155,6 +175,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        @Keep
         @JavascriptInterface
         fun scheduleNotification(enabled: Boolean, time: String, note: String) {
             val alarmManager = activity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -198,6 +219,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        @Keep
         @JavascriptInterface
         fun generateAndSavePdf(jsonPayload: String, fileName: String, userName: String) {
             try {
