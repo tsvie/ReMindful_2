@@ -33,6 +33,7 @@ import java.util.Calendar
 class MainActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
+    private var currentSafeInsets: androidx.core.graphics.Insets? = null
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,21 +66,18 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(webView)
 
-        // WindowInsets an den WebView weiterleiten
+        // WindowInsets an den WebView weiterleiten, aber JS erst aufrufen, wenn Seite geladen ist
         ViewCompat.setOnApplyWindowInsetsListener(webView) { _, insets ->
             val types = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
             val safeInsets = insets.getInsets(types)
             
-            // Sende die echten Pixel-Werte als CSS-Variablen an das Frontend
-            val js = """
-                if (document.documentElement) {
-                    document.documentElement.style.setProperty('--sat', '${safeInsets.top}px');
-                    document.documentElement.style.setProperty('--sab', '${safeInsets.bottom}px');
-                    document.documentElement.style.setProperty('--sar', '${safeInsets.right}px');
-                    document.documentElement.style.setProperty('--sal', '${safeInsets.left}px');
-                }
-            """.trimIndent()
-            webView.evaluateJavascript(js, null)
+            // Speichere die Insets, um sie später (in onPageFinished) an JS zu senden
+            currentSafeInsets = safeInsets
+            
+            // Wenn die Seite bereits geladen wurde, können wir auch updaten
+            if (webView.progress == 100) {
+                injectWindowInsets()
+            }
             
             insets
         }
@@ -88,9 +86,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun injectWindowInsets() {
-        val insets = ViewCompat.getRootWindowInsets(webView) ?: return
-        val types = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
-        val safeInsets = insets.getInsets(types)
+        val safeInsets = currentSafeInsets ?: return
         
         val js = """
             if (document.documentElement) {
