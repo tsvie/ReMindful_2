@@ -13,7 +13,7 @@ android {
         applicationId = "com.achtsamweg.remindful"
         minSdk = 24
         targetSdk = 36
-        versionCode = 13
+        versionCode = 14
         versionName = "2.1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
