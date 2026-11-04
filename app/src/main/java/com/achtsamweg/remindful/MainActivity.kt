@@ -240,7 +240,7 @@ class MainActivity : AppCompatActivity() {
             if (ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.RECORD_AUDIO), 102)
                 activity.runOnUiThread {
-                    Toast.makeText(activity, "Bitte erlaube das Mikrofon und tippe erneut.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "Bitte erlaube das Mikrofon in den Systemeinstellungen.", Toast.LENGTH_LONG).show()
                     val js = "if(window.app) { window.app.abortRecording(); }"
                     webView.evaluateJavascript(js, null)
                 }
@@ -268,7 +268,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    Toast.makeText(activity, "Mikrofon-Fehler: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "Mikrofon-Fehler: ${e.message}", Toast.LENGTH_LONG).show()
                     val js = "if(window.app) { window.app.abortRecording(); }"
                     webView.evaluateJavascript(js, null)
                 }
@@ -279,10 +279,12 @@ class MainActivity : AppCompatActivity() {
         @JavascriptInterface
         fun stopRecording() {
             activity.runOnUiThread {
+                var wasError = false
                 try {
                     mediaRecorder?.stop()
                 } catch (e: Exception) {
-                    e.printStackTrace() // Verhindert Crash bei zu kurzem Recording
+                    e.printStackTrace() 
+                    wasError = true
                 } finally {
                     try {
                         mediaRecorder?.release()
@@ -291,10 +293,12 @@ class MainActivity : AppCompatActivity() {
                 }
                 
                 val file = java.io.File(activity.filesDir, currentAudioFileName)
-                if (file.exists() && file.length() > 0) {
+                if (!wasError && file.exists() && file.length() > 0) {
                     val js = "if(window.app) { window.app.onNativeAudioResult('$currentAudioFileName'); }"
                     webView.evaluateJavascript(js, null)
                 } else {
+                    if(file.exists()) file.delete() // Cleanup corrupted file
+                    Toast.makeText(activity, "Aufnahme fehlgeschlagen (zu kurz?).", Toast.LENGTH_LONG).show()
                     val js = "if(window.app) { window.app.abortRecording(); }"
                     webView.evaluateJavascript(js, null)
                 }
