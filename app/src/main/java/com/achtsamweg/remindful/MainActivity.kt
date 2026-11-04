@@ -37,6 +37,8 @@ import kotlin.math.max
 class MainActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
+    private var mediaRecorder: android.media.MediaRecorder? = null
+    private var audioFile: java.io.File? = null
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -211,6 +213,72 @@ class MainActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+        }
+
+        @Keep
+        @JavascriptInterface
+        fun startRecording() {
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.RECORD_AUDIO), 102)
+                activity.runOnUiThread {
+                    Toast.makeText(activity, "Bitte erlaube das Mikrofon und tippe erneut.", Toast.LENGTH_SHORT).show()
+                    val js = "if(window.app) { window.app.abortRecording(); }"
+                    webView.evaluateJavascript(js, null)
+                }
+                return
+            }
+            activity.runOnUiThread {
+                try {
+                    val dir = activity.cacheDir
+                    audioFile = java.io.File(dir, "temp_audio.mp4")
+                    
+                    mediaRecorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        android.media.MediaRecorder(activity)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        android.media.MediaRecorder()
+                    }
+                    
+                    mediaRecorder?.apply {
+                        setAudioSource(android.media.MediaRecorder.AudioSource.MIC)
+                        setOutputFormat(android.media.MediaRecorder.OutputFormat.MPEG_4)
+                        setAudioEncoder(android.media.MediaRecorder.AudioEncoder.AAC)
+                        setOutputFile(audioFile?.absolutePath)
+                        prepare()
+                        start()
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(activity, "Mikrofon-Fehler: ${e.message}", Toast.LENGTH_SHORT).show()
+                    val js = "if(window.app) { window.app.abortRecording(); }"
+                    webView.evaluateJavascript(js, null)
+                }
+            }
+        }
+
+        @Keep
+        @JavascriptInterface
+        fun stopRecording() {
+            activity.runOnUiThread {
+                try {
+                    mediaRecorder?.stop()
+                    mediaRecorder?.release()
+                    mediaRecorder = null
+                    
+                    if (audioFile != null && audioFile!!.exists()) {
+                        val bytes = audioFile!!.readBytes()
+                        val base64 = android.util.Base64.encodeToString(bytes, android.util.Base64.NO_WRAP)
+                        val audioUrl = "data:audio/mp4;base64,$base64"
+                        
+                        val js = "if(window.app) { window.app.onNativeAudioResult('$audioUrl'); }"
+                        webView.evaluateJavascript(js, null)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    val js = "if(window.app) { window.app.abortRecording(); }"
+                    webView.evaluateJavascript(js, null)
+                }
             }
         }
 

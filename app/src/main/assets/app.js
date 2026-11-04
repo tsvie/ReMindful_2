@@ -388,6 +388,33 @@ const nlpData = {
     }
 };
 
+const colorPalettes = {
+    teal: {
+        light: { p: '#0d9488', s: '#f0fdfa', b: '#f8fafc', t: '#334155' },
+        dark:  { p: '#14b8a6', s: '#134e4a', b: '#0f172a', t: '#f8fafc' }
+    },
+    indigo: {
+        light: { p: '#4f46e5', s: '#eef2ff', b: '#f8fafc', t: '#312e81' },
+        dark:  { p: '#6366f1', s: '#1e1b4b', b: '#0f172a', t: '#e0e7ff' }
+    },
+    amber: {
+        light: { p: '#d97706', s: '#fffbeb', b: '#fefce8', t: '#78350f' },
+        dark:  { p: '#f59e0b', s: '#451a03', b: '#0f172a', t: '#fef3c7' }
+    },
+    rose: {
+        light: { p: '#e11d48', s: '#fff1f2', b: '#fdf2f8', t: '#881337' },
+        dark:  { p: '#f43f5e', s: '#4c0519', b: '#0f172a', t: '#ffe4e6' }
+    },
+    emerald: {
+        light: { p: '#059669', s: '#ecfdf5', b: '#f0fdf4', t: '#064e3b' },
+        dark:  { p: '#10b981', s: '#022c22', b: '#0f172a', t: '#d1fae5' }
+    },
+    violet: {
+        light: { p: '#7c3aed', s: '#f5f3ff', b: '#faf5ff', t: '#4c1d95' },
+        dark:  { p: '#8b5cf6', s: '#2e1065', b: '#0f172a', t: '#ede9fe' }
+    }
+};
+
 const app = {
     data: {
         user: null,
@@ -452,14 +479,8 @@ const app = {
             if(this.data.user.theme) this.data.theme = this.data.user.theme;
         }
 
-        // Custom colors apply on load
-        const manualColor = localStorage.getItem('aw_manual_colors');
-        if (manualColor) {
-            try {
-                const c = JSON.parse(manualColor);
-                this.setCssVariables(c.primary, c.surface, c.bg, c.text);
-            } catch (e) {}
-        }
+        // Clean up legacy inline color overrides
+        localStorage.removeItem('aw_manual_colors');
     },
     saveData: function() {
         localStorage.setItem('aw_user', JSON.stringify(this.data.user));
@@ -550,6 +571,28 @@ const app = {
             document.documentElement.setAttribute('data-theme', 'dark');
         } else {
             document.documentElement.removeAttribute('data-theme');
+        }
+
+        const manualColorName = localStorage.getItem('aw_manual_color_name');
+        if (manualColorName && colorPalettes[manualColorName]) {
+            const pal = isDark ? colorPalettes[manualColorName].dark : colorPalettes[manualColorName].light;
+            this.setCssVariables(pal.p, pal.s, pal.b, pal.t);
+        } else {
+            // Remove manual overrides to allow default CSS or Material You
+            const root = document.documentElement.style;
+            root.removeProperty('--primary-teal');
+            root.removeProperty('--soft-teal');
+            root.removeProperty('--bg-color');
+            root.removeProperty('--text-main');
+
+            if (this.data.systemColors) {
+                // Apply Material You only if OS theme matches App theme to avoid clashes
+                let isSystemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (isDark === isSystemDark) {
+                    const sc = this.data.systemColors;
+                    this.setCssVariables(sc.primary, sc.surface, sc.bg, sc.text);
+                }
+            }
         }
         this.updateSettingsUI();
     },
@@ -936,51 +979,40 @@ const app = {
 
     // --- VOICE MEMOS ---
     initVoiceMemos: function() {
-        if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            console.log("Web Audio API check failed initially, but we are relying on WebView.");
-        }
+        // We now rely purely on the native Kotlin MediaRecorder bridge
+    },
+    abortRecording: function() {
+        this.isRecording = false;
+        document.getElementById('btn-record').innerText = this.t('voice_btn_record');
+        document.getElementById('record-status').innerText = "";
     },
     toggleRecording: function() {
         if(this.isRecording) {
-            this.mediaRecorder.stop();
-            document.getElementById('btn-record').innerText = this.t('voice_btn_record');
-            document.getElementById('record-status').innerText = "";
-            this.isRecording = false;
+            if (window.AndroidApp && window.AndroidApp.stopRecording) {
+                window.AndroidApp.stopRecording();
+            }
+            this.abortRecording();
         } else {
-            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-                this.mediaRecorder = new MediaRecorder(stream);
-                this.audioChunks = [];
-
-                this.mediaRecorder.ondataavailable = e => {
-                    if(e.data.size > 0) this.audioChunks.push(e.data);
-                };
-                this.mediaRecorder.onstop = () => {
-                    const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
-                    const reader = new FileReader();
-                    reader.readAsDataURL(audioBlob);
-                    reader.onloadend = () => {
-                        const base64data = reader.result;
-                        this.data.voiceMemos.push({
-                            id: Date.now(),
-                            title: "",
-                            audioUrl: base64data,
-                            timestamp: new Date().toISOString()
-                        });
-                        this.saveData();
-                        this.renderVoiceMemos();
-                    }
-                    stream.getTracks().forEach(track => track.stop());
-                };
-
-                this.mediaRecorder.start();
+            if (window.AndroidApp && window.AndroidApp.startRecording) {
+                window.AndroidApp.startRecording();
                 this.isRecording = true;
                 document.getElementById('btn-record').innerText = this.t('voice_btn_stop');
                 document.getElementById('record-status').innerText = this.t('voice_status_rec');
-            }).catch(e => {
-                console.error("Mic Error:", e);
-                this.showToast("Bitte erlaube den Mikrofonzugriff in den App-Einstellungen.");
-            });
+            } else {
+                this.showToast("Native Bridge nicht gefunden.");
+            }
         }
+    },
+    onNativeAudioResult: function(base64data) {
+        this.data.voiceMemos.push({
+            id: Date.now(),
+            title: "",
+            audioUrl: base64data,
+            timestamp: new Date().toISOString()
+        });
+        this.saveData();
+        this.renderVoiceMemos();
+        this.showToast(this.t('toast_saved'));
     },
     renderVoiceMemos: function() {
         const container = document.getElementById('memo-list');
@@ -1122,30 +1154,17 @@ const app = {
         });
     },
     applyMaterialYou: function(primary, bg, text, surface) {
-        // Material You override
-        if(this.data.theme === 'dark') return; // Don't override dark mode with light system colors automatically unless configured
         this.data.systemColors = { primary, bg, text, surface };
-        const manualColor = localStorage.getItem('aw_manual_colors');
-        if (manualColor) {
-            const c = JSON.parse(manualColor);
-            this.setCssVariables(c.primary, c.surface, c.bg, c.text);
-        } else {
-            this.setCssVariables(primary, surface, bg, text);
-        }
+        this.applyTheme();
     },
-    setManualColor: function(primary, surface, bg, text) {
-        localStorage.setItem('aw_manual_colors', JSON.stringify({ primary, surface, bg, text }));
-        this.setCssVariables(primary, surface, bg, text);
-        this.showToast("Theme applied!");
+    setManualColor: function(colorName) {
+        localStorage.setItem('aw_manual_color_name', colorName);
+        this.applyTheme();
+        this.showToast(this.t('toast_updated') || "Theme applied!");
     },
     resetToMaterialYou: function() {
-        localStorage.removeItem('aw_manual_colors');
-        if (this.data.systemColors) {
-            const sc = this.data.systemColors;
-            this.setCssVariables(sc.primary, sc.surface, sc.bg, sc.text);
-        } else {
-            this.setCssVariables('#0d9488', '#f0fdfa', '#f8fafc', '#334155');
-        }
+        localStorage.removeItem('aw_manual_color_name');
+        this.applyTheme();
         this.showToast("System Theme applied!");
     },
     setCssVariables: function(p, s, b, t) {
