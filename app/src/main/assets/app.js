@@ -1003,11 +1003,11 @@ const app = {
             }
         }
     },
-    onNativeAudioResult: function(base64data) {
+    onNativeAudioResult: function(fileName) {
         this.data.voiceMemos.push({
             id: Date.now(),
             title: "",
-            audioUrl: base64data,
+            fileName: fileName,
             timestamp: new Date().toISOString()
         });
         this.saveData();
@@ -1022,6 +1022,9 @@ const app = {
         sorted.forEach(m => {
             const timeStr = new Date(m.timestamp).toLocaleDateString(this.data.currentLang === 'en' ? 'en-US' : 'de-DE', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' });
 
+            // Abwärtskompatibilität für alte Base64-Aufnahmen vs neue native Dateien
+            const audioSrc = m.audioUrl || `https://remindful.local/audio/${m.fileName}`;
+
             const div = document.createElement('div');
             div.className = 'voice-memo-card';
             div.innerHTML = `
@@ -1029,7 +1032,7 @@ const app = {
                     <input type="text" id="memo-title-${m.id}" value="${m.title}" placeholder="${this.t('voice_ph_title')}" style="margin:0; width:70%; padding:8px;" onblur="app.saveMemoTitle(${m.id})">
                     <small style="color:var(--text-main); opacity:0.6;">${timeStr}</small>
                 </div>
-                <audio controls src="${m.audioUrl}"></audio>
+                <audio controls src="${audioSrc}"></audio>
                 <div style="display:flex; gap:8px; margin-top:8px;">
                     <button class="outline-btn" style="padding:8px;" onclick="app.addMemoToJournal(${m.id})">${this.t('voice_add_journal')}</button>
                     <button class="danger-btn" style="padding:8px;" onclick="app.deleteMemo(${m.id})">${this.t('journal_btn_del')}</button>
@@ -1049,6 +1052,10 @@ const app = {
     },
     deleteMemo: function(id) {
         this.showModal(this.t('modal_delete_title'), `<p>${this.t('modal_delete_desc')}</p>`, () => {
+            const memo = this.data.voiceMemos.find(m => m.id === id);
+            if(memo && memo.fileName && window.AndroidApp && window.AndroidApp.deleteRecording) {
+                window.AndroidApp.deleteRecording(memo.fileName);
+            }
             this.data.voiceMemos = this.data.voiceMemos.filter(m => m.id !== id);
             this.saveData();
             this.renderVoiceMemos();

@@ -19,6 +19,8 @@ import android.provider.MediaStore
 import android.webkit.JavascriptInterface
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
@@ -38,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
     private var mediaRecorder: android.media.MediaRecorder? = null
-    private var audioFile: java.io.File? = null
+    private var currentAudioFileName: String = ""
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,6 +80,22 @@ class MainActivity : AppCompatActivity() {
                     } catch (e: Throwable) {
                         e.printStackTrace()
                     }
+                }
+
+                override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+                    val url = request?.url?.toString() ?: ""
+                    if (url.startsWith("https://remindful.local/audio/")) {
+                        try {
+                            val fileName = url.substringAfterLast("/")
+                            val file = java.io.File(filesDir, fileName)
+                            if (file.exists()) {
+                                return WebResourceResponse("audio/mp4", null, file.inputStream())
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                    return super.shouldInterceptRequest(view, request)
                 }
             }
             webChromeClient = object : WebChromeClient() {
@@ -230,8 +248,8 @@ class MainActivity : AppCompatActivity() {
             }
             activity.runOnUiThread {
                 try {
-                    val dir = activity.cacheDir
-                    audioFile = java.io.File(dir, "temp_audio.mp4")
+                    currentAudioFileName = "memo_${System.currentTimeMillis()}.mp4"
+                    val audioFile = java.io.File(activity.filesDir, currentAudioFileName)
                     
                     mediaRecorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         android.media.MediaRecorder(activity)
@@ -244,7 +262,7 @@ class MainActivity : AppCompatActivity() {
                         setAudioSource(android.media.MediaRecorder.AudioSource.MIC)
                         setOutputFormat(android.media.MediaRecorder.OutputFormat.MPEG_4)
                         setAudioEncoder(android.media.MediaRecorder.AudioEncoder.AAC)
-                        setOutputFile(audioFile?.absolutePath)
+                        setOutputFile(audioFile.absolutePath)
                         prepare()
                         start()
                     }
@@ -263,22 +281,36 @@ class MainActivity : AppCompatActivity() {
             activity.runOnUiThread {
                 try {
                     mediaRecorder?.stop()
-                    mediaRecorder?.release()
-                    mediaRecorder = null
-                    
-                    if (audioFile != null && audioFile!!.exists()) {
-                        val bytes = audioFile!!.readBytes()
-                        val base64 = android.util.Base64.encodeToString(bytes, android.util.Base64.NO_WRAP)
-                        val audioUrl = "data:audio/mp4;base64,$base64"
-                        
-                        val js = "if(window.app) { window.app.onNativeAudioResult('$audioUrl'); }"
-                        webView.evaluateJavascript(js, null)
-                    }
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    e.printStackTrace() // Verhindert Crash bei zu kurzem Recording
+                } finally {
+                    try {
+                        mediaRecorder?.release()
+                    } catch (e: Exception) {}
+                    mediaRecorder = null
+                }
+                
+                val file = java.io.File(activity.filesDir, currentAudioFileName)
+                if (file.exists() && file.length() > 0) {
+                    val js = "if(window.app) { window.app.onNativeAudioResult('$currentAudioFileName'); }"
+                    webView.evaluateJavascript(js, null)
+                } else {
                     val js = "if(window.app) { window.app.abortRecording(); }"
                     webView.evaluateJavascript(js, null)
                 }
+            }
+        }
+
+        @Keep
+        @JavascriptInterface
+        fun deleteRecording(fileName: String) {
+            try {
+                val file = java.io.File(activity.filesDir, fileName)
+                if (file.exists()) {
+                    file.delete()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
 
