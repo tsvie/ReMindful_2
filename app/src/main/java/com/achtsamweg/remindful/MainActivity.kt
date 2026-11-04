@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity() {
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT
             )
+            clearCache(true)
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
             settings.allowFileAccess = true
@@ -84,12 +85,16 @@ class MainActivity : AppCompatActivity() {
 
                 override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
                     val url = request?.url?.toString() ?: ""
-                    if (url.startsWith("https://remindful.local/audio/")) {
+                    if (url.startsWith("app-audio://")) {
                         try {
                             val fileName = url.substringAfterLast("/")
                             val file = java.io.File(filesDir, fileName)
                             if (file.exists()) {
-                                return WebResourceResponse("audio/mp4", null, file.inputStream())
+                                val response = WebResourceResponse("audio/mp4", "UTF-8", file.inputStream())
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    response.responseHeaders = mapOf("Access-Control-Allow-Origin" to "*")
+                                }
+                                return response
                             }
                         } catch (e: Exception) {
                             e.printStackTrace()

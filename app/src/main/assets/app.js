@@ -1023,7 +1023,7 @@ const app = {
             const timeStr = new Date(m.timestamp).toLocaleDateString(this.data.currentLang === 'en' ? 'en-US' : 'de-DE', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' });
 
             // Abwärtskompatibilität für alte Base64-Aufnahmen vs neue native Dateien
-            const audioSrc = m.audioUrl || `https://remindful.local/audio/${m.fileName}`;
+            const audioSrc = m.audioUrl || `app-audio://${m.fileName}`;
 
             const div = document.createElement('div');
             div.className = 'voice-memo-card';
