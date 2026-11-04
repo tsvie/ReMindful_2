@@ -5,12 +5,22 @@ const i18n = {
         splash_btn: "Einen Eintrag erstellen",
         onboarding_desc: "Willkommen zu deiner Achtsamkeitsreise.",
         onboarding_name_ph: "Wie dürfen wir dich nennen?",
+        onboarding_pw_q: "Möchtest du die App mit einem Passwort schützen?",
+        btn_yes: "Ja",
+        btn_no: "Nein",
+        pw_ph1: "Passwort",
+        pw_ph2: "Passwort wiederholen",
         onboarding_start: "Starten",
+        lock_title: "App gesperrt",
+        lock_desc: "Bitte gib dein Passwort ein.",
+        lock_btn: "Entsperren",
         mood_title: "Wie fühlst du dich heute?",
         mood_nlp_btn: "✨ Gefühle in Worte fassen",
         mood_ph_happened: "Was ist passiert?",
         mood_ph_pos: "Was war positiv?",
         mood_ph_neg: "Was war negativ?",
+        mood_notes_title: "Zusätzliche Notizen",
+        mood_notes_ph: "Weitere Gedanken...",
         save_entry: "Eintrag speichern",
         goals_title: "Meine Ziele",
         goals_daily: "Tagesziele",
@@ -28,16 +38,34 @@ const i18n = {
         success_ph: "Was war dein Erfolg?",
         success_reason_ph: "Was hat zu diesem Erfolg geführt?",
         success_btn: "🎉 Erfolg feiern & speichern",
+        voice_title: "Sprachmemo",
+        voice_desc: "Möchtest du etwas loswerden? Hast du eine Memo an dich selbst? Oder möchtest du einfach deinen Frust abbauen? Dann sprich, flüstere oder schreie deine Gedanken ins Mikrofon! Natürlich bleibt alles auf deinem Gerät.",
+        voice_btn_record: "🎤",
+        voice_btn_stop: "🛑",
+        voice_status_rec: "Nimmt auf... (Tippe zum Stoppen)",
+        voice_ph_title: "Titel der Aufnahme...",
+        voice_add_journal: "Ins Tagebuch übernehmen",
         journal_title: "Tagebuch",
         journal_pdf_btn: "📄 Als PDF exportieren",
         settings_title: "Einstellungen",
         settings_profile: "👤 Profil & Sprache",
         settings_name_btn: "Name speichern",
+        settings_theme: "🌓 Erscheinungsbild",
+        theme_system: "System-Standard",
+        theme_light: "Hell (Light Mode)",
+        theme_dark: "Dunkel (Dark Mode)",
+        settings_security: "🔒 Sicherheit",
+        pw_status_on: "Passwortschutz ist aktiv.",
+        pw_status_off: "Passwortschutz ist deaktiviert.",
+        pw_btn_enable: "Passwort einrichten",
+        pw_btn_disable: "Passwortschutz entfernen",
+        pw_prompt_enable: "Bitte gib ein neues Passwort ein:",
+        pw_prompt_disable: "Bitte gib dein aktuelles Passwort ein:",
         settings_design: "🎨 Design & Farben",
         settings_design_desc: "Wähle dein bevorzugtes Farbschema:",
         settings_material_btn: "📱 System \"Material You\" wiederherstellen",
         settings_system: "🛠️ System",
-        settings_reminder: "⏰ Tägliche Erinnerung",
+        settings_reminder: "⏰ Aktivieren",
         settings_delete: "🗑️ Alle Daten löschen",
         settings_help: "❓ Hilfe & Erklärung",
         help_q1: "Wie funktioniert der Mood-Tracker?",
@@ -47,18 +75,18 @@ const i18n = {
         help_q3: "Wie funktioniert die 'KI' (NLP)?",
         help_a3: "Die App analysiert deine Eingaben auf bestimmte Wörter und generiert daraus kleine, positive Vorschläge. Alles passiert direkt auf deinem Handy, ohne Internetverbindung.",
         help_q4: "Was passiert beim PDF-Export?",
-        help_a4: "Deine Einträge werden auf Knopfdruck in ein schönes PDF-Dokument formatiert und sicher in deinem Download-Ordner gespeichert.",
+        help_a4: "Deine Einträge werden auf Knopfdruck in ein schönes PDF-Dokument formatiert und sicher in deinem Download-Ordner gespeichert. (Hinweis: Sprachmemos werden nicht exportiert).",
         help_q5: "Wofür ist diese App gedacht?",
         help_a5: "Re:Mindful dient deinem persönlichen Wachstum und der Selbstreflexion. Hinweis: Sie ist kein Ersatz für eine professionelle Therapie oder einen Arzt.",
         nav_mood: "Mood",
         nav_goals: "Ziele",
         nav_success: "Erfolge",
+        nav_voice: "Memo",
         nav_journal: "Tagebuch",
         nav_settings: "Setup",
-        // System / UI texts
         modal_ok: "OK",
         modal_cancel: "Abbrechen",
-        modal_delete_title: "Eintrag löschen",
+        modal_delete_title: "Löschen",
         modal_delete_desc: "Bist du sicher? Dies kann nicht rückgängig gemacht werden.",
         modal_edit_title: "Eintrag bearbeiten",
         modal_reset_title: "Daten löschen",
@@ -69,6 +97,8 @@ const i18n = {
         toast_name: "Name gespeichert!",
         toast_empty: "Bitte fülle das Feld aus.",
         toast_select_emoji: "Bitte wähle einen Emoji aus.",
+        toast_pw_wrong: "Passwort falsch oder stimmt nicht überein.",
+        toast_pw_removed: "Passwortschutz entfernt!",
         nlp_mood_title: "Gefühle analysieren",
         nlp_mood_desc: "Beschreibe kurz in Stichworten, was los ist. Wir helfen dir, das Gefühl zu benennen.",
         nlp_mood_ph: "z.B. Chef war gemein, viel Arbeit...",
@@ -93,12 +123,22 @@ const i18n = {
         splash_btn: "Create an entry",
         onboarding_desc: "Welcome to your mindfulness journey.",
         onboarding_name_ph: "What should we call you?",
+        onboarding_pw_q: "Would you like to protect the app with a password?",
+        btn_yes: "Yes",
+        btn_no: "No",
+        pw_ph1: "Password",
+        pw_ph2: "Repeat Password",
         onboarding_start: "Start",
+        lock_title: "App Locked",
+        lock_desc: "Please enter your password.",
+        lock_btn: "Unlock",
         mood_title: "How do you feel today?",
         mood_nlp_btn: "✨ Put feelings into words",
         mood_ph_happened: "What happened?",
         mood_ph_pos: "What was positive?",
         mood_ph_neg: "What was negative?",
+        mood_notes_title: "Additional Notes",
+        mood_notes_ph: "Further thoughts...",
         save_entry: "Save entry",
         goals_title: "My Goals",
         goals_daily: "Daily Goals",
@@ -116,16 +156,34 @@ const i18n = {
         success_ph: "What was your success?",
         success_reason_ph: "What led to this success?",
         success_btn: "🎉 Celebrate & Save",
+        voice_title: "Voice Memo",
+        voice_desc: "Want to get something off your chest? Have a memo for yourself? Or just want to vent? Speak, whisper, or shout your thoughts into the microphone! Everything stays on your device.",
+        voice_btn_record: "🎤",
+        voice_btn_stop: "🛑",
+        voice_status_rec: "Recording... (Tap to stop)",
+        voice_ph_title: "Recording title...",
+        voice_add_journal: "Add to Journal",
         journal_title: "Journal",
         journal_pdf_btn: "📄 Export as PDF",
         settings_title: "Settings",
         settings_profile: "👤 Profile & Language",
         settings_name_btn: "Save name",
+        settings_theme: "🌓 Appearance",
+        theme_system: "System Default",
+        theme_light: "Light Mode",
+        theme_dark: "Dark Mode",
+        settings_security: "🔒 Security",
+        pw_status_on: "Password protection is active.",
+        pw_status_off: "Password protection is disabled.",
+        pw_btn_enable: "Set Password",
+        pw_btn_disable: "Remove Password",
+        pw_prompt_enable: "Please enter a new password:",
+        pw_prompt_disable: "Please enter your current password:",
         settings_design: "🎨 Design & Colors",
         settings_design_desc: "Choose your preferred color scheme:",
         settings_material_btn: "📱 Restore System \"Material You\"",
         settings_system: "🛠️ System",
-        settings_reminder: "⏰ Daily Reminder",
+        settings_reminder: "⏰ Enable",
         settings_delete: "🗑️ Delete all data",
         settings_help: "❓ Help & Explanation",
         help_q1: "How does the Mood Tracker work?",
@@ -135,18 +193,18 @@ const i18n = {
         help_q3: "How does the 'AI' (NLP) work?",
         help_a3: "The app analyzes your input for specific words and generates small, positive suggestions. Everything happens locally on your phone without internet.",
         help_q4: "What happens during PDF Export?",
-        help_a4: "Your entries are formatted into a beautiful PDF document and securely saved in your Downloads folder.",
+        help_a4: "Your entries are formatted into a beautiful PDF document and securely saved in your Downloads folder. (Note: Voice memos are not exported).",
         help_q5: "What is this app for?",
         help_a5: "Re:Mindful is for personal growth and self-reflection. Note: It is not a substitute for professional therapy or a doctor.",
         nav_mood: "Mood",
         nav_goals: "Goals",
         nav_success: "Success",
+        nav_voice: "Memo",
         nav_journal: "Journal",
         nav_settings: "Settings",
-        // System / UI texts
         modal_ok: "OK",
         modal_cancel: "Cancel",
-        modal_delete_title: "Delete Entry",
+        modal_delete_title: "Delete",
         modal_delete_desc: "Are you sure? This cannot be undone.",
         modal_edit_title: "Edit Entry",
         modal_reset_title: "Delete all data",
@@ -157,6 +215,8 @@ const i18n = {
         toast_name: "Name saved!",
         toast_empty: "Please fill out this field.",
         toast_select_emoji: "Please select an emoji.",
+        toast_pw_wrong: "Password incorrect or mismatch.",
+        toast_pw_removed: "Password removed!",
         nlp_mood_title: "Analyze Feelings",
         nlp_mood_desc: "Briefly describe what's going on. We will help you name the emotion.",
         nlp_mood_ph: "e.g., boss was mean, lots of work...",
@@ -333,22 +393,43 @@ const app = {
         user: null,
         entries: [],
         activeGoals: [],
+        voiceMemos: [],
         currentLang: 'de',
         selectedMood: null,
-        currentGoalType: 'daily'
+        currentGoalType: 'daily',
+        theme: 'system' // system, light, dark
     },
+
+    // Voice Recorder State
+    mediaRecorder: null,
+    audioChunks: [],
+    isRecording: false,
 
     init: function() {
         this.loadData();
         this.applyLanguage();
+        this.applyTheme();
+
+        // Listen to system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+            if(this.data.theme === 'system') this.applyTheme();
+        });
 
         if (this.data.user && this.data.user.name) {
             document.getElementById('screen-onboarding').style.display = 'none';
-            this.showSplash();
+            if (this.data.user.password) {
+                document.getElementById('screen-lock').style.display = 'flex';
+                document.getElementById('screen-main').style.display = 'none';
+            } else {
+                this.showSplash();
+            }
         } else {
             document.getElementById('screen-onboarding').style.display = 'flex';
             document.getElementById('screen-main').style.display = 'none';
         }
+
+        // Setup IDB for Memos if not available we use base64 in localstorage (Fallback)
+        this.initVoiceMemos();
     },
 
     // --- UTILS ---
@@ -364,9 +445,14 @@ const app = {
         this.data.user = this.safeParse('aw_user', null);
         this.data.entries = this.safeParse('aw_entries', []);
         this.data.activeGoals = this.safeParse('aw_active_goals', []);
-        if(this.data.user && this.data.user.lang) this.data.currentLang = this.data.user.lang;
+        this.data.voiceMemos = this.safeParse('aw_voice_memos', []);
 
-        // Farbe sofort beim Start wiederherstellen!
+        if(this.data.user) {
+            if(this.data.user.lang) this.data.currentLang = this.data.user.lang;
+            if(this.data.user.theme) this.data.theme = this.data.user.theme;
+        }
+
+        // Custom colors apply on load
         const manualColor = localStorage.getItem('aw_manual_colors');
         if (manualColor) {
             try {
@@ -379,6 +465,7 @@ const app = {
         localStorage.setItem('aw_user', JSON.stringify(this.data.user));
         localStorage.setItem('aw_entries', JSON.stringify(this.data.entries));
         localStorage.setItem('aw_active_goals', JSON.stringify(this.data.activeGoals));
+        localStorage.setItem('aw_voice_memos', JSON.stringify(this.data.voiceMemos));
     },
 
     // --- UI HELPERS ---
@@ -401,7 +488,6 @@ const app = {
 
         btnCancel.innerText = this.t('modal_cancel');
         btnConfirm.innerText = this.t('modal_ok');
-
         btnCancel.style.display = showCancel ? 'block' : 'none';
 
         btnCancel.onclick = () => { document.getElementById('custom-modal').style.display = 'none'; };
@@ -424,8 +510,8 @@ const app = {
         this.saveData();
         this.applyLanguage();
         this.showToast(this.t('toast_name'));
-        this.renderJournal(); // re-render dates
-        this.renderActiveGoals(); // re-render types
+        this.renderJournal();
+        this.renderActiveGoals();
     },
     t: function(key) {
         return i18n[this.data.currentLang][key] || key;
@@ -440,20 +526,125 @@ const app = {
             const key = el.getAttribute('data-i18n-placeholder');
             if(langData[key]) el.placeholder = langData[key];
         });
+        this.updateSettingsUI();
     },
 
-    // --- ONBOARDING & SPLASH ---
+    // --- THEME ---
+    changeTheme: function() {
+        const sel = document.getElementById('theme-selector').value;
+        this.data.theme = sel;
+        if(this.data.user) {
+            this.data.user.theme = sel;
+            this.saveData();
+        }
+        this.applyTheme();
+    },
+    applyTheme: function() {
+        let isDark = false;
+        if (this.data.theme === 'dark') isDark = true;
+        else if (this.data.theme === 'system') {
+            isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+
+        if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+        }
+        this.updateSettingsUI();
+    },
+
+    // --- PASSWORD & ONBOARDING ---
+    toggleOnboardingPw: function(show) {
+        document.getElementById('btn-pw-yes').classList.toggle('active', show);
+        document.getElementById('btn-pw-no').classList.toggle('active', !show);
+        document.getElementById('onboarding-pw-fields').style.display = show ? 'block' : 'none';
+    },
+
     finishOnboarding: function() {
         const name = document.getElementById('input-username').value.trim();
-        if (name) {
-            this.data.user = { name: name, lang: this.data.currentLang };
-            this.saveData();
-            document.getElementById('screen-onboarding').style.display = 'none';
+        if (!name) return this.showToast(this.t('toast_empty'));
+
+        let pw = null;
+        if (document.getElementById('onboarding-pw-fields').style.display === 'block') {
+            const p1 = document.getElementById('input-pw1').value;
+            const p2 = document.getElementById('input-pw2').value;
+            if(!p1 || p1 !== p2) return this.showToast(this.t('toast_pw_wrong'));
+            pw = p1;
+        }
+
+        this.data.user = { name: name, lang: this.data.currentLang, password: pw, theme: 'system' };
+        this.saveData();
+        document.getElementById('screen-onboarding').style.display = 'none';
+        this.showSplash();
+    },
+
+    unlockApp: function() {
+        const inp = document.getElementById('input-lock-pw').value;
+        if(inp === this.data.user.password) {
+            document.getElementById('screen-lock').style.display = 'none';
+            document.getElementById('input-lock-pw').value = '';
             this.showSplash();
         } else {
-            this.showToast(this.t('toast_empty'));
+            this.showToast(this.t('toast_pw_wrong'));
         }
     },
+
+    updateSettingsUI: function() {
+        if(!this.data.user) return;
+        const selector = document.getElementById('theme-selector');
+        if(selector) selector.value = this.data.theme || 'system';
+
+        const pwStatus = document.getElementById('pw-status-text');
+        const pwBtn = document.getElementById('btn-pw-toggle');
+        if(pwStatus && pwBtn) {
+            if(this.data.user.password) {
+                pwStatus.innerText = this.t('pw_status_on');
+                pwBtn.innerText = this.t('pw_btn_disable');
+                pwBtn.className = 'danger-btn';
+            } else {
+                pwStatus.innerText = this.t('pw_status_off');
+                pwBtn.innerText = this.t('pw_btn_enable');
+                pwBtn.className = '';
+            }
+        }
+    },
+
+    togglePasswordSetting: function() {
+        if(this.data.user.password) {
+            const body = `<p>${this.t('pw_prompt_disable')}</p><input type='password' id='settings-pw-verify'>`;
+            this.showModal(this.t('settings_security'), body, () => {
+                const val = document.getElementById('settings-pw-verify').value;
+                if(val === this.data.user.password) {
+                    this.data.user.password = null;
+                    this.saveData();
+                    this.updateSettingsUI();
+                    this.showToast(this.t('toast_pw_removed'));
+                } else {
+                    this.showToast(this.t('toast_pw_wrong'));
+                }
+            });
+        } else {
+            const body = `
+                <p>${this.t('pw_prompt_enable')}</p>
+                <input type='password' id='settings-pw-new1' placeholder='${this.t('pw_ph1')}'>
+                <input type='password' id='settings-pw-new2' placeholder='${this.t('pw_ph2')}' style='margin-top:10px;'>
+            `;
+            this.showModal(this.t('settings_security'), body, () => {
+                const p1 = document.getElementById('settings-pw-new1').value;
+                const p2 = document.getElementById('settings-pw-new2').value;
+                if(p1 && p1 === p2) {
+                    this.data.user.password = p1;
+                    this.saveData();
+                    this.updateSettingsUI();
+                    this.showToast(this.t('toast_saved'));
+                } else {
+                    this.showToast(this.t('toast_pw_wrong'));
+                }
+            });
+        }
+    },
+
     showSplash: function() {
         const splash = document.getElementById('screen-splash');
         document.getElementById('splash-title').innerText = `${this.t('welcome')} ${this.data.user.name}!`;
@@ -473,10 +664,12 @@ const app = {
         document.getElementById('tab-' + tabId).style.display = 'block';
         if(btnElement) btnElement.classList.add('active');
         if(tabId === 'journal') this.renderJournal();
+        if(tabId === 'voice') this.renderVoiceMemos();
         if(tabId === 'settings') {
             document.getElementById('settings-name').value = this.data.user.name;
             document.querySelectorAll('#tab-settings .lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`set-lang-${this.data.currentLang}`).classList.add('active');
+            this.updateSettingsUI();
         }
     },
 
@@ -497,38 +690,32 @@ const app = {
             const engine = nlpData[this.data.currentLang];
             let emotion = engine.mood_fallback;
 
-            // Collect all matching emotions
             let matches = [];
             engine.moods.forEach(rule => {
                 if (rule.rx.test(text)) matches.push(rule.text);
             });
-
-            if (matches.length > 0) {
-                // If multiple emotions match, we join them, creating a nuanced response
-                emotion = matches.join(" ");
-            }
+            if (matches.length > 0) emotion = matches.join(" ");
 
             const mainText = document.getElementById('mood-text');
             mainText.value = mainText.value ? mainText.value + "\n\n" + emotion : emotion;
             this.showToast(this.t('nlp_mood_btn') + " ✅");
         });
-
-        // Auto-focus the NLP textarea for immediate typing
         setTimeout(() => document.getElementById('nlp-mood-input').focus(), 100);
     },
 
     saveMood: function() {
         if(!this.data.selectedMood) return this.showToast(this.t('toast_select_emoji'));
 
-        const happened = document.getElementById('mood-text').value;
-        const pos = document.getElementById('mood-pos').value;
-        const neg = document.getElementById('mood-neg').value;
+        const happened = document.getElementById('mood-text').value.trim();
+        const pos = document.getElementById('mood-pos').value.trim();
+        const neg = document.getElementById('mood-neg').value.trim();
+        const notes = document.getElementById('mood-notes').value.trim();
 
         let fullText = happened;
         if(pos) fullText += `\n\nPositiv: ${pos}`;
         if(neg) fullText += `\n\nNegativ: ${neg}`;
+        if(notes) fullText += `\n\nNotizen: ${notes}`;
 
-        // Emoji Map
         const emojiMap = {1:'😢', 2:'😕', 3:'😐', 4:'🙂', 5:'😄'};
 
         this.data.entries.push({
@@ -549,6 +736,7 @@ const app = {
         document.getElementById('mood-text').value = '';
         document.getElementById('mood-pos').value = '';
         document.getElementById('mood-neg').value = '';
+        document.getElementById('mood-notes').value = '';
     },
 
     // --- GOALS ---
@@ -577,10 +765,7 @@ const app = {
                 break;
             }
         }
-
-        if (matchedSteps.length === 0) {
-            matchedSteps = engine.goal_fallback;
-        }
+        if (matchedSteps.length === 0) matchedSteps = engine.goal_fallback;
 
         let html = '';
         matchedSteps.forEach(step => {
@@ -603,7 +788,6 @@ const app = {
         const newLabel = document.createElement('label');
         newLabel.innerHTML = `<input type="checkbox" value="${stepText}" checked> ${stepText}`;
 
-        // Insert before the save button
         const saveBtn = container.querySelector('.save-btn');
         if(saveBtn) {
             container.insertBefore(newLabel, saveBtn);
@@ -611,7 +795,6 @@ const app = {
         } else {
             container.appendChild(newLabel);
         }
-
         document.getElementById('custom-step-input').value = '';
     },
 
@@ -627,7 +810,6 @@ const app = {
         const text = document.getElementById('goal-input').value;
         const checkboxes = document.querySelectorAll('#goal-nlp-suggestions input:checked');
         let steps = Array.from(checkboxes).map(cb => cb.value);
-
         this.addActiveGoal(text, steps);
 
         document.getElementById('goal-input').value = '';
@@ -703,7 +885,6 @@ const app = {
             if(goal.steps.length > 0) journalText += `Schritte:\n- ` + goal.steps.join('\n- ') + `\n\n`;
             journalText += `Ergebnis: ${status}\nReflexion: ${reason}`;
 
-            // Add to Journal
             this.data.entries.push({
                 id: Date.now(),
                 type: 'goal',
@@ -711,7 +892,6 @@ const app = {
                 timestamp: new Date().toISOString()
             });
 
-            // Remove from active
             this.data.activeGoals = this.data.activeGoals.filter(g => g.id !== id);
             this.saveData();
             this.renderActiveGoals();
@@ -723,7 +903,6 @@ const app = {
     saveSuccess: function() {
         const text = document.getElementById('success-input').value;
         const reason = document.getElementById('success-reason').value;
-
         if(!text) return this.showToast(this.t('toast_empty'));
 
         let fullText = `Erfolg: ${text}`;
@@ -743,7 +922,6 @@ const app = {
         document.getElementById('success-input').value = '';
         document.getElementById('success-reason').value = '';
     },
-
     triggerConfetti: function() {
         for(let i=0; i<60; i++) {
             let el = document.createElement('div');
@@ -756,6 +934,111 @@ const app = {
         }
     },
 
+    // --- VOICE MEMOS ---
+    initVoiceMemos: function() {
+        if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            console.error("Audio recording not supported in this environment");
+        }
+    },
+    toggleRecording: function() {
+        if(this.isRecording) {
+            this.mediaRecorder.stop();
+            document.getElementById('btn-record').innerText = this.t('voice_btn_record');
+            document.getElementById('record-status').innerText = "";
+            this.isRecording = false;
+        } else {
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+                this.mediaRecorder = new MediaRecorder(stream);
+                this.audioChunks = [];
+
+                this.mediaRecorder.ondataavailable = e => {
+                    if(e.data.size > 0) this.audioChunks.push(e.data);
+                };
+                this.mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+                    // Using FileReader to store Base64 in LocalStorage for simplicity.
+                    // (WebView limit is usually 5-10MB, fine for short memos)
+                    const reader = new FileReader();
+                    reader.readAsDataURL(audioBlob);
+                    reader.onloadend = () => {
+                        const base64data = reader.result;
+                        this.data.voiceMemos.push({
+                            id: Date.now(),
+                            title: "",
+                            audioUrl: base64data,
+                            timestamp: new Date().toISOString()
+                        });
+                        this.saveData();
+                        this.renderVoiceMemos();
+                    }
+                    // Stop tracks to release mic
+                    stream.getTracks().forEach(track => track.stop());
+                };
+
+                this.mediaRecorder.start();
+                this.isRecording = true;
+                document.getElementById('btn-record').innerText = this.t('voice_btn_stop');
+                document.getElementById('record-status').innerText = this.t('voice_status_rec');
+            }).catch(e => {
+                this.showToast("Microphone permission denied or not supported.");
+            });
+        }
+    },
+    renderVoiceMemos: function() {
+        const container = document.getElementById('memo-list');
+        container.innerHTML = '';
+        const sorted = [...this.data.voiceMemos].sort((a,b) => b.id - a.id);
+
+        sorted.forEach(m => {
+            const timeStr = new Date(m.timestamp).toLocaleDateString(this.data.currentLang === 'en' ? 'en-US' : 'de-DE', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' });
+
+            const div = document.createElement('div');
+            div.className = 'voice-memo-card';
+            div.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <input type="text" id="memo-title-${m.id}" value="${m.title}" placeholder="${this.t('voice_ph_title')}" style="margin:0; width:70%; padding:8px;" onblur="app.saveMemoTitle(${m.id})">
+                    <small style="color:var(--text-main); opacity:0.6;">${timeStr}</small>
+                </div>
+                <audio controls src="${m.audioUrl}"></audio>
+                <div style="display:flex; gap:8px; margin-top:8px;">
+                    <button class="outline-btn" style="padding:8px;" onclick="app.addMemoToJournal(${m.id})">${this.t('voice_add_journal')}</button>
+                    <button class="danger-btn" style="padding:8px;" onclick="app.deleteMemo(${m.id})">${this.t('journal_btn_del')}</button>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    },
+    saveMemoTitle: function(id) {
+        const title = document.getElementById(`memo-title-${id}`).value;
+        const memo = this.data.voiceMemos.find(m => m.id === id);
+        if(memo) {
+            memo.title = title;
+            this.saveData();
+            this.showToast(this.t('toast_saved'));
+        }
+    },
+    deleteMemo: function(id) {
+        this.showModal(this.t('modal_delete_title'), `<p>${this.t('modal_delete_desc')}</p>`, () => {
+            this.data.voiceMemos = this.data.voiceMemos.filter(m => m.id !== id);
+            this.saveData();
+            this.renderVoiceMemos();
+            this.showToast(this.t('toast_deleted'));
+        });
+    },
+    addMemoToJournal: function(id) {
+        const memo = this.data.voiceMemos.find(m => m.id === id);
+        if(!memo) return;
+        const displayTitle = memo.title || "Sprachmemo";
+        this.data.entries.push({
+            id: Date.now(),
+            type: 'voice',
+            text: `🎙️ ${displayTitle} (Audionotiz am Gerät angehört)`,
+            timestamp: new Date().toISOString()
+        });
+        this.saveData();
+        this.showToast(this.t('toast_saved'));
+    },
+
     // --- JOURNAL ---
     renderJournal: function() {
         const list = document.getElementById('journal-list');
@@ -766,7 +1049,6 @@ const app = {
             return;
         }
 
-        // Group by Date
         const grouped = {};
         const sorted = [...this.data.entries].sort((a,b) => b.id - a.id);
 
@@ -805,11 +1087,9 @@ const app = {
             list.appendChild(dayDiv);
         }
     },
-
     editEntry: function(id) {
         const entry = this.data.entries.find(e => e.id === id);
         if(!entry) return;
-
         const body = `<textarea id="edit-text-val" style="width:100%; min-height:150px;">${entry.text}</textarea>`;
         this.showModal(this.t('modal_edit_title'), body, () => {
             const newText = document.getElementById('edit-text-val').value;
@@ -819,7 +1099,6 @@ const app = {
             this.showToast(this.t('toast_updated'));
         });
     },
-
     deleteEntry: function(id) {
         this.showModal(this.t('modal_delete_title'), `<p>${this.t('modal_delete_desc')}</p>`, () => {
             this.data.entries = this.data.entries.filter(e => e.id !== id);
@@ -838,15 +1117,15 @@ const app = {
             this.showToast(this.t('toast_name'));
         }
     },
-
     confirmReset: function() {
         this.showModal(this.t('modal_reset_title'), `<p style='color:red;'>${this.t('modal_reset_desc')}</p>`, () => {
             localStorage.clear();
             location.reload();
         });
     },
-
     applyMaterialYou: function(primary, bg, text, surface) {
+        // Material You override
+        if(this.data.theme === 'dark') return; // Don't override dark mode with light system colors automatically unless configured
         this.data.systemColors = { primary, bg, text, surface };
         const manualColor = localStorage.getItem('aw_manual_colors');
         if (manualColor) {
@@ -879,19 +1158,8 @@ const app = {
         root.setProperty('--text-main', t);
     },
 
-    // --- BRIDGE ---
-    toggleDailyReminder: function() {
-        const timeInput = document.getElementById('reminder-time').value;
-        if(window.AndroidApp) {
-            window.AndroidApp.scheduleNotification(true, timeInput, this.t('splash_subtitle'));
-            this.showToast(`Erinnerung / Reminder: ${timeInput} ✅`);
-        } else {
-            this.showToast("Native Bridge nicht gefunden.");
-        }
-    },
     exportPdf: function() {
         if(window.AndroidApp) {
-            // PDF requires native localized formatting, we pass the raw entries
             window.AndroidApp.generateAndSavePdf(JSON.stringify(this.data.entries), "Tagebuch.pdf", this.data.user.name);
         } else {
             this.showToast("Native Bridge nicht gefunden.");
@@ -900,7 +1168,6 @@ const app = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Event Listener setup for Inputs to hide direct save if typing inside NLP search
     const goalInp = document.getElementById('goal-input');
     if(goalInp) {
         goalInp.addEventListener('input', () => {
@@ -910,7 +1177,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Scroll inputs into view to avoid keyboard overlap
     document.querySelectorAll('input[type="text"], textarea').forEach(el => {
         el.addEventListener('focus', () => {
             setTimeout(() => el.scrollIntoView({behavior: 'smooth', block: 'center'}), 300);

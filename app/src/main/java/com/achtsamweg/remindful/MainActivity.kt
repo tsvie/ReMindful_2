@@ -17,6 +17,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.webkit.JavascriptInterface
+import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -78,7 +79,11 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-                webChromeClient = WebChromeClient()
+                webChromeClient = object : WebChromeClient() {
+                    override fun onPermissionRequest(request: PermissionRequest) {
+                        request.grant(request.resources)
+                    }
+                }
                 
                 // Inject JS Bridge
                 addJavascriptInterface(WebAppInterface(this@MainActivity), "AndroidApp")
@@ -130,10 +135,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun requestPermissionsIfNecessary() {
+        val permissions = mutableListOf(Manifest.permission.RECORD_AUDIO)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
-            }
+            permissions.add(Manifest.permission.POST_NOTIFICATIONS)
+        }
+        val needed = permissions.filter { ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED }
+        if (needed.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, needed.toTypedArray(), 101)
         }
     }
 
