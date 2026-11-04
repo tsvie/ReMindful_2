@@ -21,111 +21,113 @@ import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import android.widget.FrameLayout
 import org.json.JSONArray
 import java.util.Calendar
-import androidx.annotation.Keep
 import kotlin.math.max
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
-    private var currentSafeInsets: androidx.core.graphics.Insets? = null
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        
         try {
-            super.onCreate(savedInstanceState)
             enableEdgeToEdge()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
-            createNotificationChannel()
-            requestPermissionsIfNecessary()
+        val rootLayout = FrameLayout(this).apply {
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            )
+            setBackgroundColor(android.graphics.Color.parseColor("#f8fafc"))
+        }
 
-            // Root-Container erstellen, der das Padding aufnimmt
-            val rootLayout = FrameLayout(this).apply {
-                layoutParams = FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.MATCH_PARENT,
-                    FrameLayout.LayoutParams.MATCH_PARENT
-                )
-                // Hintergrundfarbe passend zur App setzen, damit es beim Starten nicht blitzt
-                setBackgroundColor(android.graphics.Color.parseColor("#f8fafc"))
-            }
-
-            // Create WebView programmatically
-            webView = WebView(this).apply {
-                layoutParams = FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.MATCH_PARENT,
-                    FrameLayout.LayoutParams.MATCH_PARENT
-                )
-                settings.javaScriptEnabled = true
-                settings.domStorageEnabled = true
-                settings.allowFileAccess = true
-                settings.allowContentAccess = true
-                
-                webViewClient = object : WebViewClient() {
-                    override fun onPageFinished(view: WebView?, url: String?) {
-                        super.onPageFinished(view, url)
-                        try {
-                            injectMaterialYouColors()
-                        } catch (e: Throwable) {
-                            e.printStackTrace()
-                        }
+        webView = WebView(this).apply {
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            )
+            settings.javaScriptEnabled = true
+            settings.domStorageEnabled = true
+            settings.allowFileAccess = true
+            settings.allowContentAccess = true
+            
+            webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    try {
+                        injectMaterialYouColors()
+                    } catch (e: Throwable) {
+                        e.printStackTrace()
                     }
                 }
-                webChromeClient = object : WebChromeClient() {
-                    override fun onPermissionRequest(request: PermissionRequest) {
-                        request.grant(request.resources)
+            }
+            webChromeClient = object : WebChromeClient() {
+                override fun onPermissionRequest(request: PermissionRequest?) {
+                    try {
+                        request?.grant(request.resources)
+                    } catch (e: Throwable) {
+                        e.printStackTrace()
                     }
                 }
-                
-                // Inject JS Bridge
-                addJavascriptInterface(WebAppInterface(this@MainActivity), "AndroidApp")
             }
+            
+            addJavascriptInterface(WebAppInterface(this@MainActivity), "AndroidApp")
+        }
 
-            rootLayout.addView(webView)
-            setContentView(rootLayout)
+        rootLayout.addView(webView)
+        setContentView(rootLayout)
 
-            // 100% kugelsicheres Inset-Handling: Der äußere FrameLayout erhält das Padding.
-            // Dadurch wird der WebView niemals von der Notch, Statusleiste oder Tastatur überlagert.
+        try {
             ViewCompat.setOnApplyWindowInsetsListener(rootLayout) { v, insets ->
                 try {
                     val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout())
                     val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
                     
-                    // Der untere Abstand ist das Maximum aus Navigationsleiste und aufklappender Tastatur
                     val bottomPadding = max(systemBars.bottom, ime.bottom)
-                    
                     v.setPadding(systemBars.left, systemBars.top, systemBars.right, bottomPadding)
                 } catch (e: Throwable) {
                     e.printStackTrace()
                 }
                 WindowInsetsCompat.CONSUMED
             }
-
-            webView.loadUrl("file:///android_asset/index.html")
-        } catch (e: Throwable) {
+        } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, "Crash prevented: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+
+        webView.loadUrl("file:///android_asset/index.html")
+
+        // Permissions & Channels after UI setup
+        try {
+            createNotificationChannel()
+            requestPermissionsIfNecessary()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
     private fun injectMaterialYouColors() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             try {
-                // Dynamische Farben (Material You) aus dem Android OS extrahieren
-                val primary = String.format("#%06X", 0xFFFFFF and resources.getColor(android.R.color.system_accent1_500, theme))
-                val bg = String.format("#%06X", 0xFFFFFF and resources.getColor(android.R.color.system_neutral1_50, theme))
-                val surface = String.format("#%06X", 0xFFFFFF and resources.getColor(android.R.color.system_accent1_100, theme))
-                val text = String.format("#%06X", 0xFFFFFF and resources.getColor(android.R.color.system_neutral1_900, theme))
+                val primary = String.format("#%06X", 0xFFFFFF and ContextCompat.getColor(this, android.R.color.system_accent1_500))
+                val bg = String.format("#%06X", 0xFFFFFF and ContextCompat.getColor(this, android.R.color.system_neutral1_50))
+                val surface = String.format("#%06X", 0xFFFFFF and ContextCompat.getColor(this, android.R.color.system_accent1_100))
+                val text = String.format("#%06X", 0xFFFFFF and ContextCompat.getColor(this, android.R.color.system_neutral1_900))
                 
-                // An das Web-Frontend senden
                 val js = "if(window.app && typeof window.app.applyMaterialYou === 'function') { window.app.applyMaterialYou('$primary', '$bg', '$text', '$surface'); }"
                 webView.evaluateJavascript(js, null)
             } catch (e: Exception) {
@@ -159,65 +161,54 @@ class MainActivity : AppCompatActivity() {
         }
     }
     
-    // JS Bridge class
     @Keep
     inner class WebAppInterface(private val activity: AppCompatActivity) {
         
         @Keep
         @JavascriptInterface
-        fun triggerTestNotification(text: String) {
-            val intent = Intent(activity, NotificationReceiver::class.java).apply {
-                putExtra("title", "Re:Mindful")
-                putExtra("message", text)
-            }
-            activity.sendBroadcast(intent)
-            
-            activity.runOnUiThread {
-                Toast.makeText(activity, "Notification ausgelöst", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        @Keep
-        @JavascriptInterface
         fun scheduleNotification(enabled: Boolean, time: String, note: String) {
-            val alarmManager = activity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val intent = Intent(activity, NotificationReceiver::class.java).apply {
-                putExtra("title", "Re:Mindful Erinnerung")
-                putExtra("message", if (note.isEmpty()) "Zeit für dich! Wie war dein Tag?" else note)
-            }
-            
-            val pendingIntent = PendingIntent.getBroadcast(
-                activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-            
-            if (enabled) {
-                val parts = time.split(":")
-                if (parts.size == 2) {
-                    val calendar = Calendar.getInstance().apply {
-                        timeInMillis = System.currentTimeMillis()
-                        set(Calendar.HOUR_OF_DAY, parts[0].toInt())
-                        set(Calendar.MINUTE, parts[1].toInt())
-                        set(Calendar.SECOND, 0)
-                        if (timeInMillis <= System.currentTimeMillis()) {
-                            add(Calendar.DAY_OF_YEAR, 1)
+            try {
+                val alarmManager = activity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                val intent = Intent(activity, NotificationReceiver::class.java).apply {
+                    putExtra("title", "Re:Mindful Erinnerung")
+                    putExtra("message", if (note.isEmpty()) "Zeit für dich! Wie war dein Tag?" else note)
+                }
+                
+                val pendingIntent = PendingIntent.getBroadcast(
+                    activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+                
+                if (enabled) {
+                    val parts = time.split(":")
+                    if (parts.size == 2) {
+                        val calendar = Calendar.getInstance().apply {
+                            timeInMillis = System.currentTimeMillis()
+                            set(Calendar.HOUR_OF_DAY, parts[0].toInt())
+                            set(Calendar.MINUTE, parts[1].toInt())
+                            set(Calendar.SECOND, 0)
+                            if (timeInMillis <= System.currentTimeMillis()) {
+                                add(Calendar.DAY_OF_YEAR, 1)
+                            }
+                        }
+                        
+                        alarmManager.setRepeating(
+                            AlarmManager.RTC_WAKEUP,
+                            calendar.timeInMillis,
+                            AlarmManager.INTERVAL_DAY,
+                            pendingIntent
+                        )
+                        activity.runOnUiThread {
+                            Toast.makeText(activity, "Erinnerung aktiviert", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    
-                    alarmManager.setRepeating(
-                        AlarmManager.RTC_WAKEUP,
-                        calendar.timeInMillis,
-                        AlarmManager.INTERVAL_DAY,
-                        pendingIntent
-                    )
+                } else {
+                    alarmManager.cancel(pendingIntent)
                     activity.runOnUiThread {
-                        Toast.makeText(activity, "Tägliche Erinnerung für $time Uhr aktiviert", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity, "Erinnerung deaktiviert", Toast.LENGTH_SHORT).show()
                     }
                 }
-            } else {
-                alarmManager.cancel(pendingIntent)
-                activity.runOnUiThread {
-                    Toast.makeText(activity, "Erinnerung deaktiviert", Toast.LENGTH_SHORT).show()
-                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
 
@@ -239,12 +230,10 @@ class MainActivity : AppCompatActivity() {
                 var canvas = page.canvas
                 var yPosition = 50f
                 
-                // Lese aktuelle Farben (Workaround für WebView Interop)
                 val primaryTeal = android.graphics.Color.parseColor("#0d9488")
                 val softTeal = android.graphics.Color.parseColor("#f0fdfa")
                 val textMain = android.graphics.Color.parseColor("#334155")
                 
-                // Titel "Tagebuch von X"
                 paint.color = primaryTeal
                 paint.textSize = 32f
                 paint.isFakeBoldText = true
@@ -257,7 +246,6 @@ class MainActivity : AppCompatActivity() {
                 canvas.drawText("Dein Weg zu mehr Achtsamkeit und persönlichem Wachstum.", 50f, yPosition, paint)
                 yPosition += 50f
 
-                // Datum-Gruppierung (einfacher State)
                 var lastDate = ""
 
                 for (i in 0 until jsonArray.length()) {
@@ -265,7 +253,6 @@ class MainActivity : AppCompatActivity() {
                     val text = entry.optString("text", "")
                     val fullDate = entry.optString("timestamp", "")
                     
-                    // Format: 2023-10-01 -> 01.10.2023 (Deutsches Datum)
                     val dateOnly = if (fullDate.length >= 10) {
                         val y = fullDate.substring(0, 4)
                         val m = fullDate.substring(5, 7)
@@ -284,12 +271,10 @@ class MainActivity : AppCompatActivity() {
                         yPosition = 50f
                     }
                     
-                    // Neues Datum? -> Überschrift
                     if (dateOnly != lastDate) {
                         lastDate = dateOnly
                         yPosition += 20f
                         
-                        // Hintergrund für Datum
                         val rect = android.graphics.RectF(40f, yPosition - 25f, 555f, yPosition + 15f)
                         paint.color = softTeal
                         canvas.drawRoundRect(rect, 10f, 10f, paint)
@@ -304,12 +289,10 @@ class MainActivity : AppCompatActivity() {
                         paint.textSize = 14f
                     }
                     
-                    // Header des Eintrags: Uhrzeit, Typ, Emoji
                     paint.isFakeBoldText = true
                     canvas.drawText("$timeOnly | $type $emoji", 50f, yPosition, paint)
                     yPosition += 20f
                     
-                    // Text mit StaticLayout (automatischer Zeilenumbruch!)
                     val staticLayout = android.text.StaticLayout.Builder.obtain(text, 0, text.length, textPaint, 495)
                             .setAlignment(android.text.Layout.Alignment.ALIGN_NORMAL)
                             .setLineSpacing(0f, 1.2f)
@@ -321,11 +304,10 @@ class MainActivity : AppCompatActivity() {
                     staticLayout.draw(canvas)
                     canvas.restore()
                     
-                    yPosition += staticLayout.height + 35f // Abstand zum nächsten Eintrag
+                    yPosition += staticLayout.height + 35f 
                 }
                 pdfDocument.finishPage(page)
 
-                // Speichern
                 val values = ContentValues().apply {
                     put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
                     put(MediaStore.MediaColumns.MIME_TYPE, "application/pdf")
@@ -338,11 +320,11 @@ class MainActivity : AppCompatActivity() {
                         pdfDocument.writeTo(it)
                     }
                     activity.runOnUiThread {
-                        Toast.makeText(activity, "PDF erfolgreich in 'Downloads' gespeichert", Toast.LENGTH_LONG).show()
+                        Toast.makeText(activity, "PDF in 'Downloads' gespeichert", Toast.LENGTH_LONG).show()
                     }
                 } else {
                     activity.runOnUiThread {
-                        Toast.makeText(activity, "Fehler beim Erstellen der PDF-Datei", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity, "Fehler beim Erstellen der PDF", Toast.LENGTH_SHORT).show()
                     }
                 }
                 pdfDocument.close()
@@ -350,7 +332,7 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
                 activity.runOnUiThread {
-                    Toast.makeText(activity, "PDF Generierung fehlgeschlagen: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, "PDF Generierung fehlgeschlagen", Toast.LENGTH_LONG).show()
                 }
             }
         }
