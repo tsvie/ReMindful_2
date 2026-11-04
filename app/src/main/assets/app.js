@@ -38,13 +38,6 @@ const i18n = {
         success_ph: "Was war dein Erfolg?",
         success_reason_ph: "Was hat zu diesem Erfolg geführt?",
         success_btn: "🎉 Erfolg feiern & speichern",
-        voice_title: "Sprachmemo",
-        voice_desc: "Möchtest du etwas loswerden? Hast du eine Memo an dich selbst? Oder möchtest du einfach deinen Frust abbauen? Dann sprich, flüstere oder schreie deine Gedanken ins Mikrofon! Natürlich bleibt alles auf deinem Gerät.",
-        voice_btn_record: "🎤",
-        voice_btn_stop: "🛑",
-        voice_status_rec: "Nimmt auf... (Tippe zum Stoppen)",
-        voice_ph_title: "Titel der Aufnahme...",
-        voice_add_journal: "Ins Tagebuch übernehmen",
         journal_title: "Tagebuch",
         journal_pdf_btn: "📄 Als PDF exportieren",
         settings_title: "Einstellungen",
@@ -156,13 +149,6 @@ const i18n = {
         success_ph: "What was your success?",
         success_reason_ph: "What led to this success?",
         success_btn: "🎉 Celebrate & Save",
-        voice_title: "Voice Memo",
-        voice_desc: "Want to get something off your chest? Have a memo for yourself? Or just want to vent? Speak, whisper, or shout your thoughts into the microphone! Everything stays on your device.",
-        voice_btn_record: "🎤",
-        voice_btn_stop: "🛑",
-        voice_status_rec: "Recording... (Tap to stop)",
-        voice_ph_title: "Recording title...",
-        voice_add_journal: "Add to Journal",
         journal_title: "Journal",
         journal_pdf_btn: "📄 Export as PDF",
         settings_title: "Settings",
@@ -420,7 +406,6 @@ const app = {
         user: null,
         entries: [],
         activeGoals: [],
-        voiceMemos: [],
         currentLang: 'de',
         selectedMood: null,
         currentGoalType: 'daily',
@@ -472,7 +457,6 @@ const app = {
         this.data.user = this.safeParse('aw_user', null);
         this.data.entries = this.safeParse('aw_entries', []);
         this.data.activeGoals = this.safeParse('aw_active_goals', []);
-        this.data.voiceMemos = this.safeParse('aw_voice_memos', []);
 
         if(this.data.user) {
             if(this.data.user.lang) this.data.currentLang = this.data.user.lang;
@@ -486,7 +470,6 @@ const app = {
         localStorage.setItem('aw_user', JSON.stringify(this.data.user));
         localStorage.setItem('aw_entries', JSON.stringify(this.data.entries));
         localStorage.setItem('aw_active_goals', JSON.stringify(this.data.activeGoals));
-        localStorage.setItem('aw_voice_memos', JSON.stringify(this.data.voiceMemos));
     },
 
     // --- UI HELPERS ---
@@ -707,7 +690,6 @@ const app = {
         document.getElementById('tab-' + tabId).style.display = 'block';
         if(btnElement) btnElement.classList.add('active');
         if(tabId === 'journal') this.renderJournal();
-        if(tabId === 'voice') this.renderVoiceMemos();
         if(tabId === 'settings') {
             document.getElementById('settings-name').value = this.data.user.name;
             document.querySelectorAll('#tab-settings .lang-btn').forEach(b => b.classList.remove('active'));
@@ -975,105 +957,6 @@ const app = {
             document.body.appendChild(el);
             setTimeout(() => el.remove(), 4000);
         }
-    },
-
-    // --- VOICE MEMOS ---
-    initVoiceMemos: function() {
-        // We now rely purely on the native Kotlin MediaRecorder bridge
-    },
-    abortRecording: function() {
-        this.isRecording = false;
-        document.getElementById('btn-record').innerText = this.t('voice_btn_record');
-        document.getElementById('record-status').innerText = "";
-    },
-    toggleRecording: function() {
-        if(this.isRecording) {
-            if (window.AndroidApp && window.AndroidApp.stopRecording) {
-                window.AndroidApp.stopRecording();
-            }
-            this.abortRecording();
-        } else {
-            if (window.AndroidApp && window.AndroidApp.startRecording) {
-                window.AndroidApp.startRecording();
-                this.isRecording = true;
-                document.getElementById('btn-record').innerText = this.t('voice_btn_stop');
-                document.getElementById('record-status').innerText = this.t('voice_status_rec');
-            } else {
-                this.showToast("Native Bridge nicht gefunden.");
-            }
-        }
-    },
-    onNativeAudioResult: function(fileName) {
-        this.data.voiceMemos.push({
-            id: Date.now(),
-            title: "",
-            fileName: fileName,
-            timestamp: new Date().toISOString()
-        });
-        this.saveData();
-        this.renderVoiceMemos();
-        this.showToast(this.t('toast_saved'));
-    },
-    renderVoiceMemos: function() {
-        const container = document.getElementById('memo-list');
-        container.innerHTML = '';
-        const sorted = [...this.data.voiceMemos].sort((a,b) => b.id - a.id);
-
-        sorted.forEach(m => {
-            const timeStr = new Date(m.timestamp).toLocaleDateString(this.data.currentLang === 'en' ? 'en-US' : 'de-DE', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' });
-
-            // Abwärtskompatibilität für alte Base64-Aufnahmen vs neue native Dateien
-            const audioSrc = m.audioUrl || `app-audio://${m.fileName}`;
-
-            const div = document.createElement('div');
-            div.className = 'voice-memo-card';
-            div.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <input type="text" id="memo-title-${m.id}" value="${m.title}" placeholder="${this.t('voice_ph_title')}" style="margin:0; width:70%; padding:8px;" onblur="app.saveMemoTitle(${m.id})">
-                    <small style="color:var(--text-main); opacity:0.6;">${timeStr}</small>
-                </div>
-                <audio controls src="${audioSrc}"></audio>
-                <div style="display:flex; gap:8px; margin-top:8px;">
-                    <button class="outline-btn" style="padding:8px;" onclick="app.addMemoToJournal(${m.id})">${this.t('voice_add_journal')}</button>
-                    <button class="danger-btn" style="padding:8px;" onclick="app.deleteMemo(${m.id})">${this.t('journal_btn_del')}</button>
-                </div>
-            `;
-            container.appendChild(div);
-        });
-    },
-    saveMemoTitle: function(id) {
-        const title = document.getElementById(`memo-title-${id}`).value;
-        const memo = this.data.voiceMemos.find(m => m.id === id);
-        if(memo) {
-            memo.title = title;
-            this.saveData();
-            this.showToast(this.t('toast_saved'));
-        }
-    },
-    deleteMemo: function(id) {
-        this.showModal(this.t('modal_delete_title'), `<p>${this.t('modal_delete_desc')}</p>`, () => {
-            const memo = this.data.voiceMemos.find(m => m.id === id);
-            if(memo && memo.fileName && window.AndroidApp && window.AndroidApp.deleteRecording) {
-                window.AndroidApp.deleteRecording(memo.fileName);
-            }
-            this.data.voiceMemos = this.data.voiceMemos.filter(m => m.id !== id);
-            this.saveData();
-            this.renderVoiceMemos();
-            this.showToast(this.t('toast_deleted'));
-        });
-    },
-    addMemoToJournal: function(id) {
-        const memo = this.data.voiceMemos.find(m => m.id === id);
-        if(!memo) return;
-        const displayTitle = memo.title || "Sprachmemo";
-        this.data.entries.push({
-            id: Date.now(),
-            type: 'voice',
-            text: `🎙️ ${displayTitle} (Audionotiz am Gerät angehört)`,
-            timestamp: new Date().toISOString()
-        });
-        this.saveData();
-        this.showToast(this.t('toast_saved'));
     },
 
     // --- JOURNAL ---

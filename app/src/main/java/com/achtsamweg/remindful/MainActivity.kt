@@ -39,8 +39,6 @@ import kotlin.math.max
 class MainActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
-    private var mediaRecorder: android.media.MediaRecorder? = null
-    private var currentAudioFileName: String = ""
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,36 +80,8 @@ class MainActivity : AppCompatActivity() {
                         e.printStackTrace()
                     }
                 }
-
-                override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
-                    val url = request?.url?.toString() ?: ""
-                    if (url.startsWith("app-audio://")) {
-                        try {
-                            val fileName = url.substringAfterLast("/")
-                            val file = java.io.File(filesDir, fileName)
-                            if (file.exists()) {
-                                val response = WebResourceResponse("audio/mp4", "UTF-8", file.inputStream())
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    response.responseHeaders = mapOf("Access-Control-Allow-Origin" to "*")
-                                }
-                                return response
-                            }
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }
-                    return super.shouldInterceptRequest(view, request)
-                }
             }
-            webChromeClient = object : WebChromeClient() {
-                override fun onPermissionRequest(request: PermissionRequest?) {
-                    try {
-                        request?.grant(request.resources)
-                    } catch (e: Throwable) {
-                        e.printStackTrace()
-                    }
-                }
-            }
+            webChromeClient = WebChromeClient()
             
             addJavascriptInterface(WebAppInterface(this@MainActivity), "AndroidApp")
         }
@@ -164,7 +134,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun requestPermissionsIfNecessary() {
-        val permissions = mutableListOf(Manifest.permission.RECORD_AUDIO)
+        val permissions = mutableListOf<String>()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissions.add(Manifest.permission.POST_NOTIFICATIONS)
         }
@@ -233,90 +203,6 @@ class MainActivity : AppCompatActivity() {
                     activity.runOnUiThread {
                         Toast.makeText(activity, "Erinnerung deaktiviert", Toast.LENGTH_SHORT).show()
                     }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-        @Keep
-        @JavascriptInterface
-        fun startRecording() {
-            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.RECORD_AUDIO), 102)
-                activity.runOnUiThread {
-                    Toast.makeText(activity, "Bitte erlaube das Mikrofon in den Systemeinstellungen.", Toast.LENGTH_LONG).show()
-                    val js = "if(window.app) { window.app.abortRecording(); }"
-                    webView.evaluateJavascript(js, null)
-                }
-                return
-            }
-            activity.runOnUiThread {
-                try {
-                    currentAudioFileName = "memo_${System.currentTimeMillis()}.mp4"
-                    val audioFile = java.io.File(activity.filesDir, currentAudioFileName)
-                    
-                    mediaRecorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        android.media.MediaRecorder(activity)
-                    } else {
-                        @Suppress("DEPRECATION")
-                        android.media.MediaRecorder()
-                    }
-                    
-                    mediaRecorder?.apply {
-                        setAudioSource(android.media.MediaRecorder.AudioSource.MIC)
-                        setOutputFormat(android.media.MediaRecorder.OutputFormat.MPEG_4)
-                        setAudioEncoder(android.media.MediaRecorder.AudioEncoder.AAC)
-                        setOutputFile(audioFile.absolutePath)
-                        prepare()
-                        start()
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Toast.makeText(activity, "Mikrofon-Fehler: ${e.message}", Toast.LENGTH_LONG).show()
-                    val js = "if(window.app) { window.app.abortRecording(); }"
-                    webView.evaluateJavascript(js, null)
-                }
-            }
-        }
-
-        @Keep
-        @JavascriptInterface
-        fun stopRecording() {
-            activity.runOnUiThread {
-                var wasError = false
-                try {
-                    mediaRecorder?.stop()
-                } catch (e: Exception) {
-                    e.printStackTrace() 
-                    wasError = true
-                } finally {
-                    try {
-                        mediaRecorder?.release()
-                    } catch (e: Exception) {}
-                    mediaRecorder = null
-                }
-                
-                val file = java.io.File(activity.filesDir, currentAudioFileName)
-                if (!wasError && file.exists() && file.length() > 0) {
-                    val js = "if(window.app) { window.app.onNativeAudioResult('$currentAudioFileName'); }"
-                    webView.evaluateJavascript(js, null)
-                } else {
-                    if(file.exists()) file.delete() // Cleanup corrupted file
-                    Toast.makeText(activity, "Aufnahme fehlgeschlagen (zu kurz?).", Toast.LENGTH_LONG).show()
-                    val js = "if(window.app) { window.app.abortRecording(); }"
-                    webView.evaluateJavascript(js, null)
-                }
-            }
-        }
-
-        @Keep
-        @JavascriptInterface
-        fun deleteRecording(fileName: String) {
-            try {
-                val file = java.io.File(activity.filesDir, fileName)
-                if (file.exists()) {
-                    file.delete()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

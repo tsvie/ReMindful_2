@@ -137,27 +137,14 @@
                 <button onclick="app.saveSuccess()" data-i18n="success_btn">🎉 Erfolg feiern & speichern</button>
             </div>
 
-            <!-- Tab 4: Voice Memos -->
-            <div id="tab-voice" class="tab-content" style="display:none;">
-                <h2 data-i18n="voice_title">Sprachmemo</h2>
-                <p data-i18n="voice_desc" style="font-size:14px; line-height:1.5;">Möchtest du etwas loswerden? Hast du eine Memo an dich selbst? Oder möchtest du einfach deinen Frust abbauen? Dann sprich, flüstere oder schreie deine Gedanken ins Mikrofon! Natürlich bleibt alles auf deinem Gerät.</p>
-
-                <div style="text-align: center; margin: 24px 0;">
-                    <button id="btn-record" onclick="app.toggleRecording()" style="border-radius: 50%; width: 80px; height: 80px; font-size: 32px; padding: 0; display: inline-flex; justify-content: center; align-items: center; transition: 0.3s;">🎤</button>
-                    <p id="record-status" style="margin-top: 12px; font-weight: bold;"></p>
-                </div>
-
-                <div id="memo-list"></div>
-            </div>
-
-            <!-- Tab 5: Journal -->
+            <!-- Tab 4: Journal -->
             <div id="tab-journal" class="tab-content" style="display:none;">
                 <h2 data-i18n="journal_title">Tagebuch</h2>
                 <button onclick="app.exportPdf()" data-i18n="journal_pdf_btn">📄 Als PDF exportieren</button>
                 <div id="journal-list"></div>
             </div>
 
-            <!-- Tab 6: Settings -->
+            <!-- Tab 5: Settings -->
             <div id="tab-settings" class="tab-content" style="display:none;">
                 <h2 data-i18n="settings_title">Einstellungen</h2>
 
@@ -246,7 +233,6 @@
                 <button onclick="app.switchTab('mood', this)" class="active" data-i18n="nav_mood">Mood</button>
                 <button onclick="app.switchTab('goals', this)" data-i18n="nav_goals">Ziele</button>
                 <button onclick="app.switchTab('success', this)" data-i18n="nav_success">Erfolge</button>
-                <button onclick="app.switchTab('voice', this)" data-i18n="nav_voice">Memo</button>
                 <button onclick="app.switchTab('journal', this)" data-i18n="nav_journal">Tagebuch</button>
                 <button onclick="app.switchTab('settings', this)" data-i18n="nav_settings">Setup</button>
             </nav>
