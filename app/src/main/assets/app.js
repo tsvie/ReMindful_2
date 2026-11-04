@@ -937,7 +937,7 @@ const app = {
     // --- VOICE MEMOS ---
     initVoiceMemos: function() {
         if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            console.error("Audio recording not supported in this environment");
+            console.log("Web Audio API check failed initially, but we are relying on WebView.");
         }
     },
     toggleRecording: function() {
@@ -956,8 +956,6 @@ const app = {
                 };
                 this.mediaRecorder.onstop = () => {
                     const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
-                    // Using FileReader to store Base64 in LocalStorage for simplicity.
-                    // (WebView limit is usually 5-10MB, fine for short memos)
                     const reader = new FileReader();
                     reader.readAsDataURL(audioBlob);
                     reader.onloadend = () => {
@@ -971,7 +969,6 @@ const app = {
                         this.saveData();
                         this.renderVoiceMemos();
                     }
-                    // Stop tracks to release mic
                     stream.getTracks().forEach(track => track.stop());
                 };
 
@@ -980,7 +977,8 @@ const app = {
                 document.getElementById('btn-record').innerText = this.t('voice_btn_stop');
                 document.getElementById('record-status').innerText = this.t('voice_status_rec');
             }).catch(e => {
-                this.showToast("Microphone permission denied or not supported.");
+                console.error("Mic Error:", e);
+                this.showToast("Bitte erlaube den Mikrofonzugriff in den App-Einstellungen.");
             });
         }
     },

@@ -23,12 +23,12 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import org.json.JSONArray
 import java.util.Calendar
@@ -43,7 +43,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         
         try {
-            enableEdgeToEdge()
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+            window.statusBarColor = android.graphics.Color.TRANSPARENT
+            window.navigationBarColor = android.graphics.Color.TRANSPARENT
         } catch (e: Exception) {
             e.printStackTrace()
         }
