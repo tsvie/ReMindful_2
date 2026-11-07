@@ -1,6 +1,6 @@
 # 🌱 Re:Mindful – Mindfulness & Personal Growth
 
-[![Version](https://img.shields.io/badge/version-2.2.1.0-blue.svg)](https://github.com/tsvie/ReMindful_2/releases)
+[![Version](https://img.shields.io/badge/version-2.3.0.0-blue.svg)](https://github.com/tsvie/ReMindful_2/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-Android-green.svg)](https://github.com/tsvie/ReMindful_2)
 
@@ -12,17 +12,18 @@
 
 ### ✨ Hauptfunktionen
 * **Offline-First & Privacy by Design:** Alle Daten werden ausschließlich lokal auf deinem Gerät gespeichert.
-* **Intelligentes NLP (0-MB KI):** Die App zerlegt überwältigende Ziele (wie "Aufräumen" oder "Steuern") in machbare, völlig druckfreie Mikroziele.
+* **Intelligentes NLP (0-MB KI):** Die App zerlegt überwältigende Ziele in 11 Kategorien (wie "Aufräumen" oder "Steuern") in machbare, völlig druckfreie Mikroziele.
 * **Mood-Tracker & Emotionale Reflexion:** Dokumentiere deine Stimmung inkl. zusätzlicher Notizen. Das NLP hilft dir dabei, komplexe Gefühle in Worte zu fassen.
+* **Swipe-to-Navigate:** Wechsle intuitiv durch Wischen nach links oder rechts durch die verschiedenen Ansichten.
 * **Dynamisches Erscheinungsbild:** Wähle zwischen Dark-, Light- oder System-Mode, gepaart mit 6 wunderschönen "Material You"-Farbpaletten.
-* **Passwortschutz (App Lock):** Sperre deine intimsten Gedanken auf Wunsch vor unbefugten Blicken.
+* **Passwortschutz (App Lock):** Sperre deine intimsten Gedanken auf Wunsch vor unbefugten Blicken (wird direkt im 2-Step-Onboarding abgefragt).
 * **Tagebuch & PDF-Export:** Exportiere deine Einträge chronologisch als formatiertes PDF-Dokument (inkl. deutschem Datumsformat).
 * **Zweisprachig (i18n):** Vollständig in Deutsch und Englisch verfügbar.
 
 ### 🚀 Installation
 Du kannst die fertige App direkt installieren, ohne sie selbst kompilieren zu müssen:
 1. Gehe zu den [Releases](https://github.com/tsvie/ReMindful_2/releases/latest).
-2. Lade dir die neueste `app-release.apk` (v2.2.1.0) herunter.
+2. Lade dir die neueste `app-release.apk` (v2.3.0.0) herunter.
 3. Führe die Datei auf deinem Android Smartphone aus.
 
 ### 🛠 Tech-Stack
@@ -39,17 +40,18 @@ Du kannst die fertige App direkt installieren, ohne sie selbst kompilieren zu m�
 
 ### ✨ Key Features
 * **Offline-First & Privacy by Design:** All data is stored exclusively locally on your device.
-* **Smart NLP (0-MB AI):** The app breaks down overwhelming goals into actionable, pressure-free micro-steps.
+* **Smart NLP (0-MB AI):** The app breaks down overwhelming goals across 11 categories into actionable, pressure-free micro-steps.
 * **Mood Tracker & Emotional Reflection:** Document your mood including additional notes. The NLP helps you put complex feelings into words.
+* **Swipe-to-Navigate:** Move intuitively between tabs by simply swiping left or right.
 * **Dynamic Appearance:** Choose between Dark, Light, or System modes paired with 6 beautiful "Material You" color palettes.
-* **Password Protection (App Lock):** Secure your most intimate thoughts from prying eyes.
+* **Password Protection (App Lock):** Secure your most intimate thoughts from prying eyes (set up via a 2-step onboarding).
 * **Journal & PDF Export:** Export your entries chronologically as a formatted PDF document.
 * **Bilingual (i18n):** Fully available in English and German.
 
 ### 🚀 Installation
 You can install the ready-to-use app without compiling it yourself:
 1. Go to the [Latest Release](https://github.com/tsvie/ReMindful_2/releases/latest) page.
-2. Download the latest `app-release.apk` (v2.2.1.0).
+2. Download the latest `app-release.apk` (v2.3.0.0).
 3. Run the file on your Android smartphone to install.
 
 ### 🛠 Tech Stack
