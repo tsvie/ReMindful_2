@@ -45,7 +45,7 @@
     <div id="app-container">
         <!-- Onboarding Screen -->
         <div id="screen-onboarding" class="screen">
-            <div class="onboarding-content">
+            <div id="onboarding-step-1" class="onboarding-content">
                 <h1>🌱 Re:Mindful</h1>
                 <p data-i18n="onboarding_desc">Willkommen zu deiner Achtsamkeitsreise.</p>
 
@@ -68,7 +68,18 @@
                     </div>
                 </div>
 
-                <button onclick="app.finishOnboarding()" data-i18n="onboarding_start" style="margin-top: 24px;">Starten</button>
+                <button onclick="app.nextOnboardingStep()" data-i18n="onboarding_next" style="margin-top: 24px;">Weiter</button>
+            </div>
+
+            <div id="onboarding-step-2" class="onboarding-content" style="display: none;">
+                <h1 style="font-size: 48px;">⏰</h1>
+                <h2 data-i18n="onboard_remind_title">Tägliche Erinnerung</h2>
+                <p data-i18n="onboard_remind_desc">Möchtest du jeden Tag eine liebevolle Erinnerung erhalten, um kurz innezuhalten und den Tag zu reflektieren?</p>
+
+                <input type="time" id="onboard-reminder-time" value="19:00" style="font-size: 24px; text-align: center;">
+
+                <button onclick="app.finishOnboarding(true)" data-i18n="onboard_remind_yes" style="margin-top: 16px;">Erinnerung aktivieren</button>
+                <button class="outline-btn" onclick="app.finishOnboarding(false)" data-i18n="onboard_remind_no">Jetzt nicht</button>
             </div>
         </div>
 

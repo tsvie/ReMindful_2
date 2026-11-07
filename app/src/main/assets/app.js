@@ -10,7 +10,11 @@ const i18n = {
         btn_no: "Nein",
         pw_ph1: "Passwort",
         pw_ph2: "Passwort wiederholen",
-        onboarding_start: "Starten",
+        onboarding_next: "Weiter",
+        onboard_remind_title: "Tägliche Erinnerung",
+        onboard_remind_desc: "Möchtest du jeden Tag eine liebevolle Erinnerung erhalten, um kurz innezuhalten und den Tag zu reflektieren?",
+        onboard_remind_yes: "Erinnerung aktivieren",
+        onboard_remind_no: "Jetzt nicht",
         lock_title: "App gesperrt",
         lock_desc: "Bitte gib dein Passwort ein.",
         lock_btn: "Entsperren",
@@ -121,7 +125,11 @@ const i18n = {
         btn_no: "No",
         pw_ph1: "Password",
         pw_ph2: "Repeat Password",
-        onboarding_start: "Start",
+        onboarding_next: "Next",
+        onboard_remind_title: "Daily Reminder",
+        onboard_remind_desc: "Would you like to receive a gentle daily reminder to pause and reflect on your day?",
+        onboard_remind_yes: "Enable Reminder",
+        onboard_remind_no: "Not now",
         lock_title: "App Locked",
         lock_desc: "Please enter your password.",
         lock_btn: "Unlock",
@@ -587,9 +595,15 @@ const app = {
         document.getElementById('onboarding-pw-fields').style.display = show ? 'block' : 'none';
     },
 
-    finishOnboarding: function() {
+    nextOnboardingStep: function() {
         const name = document.getElementById('input-username').value.trim();
         if (!name) return this.showToast(this.t('toast_empty'));
+        document.getElementById('onboarding-step-1').style.display = 'none';
+        document.getElementById('onboarding-step-2').style.display = 'flex';
+    },
+
+    finishOnboarding: function(enableReminder) {
+        const name = document.getElementById('input-username').value.trim();
 
         let pw = null;
         if (document.getElementById('onboarding-pw-fields').style.display === 'block') {
@@ -601,6 +615,14 @@ const app = {
 
         this.data.user = { name: name, lang: this.data.currentLang, password: pw, theme: 'system' };
         this.saveData();
+
+        if (enableReminder) {
+            const time = document.getElementById('onboard-reminder-time').value;
+            if(window.AndroidApp) {
+                window.AndroidApp.scheduleNotification(true, time, this.t('splash_subtitle'));
+            }
+        }
+
         document.getElementById('screen-onboarding').style.display = 'none';
         this.showSplash();
     },
@@ -695,6 +717,34 @@ const app = {
             document.querySelectorAll('#tab-settings .lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`set-lang-${this.data.currentLang}`).classList.add('active');
             this.updateSettingsUI();
+        }
+    },
+
+    // --- SWIPE LOGIC ---
+    handleSwipe: function() {
+        const swipeThreshold = 50;
+        const tabs = ['mood', 'goals', 'success', 'journal', 'settings'];
+        const activeTabEl = document.querySelector('.bottom-nav button.active');
+        if(!activeTabEl) return;
+
+        const currentTabId = activeTabEl.getAttribute('onclick').match(/'([^']+)'/)[1];
+        let currentIndex = tabs.indexOf(currentTabId);
+
+        if (this.touchendX < this.touchstartX - swipeThreshold) {
+            // Swipe Left -> Next Tab
+            if (currentIndex < tabs.length - 1) {
+                const nextTab = tabs[currentIndex + 1];
+                const btn = document.querySelector(`.bottom-nav button[onclick*="'${nextTab}'"]`);
+                this.switchTab(nextTab, btn);
+            }
+        }
+        if (this.touchendX > this.touchstartX + swipeThreshold) {
+            // Swipe Right -> Prev Tab
+            if (currentIndex > 0) {
+                const prevTab = tabs[currentIndex - 1];
+                const btn = document.querySelector(`.bottom-nav button[onclick*="'${prevTab}'"]`);
+                this.switchTab(prevTab, btn);
+            }
         }
     },
 
@@ -1075,20 +1125,24 @@ const app = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-    const goalInp = document.getElementById('goal-input');
-    if(goalInp) {
-        goalInp.addEventListener('input', () => {
-            document.getElementById('goal-nlp-suggestions').innerHTML = '';
-            document.getElementById('custom-step-container').style.display = 'none';
-            document.getElementById('btn-save-goal-direct').style.display = goalInp.value ? 'block' : 'none';
-        });
-    }
-
+    // Scroll inputs into view to avoid keyboard overlap
     document.querySelectorAll('input[type="text"], textarea').forEach(el => {
         el.addEventListener('focus', () => {
             setTimeout(() => el.scrollIntoView({behavior: 'smooth', block: 'center'}), 300);
         });
     });
+
+    // Swipe Event Listeners
+    const mainScreen = document.getElementById('screen-main');
+    if (mainScreen) {
+        mainScreen.addEventListener('touchstart', e => {
+            app.touchstartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+        mainScreen.addEventListener('touchend', e => {
+            app.touchendX = e.changedTouches[0].screenX;
+            app.handleSwipe();
+        }, {passive: true});
+    }
 
     app.init();
 });

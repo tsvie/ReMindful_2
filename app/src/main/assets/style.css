@@ -23,6 +23,11 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+input, textarea, select, button {
+    font-family: inherit;
 }
 
 body {
@@ -119,7 +124,9 @@ button:active {
 }
 
 button.nlp-btn {
-    background: var(--primary-indigo);
+    background: var(--soft-teal);
+    color: var(--primary-teal);
+    border: 2px solid var(--primary-teal);
 }
 
 button.danger-btn {
