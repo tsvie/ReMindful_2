@@ -206,6 +206,10 @@
                 <!-- System -->
                 <div class="settings-card" style="margin-top: 16px;">
                     <h3 data-i18n="settings_system">🛠️ System</h3>
+
+                    <p style="font-size: 14px; opacity: 0.8; margin-bottom: 8px;" data-i18n="settings_notif_desc">Benachrichtigungen verwalten:</p>
+                    <button class="outline-btn" style="margin-bottom: 16px;" onclick="app.manageNotifications()" data-i18n="settings_notif_btn">Benachrichtigungen (System) öffnen</button>
+
                     <div style="display:flex; align-items:center; gap: 12px; margin-bottom: 12px;">
                         <input type="time" id="reminder-time" value="19:00" style="margin-bottom:0; flex:1;">
                         <button onclick="app.toggleDailyReminder()" data-i18n="settings_reminder" style="flex:2; margin-bottom:0;">⏰ Aktivieren</button>
@@ -236,6 +240,12 @@
                         <summary data-i18n="help_q5">Wofür ist diese App gedacht?</summary>
                         <p data-i18n="help_a5" style="margin-top:8px; font-size:14px; opacity:0.8;">Re:Mindful dient deinem persönlichen Wachstum und der Selbstreflexion. Hinweis: Sie ist kein Ersatz für eine professionelle Therapie oder einen Arzt.</p>
                     </details>
+                </div>
+
+                <!-- About -->
+                <div class="settings-card" style="margin-top: 16px; text-align:center; opacity:0.7;">
+                    <h3 data-i18n="about_title">ℹ️ Über diese App</h3>
+                    <p style="font-size:14px;" data-i18n="about_desc"><strong>Re:Mindful</strong><br>Entwickelt von Tian Svenja Vieth<br>Vielen Dank an L. für die Ideen und das Feedback.<br><br>Diese App ist Open-Source und darf frei verteilt und modifiziert werden. Alle Daten bleiben 100% lokal auf deinem Gerät.</p>
                 </div>
             </div>
 

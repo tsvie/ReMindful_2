@@ -72,9 +72,11 @@ const i18n = {
         help_q3: "Wie funktioniert die 'KI' (NLP)?",
         help_a3: "Die App analysiert deine Eingaben auf bestimmte Wörter und generiert daraus kleine, positive Vorschläge. Alles passiert direkt auf deinem Handy, ohne Internetverbindung.",
         help_q4: "Was passiert beim PDF-Export?",
-        help_a4: "Deine Einträge werden auf Knopfdruck in ein schönes PDF-Dokument formatiert und sicher in deinem Download-Ordner gespeichert. (Hinweis: Sprachmemos werden nicht exportiert).",
+        help_a4: "Deine Einträge werden auf Knopfdruck in ein schönes PDF-Dokument formatiert und sicher in deinem Download-Ordner gespeichert.",
         help_q5: "Wofür ist diese App gedacht?",
         help_a5: "Re:Mindful dient deinem persönlichen Wachstum und der Selbstreflexion. Hinweis: Sie ist kein Ersatz für eine professionelle Therapie oder einen Arzt.",
+        about_title: "ℹ️ Über diese App",
+        about_desc: "Re:Mindful\nEntwickelt von Tian Svenja Vieth\nVielen Dank an L. für die Ideen und das Feedback.\n\nDiese App ist Open-Source und darf frei verteilt und modifiziert werden. Alle Daten bleiben 100% lokal auf deinem Gerät.",
         nav_mood: "Mood",
         nav_goals: "Ziele",
         nav_success: "Erfolge",
@@ -92,6 +94,7 @@ const i18n = {
         toast_saved: "Gespeichert!",
         toast_updated: "Geändert!",
         toast_name: "Name gespeichert!",
+        toast_lang: "Sprache gewechselt!",
         toast_empty: "Bitte fülle das Feld aus.",
         toast_select_emoji: "Bitte wähle einen Emoji aus.",
         toast_pw_wrong: "Passwort falsch oder stimmt nicht überein.",
@@ -187,9 +190,11 @@ const i18n = {
         help_q3: "How does the 'AI' (NLP) work?",
         help_a3: "The app analyzes your input for specific words and generates small, positive suggestions. Everything happens locally on your phone without internet.",
         help_q4: "What happens during PDF Export?",
-        help_a4: "Your entries are formatted into a beautiful PDF document and securely saved in your Downloads folder. (Note: Voice memos are not exported).",
+        help_a4: "Your entries are formatted into a beautiful PDF document and securely saved in your Downloads folder.",
         help_q5: "What is this app for?",
         help_a5: "Re:Mindful is for personal growth and self-reflection. Note: It is not a substitute for professional therapy or a doctor.",
+        about_title: "ℹ️ About this App",
+        about_desc: "Re:Mindful\nDeveloped by Tian Svenja Vieth\nMany thanks to L. for the ideas and feedback.\n\nThis app is open-source and can be freely distributed and modified. All data stays 100% locally on your device.",
         nav_mood: "Mood",
         nav_goals: "Goals",
         nav_success: "Success",
@@ -207,6 +212,7 @@ const i18n = {
         toast_saved: "Saved!",
         toast_updated: "Updated!",
         toast_name: "Name saved!",
+        toast_lang: "Language changed!",
         toast_empty: "Please fill out this field.",
         toast_select_emoji: "Please select an emoji.",
         toast_pw_wrong: "Password incorrect or mismatch.",
@@ -520,8 +526,13 @@ const app = {
         this.data.user.lang = lang;
         this.data.currentLang = lang;
         this.saveData();
+
+        // Sprache sofort im DOM (Buttons) aktualisieren
+        document.querySelectorAll('#tab-settings .lang-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(`set-lang-${lang}`).classList.add('active');
+
         this.applyLanguage();
-        this.showToast(this.t('toast_name'));
+        this.showToast(this.t('toast_lang'));
         this.renderJournal();
         this.renderActiveGoals();
     },
@@ -1115,6 +1126,14 @@ const app = {
         root.setProperty('--text-main', t);
     },
 
+    // --- BRIDGE ---
+    manageNotifications: function() {
+        if(window.AndroidApp && window.AndroidApp.openAppSettings) {
+            window.AndroidApp.openAppSettings();
+        } else {
+            this.showToast("Native Bridge nicht gefunden.");
+        }
+    },
     exportPdf: function() {
         if(window.AndroidApp) {
             window.AndroidApp.generateAndSavePdf(JSON.stringify(this.data.entries), "Tagebuch.pdf", this.data.user.name);

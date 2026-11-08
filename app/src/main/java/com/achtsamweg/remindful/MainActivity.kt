@@ -12,10 +12,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.Settings
 import android.webkit.JavascriptInterface
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
@@ -28,6 +30,7 @@ import android.widget.Toast
 import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -161,6 +164,25 @@ class MainActivity : AppCompatActivity() {
     @Keep
     inner class WebAppInterface(private val activity: AppCompatActivity) {
         
+        @Keep
+        @JavascriptInterface
+        fun areNotificationsEnabled(): Boolean {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ContextCompat.checkSelfPermission(activity, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+            } else {
+                NotificationManagerCompat.from(activity).areNotificationsEnabled()
+            }
+        }
+
+        @Keep
+        @JavascriptInterface
+        fun openAppSettings() {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            val uri = Uri.fromParts("package", activity.packageName, null)
+            intent.data = uri
+            activity.startActivity(intent)
+        }
+
         @Keep
         @JavascriptInterface
         fun scheduleNotification(enabled: Boolean, time: String, note: String) {
