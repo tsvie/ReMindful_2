@@ -79,7 +79,10 @@
                 <input type="time" id="onboard-reminder-time" value="19:00" style="font-size: 24px; text-align: center;">
 
                 <button onclick="app.finishOnboarding(true)" data-i18n="onboard_remind_yes" style="margin-top: 16px;">Erinnerung aktivieren</button>
-                <button class="outline-btn" onclick="app.finishOnboarding(false)" data-i18n="onboard_remind_no">Jetzt nicht</button>
+                <div style="display: flex; gap: 12px;">
+                    <button class="outline-btn" onclick="app.prevOnboardingStep()" data-i18n="btn_back">Zurück</button>
+                    <button class="outline-btn" onclick="app.finishOnboarding(false)" data-i18n="onboard_remind_no">Jetzt nicht</button>
+                </div>
             </div>
         </div>
 

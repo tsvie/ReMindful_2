@@ -8,6 +8,7 @@ const i18n = {
         onboarding_pw_q: "Möchtest du die App mit einem Passwort schützen?",
         btn_yes: "Ja",
         btn_no: "Nein",
+        btn_back: "Zurück",
         pw_ph1: "Passwort",
         pw_ph2: "Passwort wiederholen",
         onboarding_next: "Weiter",
@@ -126,6 +127,7 @@ const i18n = {
         onboarding_pw_q: "Would you like to protect the app with a password?",
         btn_yes: "Yes",
         btn_no: "No",
+        btn_back: "Back",
         pw_ph1: "Password",
         pw_ph2: "Repeat Password",
         onboarding_next: "Next",
@@ -609,8 +611,20 @@ const app = {
     nextOnboardingStep: function() {
         const name = document.getElementById('input-username').value.trim();
         if (!name) return this.showToast(this.t('toast_empty'));
+
+        if (document.getElementById('onboarding-pw-fields').style.display === 'block') {
+            const p1 = document.getElementById('input-pw1').value;
+            const p2 = document.getElementById('input-pw2').value;
+            if(!p1 || p1 !== p2) return this.showToast(this.t('toast_pw_wrong'));
+        }
+
         document.getElementById('onboarding-step-1').style.display = 'none';
         document.getElementById('onboarding-step-2').style.display = 'flex';
+    },
+
+    prevOnboardingStep: function() {
+        document.getElementById('onboarding-step-2').style.display = 'none';
+        document.getElementById('onboarding-step-1').style.display = 'flex';
     },
 
     finishOnboarding: function(enableReminder) {
@@ -618,10 +632,7 @@ const app = {
 
         let pw = null;
         if (document.getElementById('onboarding-pw-fields').style.display === 'block') {
-            const p1 = document.getElementById('input-pw1').value;
-            const p2 = document.getElementById('input-pw2').value;
-            if(!p1 || p1 !== p2) return this.showToast(this.t('toast_pw_wrong'));
-            pw = p1;
+            pw = document.getElementById('input-pw1').value;
         }
 
         this.data.user = { name: name, lang: this.data.currentLang, password: pw, theme: 'system' };
