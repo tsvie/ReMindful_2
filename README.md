@@ -7,15 +7,13 @@
 *(🇬🇧 English description below)*
 
 <div align="center">
-  <img src="docs/images/1.jpg" width="18%" alt="Onboarding Start" style="margin: 0 5px;"/>
-  <img src="docs/images/2.jpg" width="18%" alt="Mood Tracker" style="margin: 0 5px;"/>
-  <img src="docs/images/3.jpg" width="18%" alt="Goals & NLP" style="margin: 0 5px;"/>
-  <img src="docs/images/4.jpg" width="18%" alt="Celebrate Success" style="margin: 0 5px;"/>
-  <img src="docs/images/5.jpg" width="18%" alt="PDF Export" style="margin: 0 5px;"/>
+  <img src="https://github.com/tsvie/ReMindful_2/blob/main/assets/screenshots/screen_1.png" width="18%" alt="Onboarding Start" style="margin: 0 5px;"/>
+  <img src="https://github.com/tsvie/ReMindful_2/blob/main/assets/screenshots/screen_2.png" width="18%" alt="Mood Tracker" style="margin: 0 5px;"/>
+  <img src="https://github.com/tsvie/ReMindful_2/blob/main/assets/screenshots/screen_3.png" width="18%" alt="Goals & NLP" style="margin: 0 5px;"/>
+  <img src="https://github.com/tsvie/ReMindful_2/blob/main/assets/screenshots/screen_4.png"width="18%" alt="Celebrate Success" style="margin: 0 5px;"/>
+  <img src="https://github.com/tsvie/ReMindful_2/blob/main/assets/screenshots/screen_5.png" width="18%" alt="PDF Export" style="margin: 0 5px;"/>
   <br>
-  <img src="docs/images/6.jpg" width="18%" alt="Settings & Colors" style="margin: 0 5px;"/>
-  <img src="docs/images/7.jpg" width="18%" alt="Daily Reminders" style="margin: 0 5px;"/>
-  <img src="docs/images/8.jpg" width="18%" alt="Welcome Splash" style="margin: 0 5px;"/>
+  <img src="https://github.com/tsvie/ReMindful_2/blob/main/assets/screenshots/screen_6.png" width="18%" alt="Settings & Colors" style="margin: 0 5px;"/>
 </div>
 
 ## 🇩🇪 Deutsch
