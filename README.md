@@ -1,6 +1,6 @@
 # 🌱 Re:Mindful – Mindfulness & Personal Growth
 
-[![Version](https://img.shields.io/badge/version-2.3.0.0-blue.svg)](https://github.com/tsvie/ReMindful_2/releases)
+[![Version](https://img.shields.io/badge/version-2.3.2.0-blue.svg)](https://github.com/tsvie/ReMindful_2/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-Android-green.svg)](https://github.com/tsvie/ReMindful_2)
 
