@@ -6,9 +6,29 @@
 
 *(🇬🇧 English description below)*
 
+<div align="center">
+  <img src="docs/images/1.jpg" width="18%" alt="Onboarding Start" style="margin: 0 5px;"/>
+  <img src="docs/images/2.jpg" width="18%" alt="Mood Tracker" style="margin: 0 5px;"/>
+  <img src="docs/images/3.jpg" width="18%" alt="Goals & NLP" style="margin: 0 5px;"/>
+  <img src="docs/images/4.jpg" width="18%" alt="Celebrate Success" style="margin: 0 5px;"/>
+  <img src="docs/images/5.jpg" width="18%" alt="PDF Export" style="margin: 0 5px;"/>
+  <br>
+  <img src="docs/images/6.jpg" width="18%" alt="Settings & Colors" style="margin: 0 5px;"/>
+  <img src="docs/images/7.jpg" width="18%" alt="Daily Reminders" style="margin: 0 5px;"/>
+  <img src="docs/images/8.jpg" width="18%" alt="Welcome Splash" style="margin: 0 5px;"/>
+</div>
+
 ## 🇩🇪 Deutsch
 
 **Re:Mindful** ist eine datenschutzfreundliche, 100% offline funktionierende Tagebuch- und Achtsamkeits-App für Android. Sie hilft dir bei der Selbstreflexion, der Zielsetzung und dabei, kleine Erfolge im Alltag bewusst zu feiern.
+
+### 📱 Screenshots
+<p align="center">
+  <img src="assets/screenshots/screen_1.png" width="23%" />
+  <img src="assets/screenshots/screen_3.png" width="23%" />
+  <img src="assets/screenshots/screen_4.png" width="23%" />
+  <img src="assets/screenshots/screen_5.png" width="23%" />
+</p>
 
 ### ✨ Hauptfunktionen
 * **Offline-First & Privacy by Design:** Alle Daten werden ausschließlich lokal auf deinem Gerät gespeichert.
@@ -37,6 +57,14 @@ Du kannst die fertige App direkt installieren, ohne sie selbst kompilieren zu m�
 ## 🇬🇧 English
 
 **Re:Mindful** is a privacy-first, 100% offline journaling and mindfulness app for Android. It assists you with self-reflection, goal setting, and consciously celebrating small everyday successes.
+
+### 📱 Screenshots
+<p align="center">
+  <img src="assets/screenshots/screen_1.png" width="23%" />
+  <img src="assets/screenshots/screen_3.png" width="23%" />
+  <img src="assets/screenshots/screen_4.png" width="23%" />
+  <img src="assets/screenshots/screen_5.png" width="23%" />
+</p>
 
 ### ✨ Key Features
 * **Offline-First & Privacy by Design:** All data is stored exclusively locally on your device.
