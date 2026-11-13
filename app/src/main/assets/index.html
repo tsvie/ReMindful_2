@@ -125,9 +125,9 @@
                     <input type="text" id="goal-input" data-i18n-placeholder="goals_ph" placeholder="Neues Ziel eingeben...">
 
                     <div style="margin-top: 12px; background: var(--bg-color); padding: 12px; border-radius: 8px; border: 1px solid var(--soft-teal);">
-                        <label style="display: flex; align-items: center; gap: 8px; font-weight: bold; cursor: pointer;">
-                            <input type="checkbox" id="goal-custom-timer-toggle" onchange="app.toggleCustomTimer()" style="width: 20px; height: 20px; margin: 0;">
-                            <span data-i18n="goal_custom_timer">Eigener Timer?</span>
+                        <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" id="goal-custom-timer-toggle" onchange="app.toggleCustomTimer()" style="width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0;">
+                            <span data-i18n="goal_custom_timer" style="font-size: 13px; opacity: 0.9; line-height: 1.4;">Gibt es einen speziellen Zeitpunkt, bis zu welchem du das Ziel erreichen möchtest?</span>
                         </label>
                         <div id="goal-custom-timer-container" style="display: none; margin-top: 12px; align-items: center; gap: 8px;">
                             <input type="number" id="goal-timer-d" min="0" placeholder="0" style="width: 70px; margin: 0; padding: 8px;">
@@ -145,9 +145,9 @@
                         <button class="outline-btn" onclick="app.addCustomStep()" data-i18n="goals_add_step">Hinzufügen</button>
                     </div>
 
-                    <div style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap;">
-                        <button class="nlp-btn" onclick="app.nlpAnalyzeGoal()" data-i18n="goals_nlp_btn" style="flex: 1; min-width: 140px; margin-top: 0;">✨ In kleine Schritte</button>
-                        <button class="save-btn" id="btn-save-goal-direct" onclick="app.saveGoal()" data-i18n="goals_save_btn" style="flex: 1; min-width: 140px; margin-top: 0;">➕ Ziel speichern</button>
+                    <div style="display: flex; gap: 8px; margin-top: 16px;">
+                        <button class="nlp-btn" onclick="app.nlpAnalyzeGoal()" data-i18n="goals_nlp_btn" style="flex: 1; padding: 10px 12px; font-size: 13px; margin-top: 0;">✨ In kleine Schritte</button>
+                        <button class="save-btn" id="btn-save-goal-direct" onclick="app.saveGoal()" data-i18n="goals_save_btn" style="flex: 1; padding: 10px 12px; font-size: 13px; margin-top: 0;">➕ Ziel speichern</button>
                     </div>
                     <button class="outline-btn" id="btn-cancel-edit" onclick="app.cancelEditGoal()" style="display:none; margin-top: 8px; width: 100%;" data-i18n="modal_cancel">Abbrechen</button>
                 </div>
@@ -300,6 +300,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=18"></script>
+    <script src="app.js?v=19"></script>
 </body>
 </html>

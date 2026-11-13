@@ -78,7 +78,7 @@ const i18n = {
         help_a5: "Re:Mindful dient deinem persönlichen Wachstum und der Selbstreflexion. Hinweis: Sie ist kein Ersatz für eine professionelle Therapie oder einen Arzt.",
         about_title: "ℹ️ Über diese App",
         about_desc: "Re:Mindful\nEntwickelt von Tian Svenja Vieth\nVielen Dank an L. für die Ideen und das Feedback.\n\nDiese App ist Open-Source und darf frei verteilt und modifiziert werden. Alle Daten bleiben 100% lokal auf deinem Gerät.",
-        goal_custom_timer: "Eigener Timer?",
+        goal_custom_timer: "Gibt es einen speziellen Zeitpunkt, bis zu welchem du das Ziel erreichen möchtest?",
         timer_d: "Tage",
         timer_h: "Std.",
         timer_hint_daily: "Min: 1 Std, Max: 6 Tage 23 Std (Standard: 24 Std)",
@@ -219,7 +219,7 @@ const i18n = {
         help_a5: "Re:Mindful is for personal growth and self-reflection. Note: It is not a substitute for professional therapy or a doctor.",
         about_title: "ℹ️ About this App",
         about_desc: "Re:Mindful\nDeveloped by Tian Svenja Vieth\nMany thanks to L. for the ideas and feedback.\n\nThis app is open-source and can be freely distributed and modified. All data stays 100% locally on your device.",
-        goal_custom_timer: "Custom Timer?",
+        goal_custom_timer: "Is there a specific time by which you want to achieve this goal?",
         timer_d: "Days",
         timer_h: "Hrs",
         timer_hint_daily: "Min: 1 hr, Max: 6 days 23 hrs (Default: 24 hrs)",
@@ -488,7 +488,6 @@ const app = {
                 document.getElementById('screen-main').style.display = 'none';
             } else {
                 document.getElementById('screen-main').style.display = 'block';
-                this.checkExpiredGoals();
             }
         } else {
             document.getElementById('screen-onboarding').style.display = 'flex';
@@ -694,7 +693,6 @@ const app = {
             document.getElementById('screen-lock').style.display = 'none';
             document.getElementById('input-lock-pw').value = '';
             document.getElementById('screen-main').style.display = 'block';
-            this.checkExpiredGoals();
         } else {
             this.showToast(this.t('toast_pw_wrong'));
         }
