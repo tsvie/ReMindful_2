@@ -1103,9 +1103,9 @@ const app = {
                 </div>
                 <h4 style="margin-top:8px;">${g.title}</h4>
                 ${stepsHtml}
-                <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
-                    <button class="outline-btn" style="flex: 1;" onclick="app.evaluateGoal(${g.id})">${this.t('active_goal_eval')}</button>
-                    <button class="outline-btn" style="flex: 1;" onclick="app.editGoal(${g.id})">${this.t('journal_btn_edit')}</button>
+                <div style="display: flex; gap: 8px; margin-top: 12px;">
+                    <button class="outline-btn" style="flex: 1; padding: 8px 10px; font-size: 13px; margin-bottom: 0;" onclick="app.evaluateGoal(${g.id})">${this.t('active_goal_eval')}</button>
+                    <button class="outline-btn" style="flex: 1; padding: 8px 10px; font-size: 13px; margin-bottom: 0;" onclick="app.editGoal(${g.id})">${this.t('journal_btn_edit')}</button>
                 </div>
             `;
 

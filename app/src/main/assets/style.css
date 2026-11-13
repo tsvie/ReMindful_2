@@ -126,22 +126,23 @@ button:active {
 button.nlp-btn {
     background: var(--soft-teal);
     color: var(--primary-teal);
-    border: 2px solid var(--primary-teal);
+    border: 1px solid var(--primary-teal);
 }
 
 button.danger-btn {
     background: var(--danger-red);
+    color: white;
 }
 
 button.outline-btn {
-    background: transparent;
+    background: var(--soft-teal);
     color: var(--primary-teal);
-    border: 2px solid var(--primary-teal);
+    border: 1px solid var(--primary-teal);
     box-shadow: none;
 }
 
 button.outline-btn:active {
-    background: var(--soft-teal);
+    opacity: 0.8;
 }
 
 /* Mood Selector with colored Emojis */
