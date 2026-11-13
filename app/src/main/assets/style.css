@@ -55,6 +55,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
+    overflow: hidden;
 }
 
 .onboarding-content {
@@ -69,6 +70,7 @@ body {
 .tab-content {
     flex: 1;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     padding: 20px;
     padding-bottom: 120px; /* Safe space for bottom nav and keyboard */
 }
@@ -393,6 +395,10 @@ summary { font-weight: bold; color: var(--primary-teal); }
     color: var(--primary-teal);
     opacity: 1;
     font-weight: bold;
+}
+
+body.keyboard-open .bottom-nav {
+    display: none !important;
 }
 
 /* Modals & Overlays */

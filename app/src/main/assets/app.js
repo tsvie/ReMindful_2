@@ -487,7 +487,7 @@ const app = {
                 document.getElementById('screen-lock').style.display = 'flex';
                 document.getElementById('screen-main').style.display = 'none';
             } else {
-                document.getElementById('screen-main').style.display = 'block';
+                document.getElementById('screen-main').style.display = 'flex';
                 this.renderActiveGoals();
                 this.renderJournal();
             }
@@ -694,7 +694,7 @@ const app = {
         if(inp === this.data.user.password) {
             document.getElementById('screen-lock').style.display = 'none';
             document.getElementById('input-lock-pw').value = '';
-            document.getElementById('screen-main').style.display = 'block';
+            document.getElementById('screen-main').style.display = 'flex';
             this.renderActiveGoals();
             this.renderJournal();
         } else {
@@ -764,7 +764,7 @@ const app = {
     },
     closeSplash: function() {
         document.getElementById('screen-splash').style.display = 'none';
-        document.getElementById('screen-main').style.display = 'block';
+        document.getElementById('screen-main').style.display = 'flex';
         this.switchTab('mood', document.querySelector('.bottom-nav button'));
         this.renderActiveGoals();
         this.renderJournal();
@@ -1327,11 +1327,17 @@ const app = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Scroll inputs into view to avoid keyboard overlap
-    document.querySelectorAll('input[type="text"], textarea').forEach(el => {
-        el.addEventListener('focus', () => {
-            setTimeout(() => el.scrollIntoView({behavior: 'smooth', block: 'center'}), 300);
-        });
+    // Hide bottom nav when typing to prevent overlap
+    document.addEventListener('focusin', e => {
+        if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
+            document.body.classList.add('keyboard-open');
+            setTimeout(() => e.target.scrollIntoView({behavior: 'smooth', block: 'center'}), 300);
+        }
+    });
+    document.addEventListener('focusout', e => {
+        if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
+            document.body.classList.remove('keyboard-open');
+        }
     });
 
     // Swipe Event Listeners
