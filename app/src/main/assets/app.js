@@ -1327,16 +1327,33 @@ const app = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Hide bottom nav when typing to prevent overlap
+    // Dynamic Keyboard Detection for immediate nav bar restoration on dismissal
+    const checkKeyboard = () => {
+        const screenH = window.screen.height || window.innerHeight;
+        const currentH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+
+        // If current visible height is > 75% of screen height, keyboard is closed
+        if (currentH > screenH * 0.75) {
+            document.body.classList.remove('keyboard-open');
+        } else {
+            document.body.classList.add('keyboard-open');
+        }
+    };
+
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', checkKeyboard);
+    }
+    window.addEventListener('resize', checkKeyboard);
+
     document.addEventListener('focusin', e => {
         if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
-            document.body.classList.add('keyboard-open');
+            checkKeyboard();
             setTimeout(() => e.target.scrollIntoView({behavior: 'smooth', block: 'center'}), 300);
         }
     });
     document.addEventListener('focusout', e => {
         if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
-            document.body.classList.remove('keyboard-open');
+            setTimeout(checkKeyboard, 150);
         }
     });
 
