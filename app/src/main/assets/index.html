@@ -129,11 +129,13 @@
                             <input type="checkbox" id="goal-custom-timer-toggle" onchange="app.toggleCustomTimer()" style="width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0;">
                             <span data-i18n="goal_custom_timer" style="font-size: 13px; opacity: 0.9; line-height: 1.4;">Gibt es einen speziellen Zeitpunkt, bis zu welchem du das Ziel erreichen möchtest?</span>
                         </label>
-                        <div id="goal-custom-timer-container" style="display: none; margin-top: 12px; align-items: center; gap: 8px;">
-                            <input type="number" id="goal-timer-d" min="0" placeholder="0" style="width: 70px; margin: 0; padding: 8px;">
+                        <div id="goal-custom-timer-container" style="display: none; margin-top: 12px; align-items: center; gap: 6px; flex-wrap: wrap;">
+                            <input type="number" id="goal-timer-d" min="0" placeholder="0" style="width: 55px; margin: 0; padding: 6px 8px;">
                             <span data-i18n="timer_d">Tage</span>
-                            <input type="number" id="goal-timer-h" min="0" max="23" placeholder="0" style="width: 70px; margin: 0; padding: 8px;">
+                            <input type="number" id="goal-timer-h" min="0" max="23" placeholder="0" style="width: 55px; margin: 0; padding: 6px 8px;">
                             <span data-i18n="timer_h">Std.</span>
+                            <input type="number" id="goal-timer-m" min="0" max="59" placeholder="0" style="width: 55px; margin: 0; padding: 6px 8px;">
+                            <span data-i18n="timer_m">Min.</span>
                         </div>
                         <p id="goal-timer-hint" style="font-size: 12px; opacity: 0.7; margin-top: 8px; display: none; margin-bottom: 0;"></p>
                     </div>
@@ -300,6 +302,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=19"></script>
+    <script src="app.js?v=20"></script>
 </body>
 </html>

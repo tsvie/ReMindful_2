@@ -81,13 +81,17 @@ const i18n = {
         goal_custom_timer: "Gibt es einen speziellen Zeitpunkt, bis zu welchem du das Ziel erreichen möchtest?",
         timer_d: "Tage",
         timer_h: "Std.",
-        timer_hint_daily: "Min: 1 Std, Max: 6 Tage 23 Std (Standard: 24 Std)",
-        timer_hint_weekly: "Min: 7 Tage 1 Std, Max: 13 Tage 23 Std (Standard: 7 Tage)",
+        timer_m: "Min.",
+        timer_hint_daily: "Min: 1 Min, Max: 6 Tage 23 Std 59 Min (Standard: 24 Std)",
+        timer_hint_weekly: "Min: 7 Tage 1 Min, Max: 13 Tage 23 Std 59 Min (Standard: 7 Tage)",
         expired_title: "Abgelaufene Ziele",
         expired_desc: "Bitte werte diese abgelaufenen Ziele aus:",
         expired_save: "Auswerten & ins Tagebuch",
         time_left: "Noch",
         time_expired: "Abgelaufen!",
+        reset_timer: "⏰ Timer neu stellen",
+        timer_reset_title: "Timer neu stellen",
+        timer_extended: "Timer neu gestellt!",
         badge_goal: "ZIEL",
         badge_success: "ERFOLG",
         badge_mood: "STIMMUNG",
@@ -222,13 +226,17 @@ const i18n = {
         goal_custom_timer: "Is there a specific time by which you want to achieve this goal?",
         timer_d: "Days",
         timer_h: "Hrs",
-        timer_hint_daily: "Min: 1 hr, Max: 6 days 23 hrs (Default: 24 hrs)",
-        timer_hint_weekly: "Min: 7 days 1 hr, Max: 13 days 23 hrs (Default: 7 days)",
+        timer_m: "Mins",
+        timer_hint_daily: "Min: 1 min, Max: 6 days 23 hrs 59 mins (Default: 24 hrs)",
+        timer_hint_weekly: "Min: 7 days 1 min, Max: 13 days 23 hrs 59 mins (Default: 7 days)",
         expired_title: "Expired Goals",
         expired_desc: "Please evaluate your expired goals:",
         expired_save: "Evaluate & Save to Journal",
         time_left: "Remaining:",
         time_expired: "Expired!",
+        reset_timer: "⏰ Reset Timer",
+        timer_reset_title: "Reset Timer",
+        timer_extended: "Timer reset!",
         badge_goal: "GOAL",
         badge_success: "SUCCESS",
         badge_mood: "MOOD",
@@ -498,6 +506,9 @@ const app = {
 
         // Setup IDB for Memos if not available we use base64 in localstorage (Fallback)
         this.initVoiceMemos();
+
+        // Start live timer updates (every 1 second)
+        setInterval(() => this.updateLiveTimers(), 1000);
     },
 
     // --- UTILS ---
@@ -894,6 +905,7 @@ const app = {
             document.getElementById('goal-timer-hint').innerText = isDaily ? this.t('timer_hint_daily') : this.t('timer_hint_weekly');
             document.getElementById('goal-timer-d').value = isDaily ? 1 : 7;
             document.getElementById('goal-timer-h').value = 0;
+            document.getElementById('goal-timer-m').value = 0;
         }
     },
 
@@ -958,28 +970,29 @@ const app = {
         const isCustom = document.getElementById('goal-custom-timer-toggle').checked;
         let d = parseInt(document.getElementById('goal-timer-d').value) || 0;
         let h = parseInt(document.getElementById('goal-timer-h').value) || 0;
+        let m = parseInt(document.getElementById('goal-timer-m').value) || 0;
 
-        let totalHours = 0;
+        let totalMinutes = 0;
         if (this.data.currentGoalType === 'daily') {
             if (isCustom) {
-                totalHours = d * 24 + h;
-                if (totalHours < 1) totalHours = 1;
-                if (totalHours > 167) totalHours = 167;
+                totalMinutes = d * 1440 + h * 60 + m;
+                if (totalMinutes < 1) totalMinutes = 1;
+                if (totalMinutes > 10079) totalMinutes = 10079; // 6d 23h 59m
             } else {
-                totalHours = 24;
+                totalMinutes = 1440; // 24 hours
             }
         } else {
             if (isCustom) {
-                totalHours = d * 24 + h;
-                if (totalHours < 169) totalHours = 169;
-                if (totalHours > 335) totalHours = 335;
+                totalMinutes = d * 1440 + h * 60 + m;
+                if (totalMinutes < 10081) totalMinutes = 10081; // 7d 1m
+                if (totalMinutes > 20159) totalMinutes = 20159; // 13d 23h 59m
             } else {
-                totalHours = 168;
+                totalMinutes = 10080; // 7 days
             }
         }
 
         const now = Date.now();
-        const expiresAt = now + (totalHours * 60 * 60 * 1000);
+        const expiresAt = now + (totalMinutes * 60 * 1000);
 
         if (this.editingGoalId) {
             const goal = this.data.activeGoals.find(g => g.id === this.editingGoalId);
@@ -1035,15 +1048,17 @@ const app = {
         }
 
         if (goal.expiresAt) {
-            const diffHours = (goal.expiresAt - Date.now()) / (1000 * 60 * 60);
+            const diffMin = Math.floor((goal.expiresAt - Date.now()) / (1000 * 60));
             document.getElementById('goal-custom-timer-toggle').checked = true;
             this.toggleCustomTimer();
-            if (diffHours > 0) {
-                document.getElementById('goal-timer-d').value = Math.floor(diffHours / 24);
-                document.getElementById('goal-timer-h').value = Math.floor(diffHours % 24);
+            if (diffMin > 0) {
+                document.getElementById('goal-timer-d').value = Math.floor(diffMin / 1440);
+                document.getElementById('goal-timer-h').value = Math.floor((diffMin % 1440) / 60);
+                document.getElementById('goal-timer-m').value = diffMin % 60;
             } else {
                 document.getElementById('goal-timer-d').value = 0;
                 document.getElementById('goal-timer-h').value = 0;
+                document.getElementById('goal-timer-m').value = 0;
             }
         }
 
@@ -1061,6 +1076,142 @@ const app = {
         this.toggleCustomTimer();
         document.getElementById('btn-save-goal-direct').innerText = this.t('goals_save_btn');
         document.getElementById('btn-cancel-edit').style.display = 'none';
+    },
+
+    updateLiveTimers: function() {
+        const timerEls = document.querySelectorAll('[data-expires-at]');
+        if (timerEls.length === 0) return;
+        const now = Date.now();
+
+        timerEls.forEach(el => {
+            const expiresAt = parseInt(el.getAttribute('data-expires-at'));
+            if (isNaN(expiresAt)) return;
+            const diffMs = expiresAt - now;
+
+            if (diffMs <= 0) {
+                el.innerText = this.t('time_expired');
+                el.style.color = 'var(--danger-red)';
+            } else {
+                const totalSec = Math.floor(diffMs / 1000);
+                const d = Math.floor(totalSec / 86400);
+                const h = Math.floor((totalSec % 86400) / 3600);
+                const m = Math.floor((totalSec % 3600) / 60);
+                const s = totalSec % 60;
+
+                let tStr = [];
+                if (d > 0) tStr.push(`${d}d`);
+                if (h > 0 || d > 0) tStr.push(`${h}h`);
+                if (m > 0 || h > 0 || d > 0) tStr.push(`${m}m`);
+                tStr.push(`${s}s`);
+
+                el.innerText = `⏳ ${this.t('time_left')} ${tStr.join(' ')}`;
+                el.style.color = 'inherit';
+            }
+        });
+    },
+
+    checkExpiredGoals: function() {
+        const now = Date.now();
+        const expired = this.data.activeGoals.filter(g => g.expiresAt && g.expiresAt <= now);
+
+        if (expired.length > 0) {
+            const list = document.getElementById('expired-list');
+            if (!list) return;
+            list.innerHTML = '';
+
+            expired.forEach(g => {
+                const div = document.createElement('div');
+                div.style.cssText = "background:var(--bg-color); padding:12px; border-radius:8px; margin-bottom:12px; border: 1px solid var(--primary-teal);";
+                div.innerHTML = `
+                    <div style="font-weight:bold; margin-bottom:8px; font-size:15px;">${g.title}</div>
+                    <select id="exp-status-${g.id}" style="width:100%; padding:8px; border-radius:8px; border: 1px solid var(--text-main); margin-bottom: 8px;">
+                        <option value="${this.t('eval_opt1')}">${this.t('eval_opt1')}</option>
+                        <option value="${this.t('eval_opt2')}">${this.t('eval_opt2')}</option>
+                        <option value="${this.t('eval_opt3')}">${this.t('eval_opt3')}</option>
+                    </select>
+                    <button class="outline-btn" style="width:100%; padding:8px 10px; font-size:12px; margin-bottom:0;" onclick="app.resetGoalTimerModal(${g.id})">${this.t('reset_timer')}</button>
+                `;
+                list.appendChild(div);
+            });
+
+            document.getElementById('expired-modal').style.display = 'flex';
+        }
+    },
+
+    closeExpiredModal: function() {
+        document.getElementById('expired-modal').style.display = 'none';
+    },
+
+    saveExpiredGoals: function() {
+        const now = Date.now();
+        const expired = this.data.activeGoals.filter(g => g.expiresAt && g.expiresAt <= now);
+
+        expired.forEach(g => {
+            const statusEl = document.getElementById(`exp-status-${g.id}`);
+            if (!statusEl) return;
+            const status = statusEl.value;
+            const typeTranslated = g.type === 'daily' ? this.t('goals_daily') : this.t('goals_weekly');
+            let journalText = `Ziel (${typeTranslated}): ${g.title}\n`;
+            if(g.steps && g.steps.length > 0) journalText += `Schritte:\n- ` + g.steps.join('\n- ') + `\n\n`;
+            journalText += `Ergebnis: ${status}\nReflexion: (Automatische Abfrage nach Zeitablauf)`;
+
+            this.data.entries.push({
+                id: Date.now() + Math.random(),
+                type: 'goal',
+                text: journalText,
+                timestamp: new Date().toISOString()
+            });
+
+            this.data.activeGoals = this.data.activeGoals.filter(active => active.id !== g.id);
+        });
+
+        this.saveData();
+        this.closeExpiredModal();
+        this.renderActiveGoals();
+        this.renderJournal();
+        this.showToast(this.t('toast_saved'));
+    },
+
+    resetGoalTimerModal: function(id) {
+        const goal = this.data.activeGoals.find(g => g.id === id);
+        if (!goal) return;
+
+        const isDaily = goal.type === 'daily';
+        const defaultD = isDaily ? 1 : 7;
+
+        const bodyHTML = `
+            <p style="margin-bottom:12px;"><strong>${goal.title}</strong></p>
+            <div style="display: flex; align-items: center; gap: 6px; justify-content: center; margin-bottom: 12px; flex-wrap: wrap;">
+                <input type="number" id="reset-timer-d" value="${defaultD}" min="0" style="width: 55px; padding: 6px; margin:0;">
+                <span>${this.t('timer_d')}</span>
+                <input type="number" id="reset-timer-h" value="0" min="0" max="23" style="width: 55px; padding: 6px; margin:0;">
+                <span>${this.t('timer_h')}</span>
+                <input type="number" id="reset-timer-m" value="0" min="0" max="59" style="width: 55px; padding: 6px; margin:0;">
+                <span>${this.t('timer_m')}</span>
+            </div>
+        `;
+
+        this.showModal(this.t('timer_reset_title'), bodyHTML, () => {
+            let d = parseInt(document.getElementById('reset-timer-d').value) || 0;
+            let h = parseInt(document.getElementById('reset-timer-h').value) || 0;
+            let m = parseInt(document.getElementById('reset-timer-m').value) || 0;
+
+            let totalMinutes = d * 1440 + h * 60 + m;
+            if (isDaily) {
+                if (totalMinutes < 1) totalMinutes = 1;
+                if (totalMinutes > 10079) totalMinutes = 10079;
+            } else {
+                if (totalMinutes < 10081) totalMinutes = 10081;
+                if (totalMinutes > 20159) totalMinutes = 20159;
+            }
+
+            goal.expiresAt = Date.now() + (totalMinutes * 60 * 1000);
+            this.saveData();
+            this.showToast(this.t('timer_extended'));
+
+            this.checkExpiredGoals();
+            this.renderActiveGoals();
+        });
     },
 
     renderActiveGoals: function() {
@@ -1083,24 +1234,16 @@ const app = {
 
             let timeHtml = '';
             if (g.expiresAt) {
-                const diffHours = (g.expiresAt - now) / (1000 * 60 * 60);
-                if (diffHours <= 0) {
-                    timeHtml = `<span style="font-size:12px; font-weight:bold; color:var(--danger-red);">${this.t('time_expired')}</span>`;
-                } else {
-                    const d = Math.floor(diffHours / 24);
-                    const h = Math.floor(diffHours % 24);
-                    const m = Math.floor(((diffHours % 24) - h) * 60);
-                    let tStr = [];
-                    if (d > 0) tStr.push(`${d}d`);
-                    if (h > 0) tStr.push(`${h}h`);
-                    if (m > 0 && d === 0) tStr.push(`${m}m`);
-                    if (tStr.length === 0) tStr.push(`<1m`);
-
-                    timeHtml = `<span style="font-size:12px; font-weight:bold; opacity:0.7;">⏳ ${this.t('time_left')} ${tStr.join(' ')}</span>`;
-                }
+                timeHtml = `<span data-expires-at="${g.expiresAt}" style="font-size:12px; font-weight:bold; opacity:0.7;"></span>`;
             }
 
+            const isExpired = g.expiresAt && g.expiresAt <= now;
             const typeTranslated = g.type === 'daily' ? this.t('goals_daily').toUpperCase() : this.t('goals_weekly').toUpperCase();
+
+            let resetBtnHtml = '';
+            if (isExpired) {
+                resetBtnHtml = `<button class="outline-btn" style="flex: 1; padding: 8px 10px; font-size: 13px; margin-bottom: 0;" onclick="app.resetGoalTimerModal(${g.id})">${this.t('reset_timer')}</button>`;
+            }
 
             const div = document.createElement('div');
             div.className = 'active-goal-card';
@@ -1111,9 +1254,10 @@ const app = {
                 </div>
                 <h4 style="margin-top:8px;">${g.title}</h4>
                 ${stepsHtml}
-                <div style="display: flex; gap: 8px; margin-top: 12px;">
+                <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
                     <button class="outline-btn" style="flex: 1; padding: 8px 10px; font-size: 13px; margin-bottom: 0;" onclick="app.evaluateGoal(${g.id})">${this.t('active_goal_eval')}</button>
                     <button class="outline-btn" style="flex: 1; padding: 8px 10px; font-size: 13px; margin-bottom: 0;" onclick="app.editGoal(${g.id})">${this.t('journal_btn_edit')}</button>
+                    ${resetBtnHtml}
                 </div>
             `;
 
@@ -1128,6 +1272,8 @@ const app = {
 
         if (!hasDaily) dailyContainer.innerHTML = `<p style="text-align:center; opacity:0.6;">${this.t('active_goal_empty')}</p>`;
         if (!hasWeekly) weeklyContainer.innerHTML = `<p style="text-align:center; opacity:0.6;">${this.t('active_goal_empty')}</p>`;
+
+        this.updateLiveTimers();
     },
 
     evaluateGoal: function(id) {
