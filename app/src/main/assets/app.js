@@ -78,6 +78,16 @@ const i18n = {
         help_a5: "Re:Mindful dient deinem persönlichen Wachstum und der Selbstreflexion. Hinweis: Sie ist kein Ersatz für eine professionelle Therapie oder einen Arzt.",
         about_title: "ℹ️ Über diese App",
         about_desc: "Re:Mindful\nEntwickelt von Tian Svenja Vieth\nVielen Dank an L. für die Ideen und das Feedback.\n\nDiese App ist Open-Source und darf frei verteilt und modifiziert werden. Alle Daten bleiben 100% lokal auf deinem Gerät.",
+        goal_custom_timer: "Eigener Timer?",
+        timer_d: "Tage",
+        timer_h: "Std.",
+        timer_hint_daily: "Min: 1 Std, Max: 6 Tage 23 Std (Standard: 24 Std)",
+        timer_hint_weekly: "Min: 7 Tage 1 Std, Max: 13 Tage 23 Std (Standard: 7 Tage)",
+        expired_title: "Abgelaufene Ziele",
+        expired_desc: "Bitte werte diese abgelaufenen Ziele aus:",
+        expired_save: "Auswerten & ins Tagebuch",
+        time_left: "Noch",
+        time_expired: "Abgelaufen!",
         nav_mood: "Mood",
         nav_goals: "Ziele",
         nav_success: "Erfolge",
@@ -197,6 +207,16 @@ const i18n = {
         help_a5: "Re:Mindful is for personal growth and self-reflection. Note: It is not a substitute for professional therapy or a doctor.",
         about_title: "ℹ️ About this App",
         about_desc: "Re:Mindful\nDeveloped by Tian Svenja Vieth\nMany thanks to L. for the ideas and feedback.\n\nThis app is open-source and can be freely distributed and modified. All data stays 100% locally on your device.",
+        goal_custom_timer: "Custom Timer?",
+        timer_d: "Days",
+        timer_h: "Hrs",
+        timer_hint_daily: "Min: 1 hr, Max: 6 days 23 hrs (Default: 24 hrs)",
+        timer_hint_weekly: "Min: 7 days 1 hr, Max: 13 days 23 hrs (Default: 7 days)",
+        expired_title: "Expired Goals",
+        expired_desc: "Please evaluate your expired goals:",
+        expired_save: "Evaluate & Save to Journal",
+        time_left: "Remaining:",
+        time_expired: "Expired!",
         nav_mood: "Mood",
         nav_goals: "Goals",
         nav_success: "Success",
@@ -449,7 +469,8 @@ const app = {
                 document.getElementById('screen-lock').style.display = 'flex';
                 document.getElementById('screen-main').style.display = 'none';
             } else {
-                this.showSplash();
+                document.getElementById('screen-main').style.display = 'block';
+                this.checkExpiredGoals();
             }
         } else {
             document.getElementById('screen-onboarding').style.display = 'flex';
@@ -654,7 +675,8 @@ const app = {
         if(inp === this.data.user.password) {
             document.getElementById('screen-lock').style.display = 'none';
             document.getElementById('input-lock-pw').value = '';
-            this.showSplash();
+            document.getElementById('screen-main').style.display = 'block';
+            this.checkExpiredGoals();
         } else {
             this.showToast(this.t('toast_pw_wrong'));
         }
@@ -734,6 +756,7 @@ const app = {
         document.getElementById('tab-' + tabId).style.display = 'block';
         if(btnElement) btnElement.classList.add('active');
         if(tabId === 'journal') this.renderJournal();
+        if(tabId === 'goals') this.checkExpiredGoals();
         if(tabId === 'settings') {
             document.getElementById('settings-name').value = this.data.user.name;
             document.querySelectorAll('#tab-settings .lang-btn').forEach(b => b.classList.remove('active'));
@@ -837,10 +860,24 @@ const app = {
     },
 
     // --- GOALS ---
+    toggleCustomTimer: function() {
+        const isChecked = document.getElementById('goal-custom-timer-toggle').checked;
+        document.getElementById('goal-custom-timer-container').style.display = isChecked ? 'flex' : 'none';
+        document.getElementById('goal-timer-hint').style.display = isChecked ? 'block' : 'none';
+
+        if (isChecked) {
+            const isDaily = (this.data.currentGoalType === 'daily');
+            document.getElementById('goal-timer-hint').innerText = isDaily ? this.t('timer_hint_daily') : this.t('timer_hint_weekly');
+            document.getElementById('goal-timer-d').value = isDaily ? 1 : 7;
+            document.getElementById('goal-timer-h').value = 0;
+        }
+    },
+
     switchGoalType: function(type) {
         this.data.currentGoalType = type;
         document.getElementById('seg-daily').classList.toggle('active', type === 'daily');
         document.getElementById('seg-weekly').classList.toggle('active', type === 'weekly');
+        this.toggleCustomTimer();
     },
 
     nlpAnalyzeGoal: function() {
@@ -912,16 +949,44 @@ const app = {
         document.getElementById('goal-input').value = '';
         document.getElementById('goal-nlp-suggestions').innerHTML = '';
         document.getElementById('custom-step-container').style.display = 'none';
-        document.getElementById('btn-save-goal-direct').style.display = 'block';
+
+        document.getElementById('goal-custom-timer-toggle').checked = false;
+        this.toggleCustomTimer();
     },
 
     addActiveGoal: function(title, steps) {
+        const isCustom = document.getElementById('goal-custom-timer-toggle').checked;
+        let d = parseInt(document.getElementById('goal-timer-d').value) || 0;
+        let h = parseInt(document.getElementById('goal-timer-h').value) || 0;
+
+        let totalHours = 0;
+        if (this.data.currentGoalType === 'daily') {
+            if (isCustom) {
+                totalHours = d * 24 + h;
+                if (totalHours < 1) totalHours = 1;
+                if (totalHours > 167) totalHours = 167; // 6 days 23 hours
+            } else {
+                totalHours = 24;
+            }
+        } else {
+            if (isCustom) {
+                totalHours = d * 24 + h;
+                if (totalHours < 169) totalHours = 169; // 7 days 1 hour
+                if (totalHours > 335) totalHours = 335; // 13 days 23 hours
+            } else {
+                totalHours = 168; // 7 days
+            }
+        }
+
+        const expiresAt = Date.now() + (totalHours * 60 * 60 * 1000);
+
         this.data.activeGoals.push({
             id: Date.now(),
             type: this.data.currentGoalType,
             title: title,
             steps: steps,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            expiresAt: expiresAt
         });
         this.saveData();
         this.showToast(this.t('toast_saved'));
@@ -936,10 +1001,33 @@ const app = {
             return;
         }
 
+        const now = Date.now();
+
         this.data.activeGoals.forEach(g => {
+            if (g.type !== this.data.currentGoalType) return;
+
             let stepsHtml = '';
             if(g.steps.length > 0) {
                 stepsHtml = '<ul>' + g.steps.map(s => `<li>${s}</li>`).join('') + '</ul>';
+            }
+
+            let timeHtml = '';
+            if (g.expiresAt) {
+                const diffHours = (g.expiresAt - now) / (1000 * 60 * 60);
+                if (diffHours <= 0) {
+                    timeHtml = `<span style="font-size:12px; font-weight:bold; color:var(--danger-red);">${this.t('time_expired')}</span>`;
+                } else {
+                    const d = Math.floor(diffHours / 24);
+                    const h = Math.floor(diffHours % 24);
+                    const m = Math.floor(((diffHours % 24) - h) * 60);
+                    let tStr = [];
+                    if (d > 0) tStr.push(`${d}d`);
+                    if (h > 0) tStr.push(`${h}h`);
+                    if (m > 0 && d === 0) tStr.push(`${m}m`);
+                    if (tStr.length === 0) tStr.push(`<1m`);
+
+                    timeHtml = `<span style="font-size:12px; font-weight:bold; opacity:0.7;">⏳ ${this.t('time_left')} ${tStr.join(' ')}</span>`;
+                }
             }
 
             const typeTranslated = g.type === 'daily' ? this.t('goals_daily').toUpperCase() : this.t('goals_weekly').toUpperCase();
@@ -947,8 +1035,9 @@ const app = {
             const div = document.createElement('div');
             div.className = 'active-goal-card';
             div.innerHTML = `
-                <div style="display:flex; justify-content:space-between;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                     <span class="badge goal">${typeTranslated}</span>
+                    ${timeHtml}
                 </div>
                 <h4 style="margin-top:8px;">${g.title}</h4>
                 ${stepsHtml}

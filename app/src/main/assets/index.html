@@ -121,7 +121,22 @@
                 </div>
 
                 <input type="text" id="goal-input" data-i18n-placeholder="goals_ph" placeholder="Neues Ziel eingeben...">
-                <button class="nlp-btn" onclick="app.nlpAnalyzeGoal()" data-i18n="goals_nlp_btn">✨ Ziel in kleine Schritte zerlegen</button>
+
+                <div style="margin-top: 12px; background: var(--bg-color); padding: 12px; border-radius: 8px; border: 1px solid var(--soft-teal);">
+                    <label style="display: flex; align-items: center; gap: 8px; font-weight: bold; cursor: pointer;">
+                        <input type="checkbox" id="goal-custom-timer-toggle" onchange="app.toggleCustomTimer()" style="width: 20px; height: 20px; margin: 0;">
+                        <span data-i18n="goal_custom_timer">Eigener Timer?</span>
+                    </label>
+                    <div id="goal-custom-timer-container" style="display: none; margin-top: 12px; align-items: center; gap: 8px;">
+                        <input type="number" id="goal-timer-d" min="0" placeholder="0" style="width: 70px; margin: 0; padding: 8px;">
+                        <span data-i18n="timer_d">Tage</span>
+                        <input type="number" id="goal-timer-h" min="0" max="23" placeholder="0" style="width: 70px; margin: 0; padding: 8px;">
+                        <span data-i18n="timer_h">Std.</span>
+                    </div>
+                    <p id="goal-timer-hint" style="font-size: 12px; opacity: 0.7; margin-top: 8px; display: none; margin-bottom: 0;"></p>
+                </div>
+
+                <button class="nlp-btn" onclick="app.nlpAnalyzeGoal()" data-i18n="goals_nlp_btn" style="margin-top: 16px;">✨ Ziel in kleine Schritte zerlegen</button>
                 <div id="goal-nlp-suggestions" class="nlp-suggestions"></div>
 
                 <div id="custom-step-container" style="display:none; margin-top:10px;">
@@ -263,6 +278,19 @@
         </div>
     </div>
 
-    <script src="app.js?v=17"></script>
+    <!-- Expired Goals Modal -->
+    <div id="expired-modal" class="modal-overlay" style="display:none; z-index: 9999;">
+        <div class="modal-content">
+            <h3 data-i18n="expired_title">Abgelaufene Ziele</h3>
+            <p data-i18n="expired_desc" style="margin-top: 8px;">Bitte werte deine abgelaufenen Ziele aus:</p>
+            <div id="expired-list" style="max-height: 50vh; overflow-y: auto; margin-bottom: 16px; margin-top: 16px;"></div>
+            <div style="display: flex; gap: 8px; flex-direction: column;">
+                <button onclick="app.saveExpiredGoals()" data-i18n="expired_save">Auswerten & ins Tagebuch</button>
+                <button class="outline-btn" onclick="app.closeExpiredModal()" data-i18n="btn_skip">Überspringen</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js?v=18"></script>
 </body>
 </html>
