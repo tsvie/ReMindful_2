@@ -88,6 +88,18 @@ const i18n = {
         expired_save: "Auswerten & ins Tagebuch",
         time_left: "Noch",
         time_expired: "Abgelaufen!",
+        badge_goal: "ZIEL",
+        badge_success: "ERFOLG",
+        badge_mood: "STIMMUNG",
+        badge_voice: "MEMO",
+        goals_create_title: "Neues Ziel erstellen",
+        goals_save_changes: "Änderungen speichern",
+        badge_goal: "ZIEL",
+        badge_success: "ERFOLG",
+        badge_mood: "STIMMUNG",
+        badge_voice: "MEMO",
+        goals_create_title: "Neues Ziel erstellen",
+        goals_save_changes: "Änderungen speichern",
         nav_mood: "Mood",
         nav_goals: "Ziele",
         nav_success: "Erfolge",
@@ -217,6 +229,12 @@ const i18n = {
         expired_save: "Evaluate & Save to Journal",
         time_left: "Remaining:",
         time_expired: "Expired!",
+        badge_goal: "GOAL",
+        badge_success: "SUCCESS",
+        badge_mood: "MOOD",
+        badge_voice: "MEMO",
+        goals_create_title: "Create new goal",
+        goals_save_changes: "Save changes",
         nav_mood: "Mood",
         nav_goals: "Goals",
         nav_success: "Success",
@@ -904,12 +922,11 @@ const app = {
         let html = '';
         matchedSteps.forEach(step => {
             const formattedStep = step.replace(/{goal}/g, goalName);
-            html += `<label><input type="checkbox" value="${formattedStep}"> ${formattedStep}</label><br>`;
+            html += `<label><input type="checkbox" value="${formattedStep}" checked> ${formattedStep}</label><br>`;
         });
 
         if(html) {
-             container.innerHTML = html + `<button class="save-btn" onclick="app.saveGoalNLP()" style="margin-top:10px;">${this.t('nlp_goal_btn')}</button>`;
-             saveBtn.style.display = 'none';
+             container.innerHTML = html;
              document.getElementById('custom-step-container').style.display = 'block';
         }
     },
@@ -921,40 +938,17 @@ const app = {
         const container = document.getElementById('goal-nlp-suggestions');
         const newLabel = document.createElement('label');
         newLabel.innerHTML = `<input type="checkbox" value="${stepText}" checked> ${stepText}`;
-
-        const saveBtn = container.querySelector('.save-btn');
-        if(saveBtn) {
-            container.insertBefore(newLabel, saveBtn);
-            container.insertBefore(document.createElement('br'), saveBtn);
-        } else {
-            container.appendChild(newLabel);
-        }
+        container.appendChild(newLabel);
         document.getElementById('custom-step-input').value = '';
     },
 
-    saveGoalDirect: function() {
-        const text = document.getElementById('goal-input').value;
-        if(text) {
-            this.addActiveGoal(text, []);
-            document.getElementById('goal-input').value = '';
-        }
-    },
+    saveGoal: function() {
+        const title = document.getElementById('goal-input').value.trim();
+        if(!title) return this.showToast(this.t('toast_empty'));
 
-    saveGoalNLP: function() {
-        const text = document.getElementById('goal-input').value;
         const checkboxes = document.querySelectorAll('#goal-nlp-suggestions input:checked');
         let steps = Array.from(checkboxes).map(cb => cb.value);
-        this.addActiveGoal(text, steps);
 
-        document.getElementById('goal-input').value = '';
-        document.getElementById('goal-nlp-suggestions').innerHTML = '';
-        document.getElementById('custom-step-container').style.display = 'none';
-
-        document.getElementById('goal-custom-timer-toggle').checked = false;
-        this.toggleCustomTimer();
-    },
-
-    addActiveGoal: function(title, steps) {
         const isCustom = document.getElementById('goal-custom-timer-toggle').checked;
         let d = parseInt(document.getElementById('goal-timer-d').value) || 0;
         let h = parseInt(document.getElementById('goal-timer-h').value) || 0;
@@ -964,50 +958,120 @@ const app = {
             if (isCustom) {
                 totalHours = d * 24 + h;
                 if (totalHours < 1) totalHours = 1;
-                if (totalHours > 167) totalHours = 167; // 6 days 23 hours
+                if (totalHours > 167) totalHours = 167;
             } else {
                 totalHours = 24;
             }
         } else {
             if (isCustom) {
                 totalHours = d * 24 + h;
-                if (totalHours < 169) totalHours = 169; // 7 days 1 hour
-                if (totalHours > 335) totalHours = 335; // 13 days 23 hours
+                if (totalHours < 169) totalHours = 169;
+                if (totalHours > 335) totalHours = 335;
             } else {
-                totalHours = 168; // 7 days
+                totalHours = 168;
             }
         }
 
-        const expiresAt = Date.now() + (totalHours * 60 * 60 * 1000);
+        const now = Date.now();
+        const expiresAt = now + (totalHours * 60 * 60 * 1000);
 
-        this.data.activeGoals.push({
-            id: Date.now(),
-            type: this.data.currentGoalType,
-            title: title,
-            steps: steps,
-            timestamp: new Date().toISOString(),
-            expiresAt: expiresAt
-        });
+        if (this.editingGoalId) {
+            const goal = this.data.activeGoals.find(g => g.id === this.editingGoalId);
+            if (goal) {
+                goal.title = title;
+                goal.steps = steps;
+                goal.type = this.data.currentGoalType;
+                goal.expiresAt = expiresAt;
+            }
+            this.showToast(this.t('toast_updated'));
+            this.cancelEditGoal();
+        } else {
+            this.data.activeGoals.push({
+                id: now,
+                type: this.data.currentGoalType,
+                title: title,
+                steps: steps,
+                timestamp: new Date().toISOString(),
+                expiresAt: expiresAt
+            });
+            this.showToast(this.t('toast_saved'));
+
+            document.getElementById('goal-input').value = '';
+            document.getElementById('goal-nlp-suggestions').innerHTML = '';
+            document.getElementById('custom-step-container').style.display = 'none';
+            document.getElementById('goal-custom-timer-toggle').checked = false;
+            this.toggleCustomTimer();
+        }
+
         this.saveData();
-        this.showToast(this.t('toast_saved'));
         this.renderActiveGoals();
     },
 
-    renderActiveGoals: function() {
-        const container = document.getElementById('active-goals-list');
-        container.innerHTML = '';
-        if(this.data.activeGoals.length === 0) {
-            container.innerHTML = `<p style="text-align:center; opacity:0.6;">${this.t('active_goal_empty')}</p>`;
-            return;
+    editGoal: function(id) {
+        const goal = this.data.activeGoals.find(g => g.id === id);
+        if(!goal) return;
+
+        this.editingGoalId = id;
+        document.getElementById('goal-input').value = goal.title;
+        this.switchGoalType(goal.type);
+
+        const container = document.getElementById('goal-nlp-suggestions');
+        let html = '';
+        if (goal.steps && goal.steps.length > 0) {
+            goal.steps.forEach(step => {
+                html += `<label><input type="checkbox" value="${step}" checked> ${step}</label><br>`;
+            });
+            container.innerHTML = html;
+            document.getElementById('custom-step-container').style.display = 'block';
+        } else {
+            container.innerHTML = '';
+            document.getElementById('custom-step-container').style.display = 'none';
         }
 
+        if (goal.expiresAt) {
+            const diffHours = (goal.expiresAt - Date.now()) / (1000 * 60 * 60);
+            document.getElementById('goal-custom-timer-toggle').checked = true;
+            this.toggleCustomTimer();
+            if (diffHours > 0) {
+                document.getElementById('goal-timer-d').value = Math.floor(diffHours / 24);
+                document.getElementById('goal-timer-h').value = Math.floor(diffHours % 24);
+            } else {
+                document.getElementById('goal-timer-d').value = 0;
+                document.getElementById('goal-timer-h').value = 0;
+            }
+        }
+
+        document.getElementById('btn-save-goal-direct').innerText = this.t('goals_save_changes');
+        document.getElementById('btn-cancel-edit').style.display = 'block';
+        document.getElementById('tab-goals').scrollIntoView({behavior: 'smooth'});
+    },
+
+    cancelEditGoal: function() {
+        this.editingGoalId = null;
+        document.getElementById('goal-input').value = '';
+        document.getElementById('goal-nlp-suggestions').innerHTML = '';
+        document.getElementById('custom-step-container').style.display = 'none';
+        document.getElementById('goal-custom-timer-toggle').checked = false;
+        this.toggleCustomTimer();
+        document.getElementById('btn-save-goal-direct').innerText = this.t('goals_save_btn');
+        document.getElementById('btn-cancel-edit').style.display = 'none';
+    },
+
+    renderActiveGoals: function() {
+        const dailyContainer = document.getElementById('active-daily-goals-list');
+        const weeklyContainer = document.getElementById('active-weekly-goals-list');
+        if(!dailyContainer || !weeklyContainer) return;
+
+        dailyContainer.innerHTML = '';
+        weeklyContainer.innerHTML = '';
+
         const now = Date.now();
+        let hasDaily = false;
+        let hasWeekly = false;
 
         this.data.activeGoals.forEach(g => {
-            if (g.type !== this.data.currentGoalType) return;
-
             let stepsHtml = '';
-            if(g.steps.length > 0) {
+            if(g.steps && g.steps.length > 0) {
                 stepsHtml = '<ul>' + g.steps.map(s => `<li>${s}</li>`).join('') + '</ul>';
             }
 
@@ -1041,10 +1105,23 @@ const app = {
                 </div>
                 <h4 style="margin-top:8px;">${g.title}</h4>
                 ${stepsHtml}
-                <button class="outline-btn" style="margin-top:8px;" onclick="app.evaluateGoal(${g.id})">${this.t('active_goal_eval')}</button>
+                <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
+                    <button class="outline-btn" style="flex: 1;" onclick="app.evaluateGoal(${g.id})">${this.t('active_goal_eval')}</button>
+                    <button class="outline-btn" style="flex: 1;" onclick="app.editGoal(${g.id})">${this.t('journal_btn_edit')}</button>
+                </div>
             `;
-            container.appendChild(div);
+
+            if (g.type === 'daily') {
+                hasDaily = true;
+                dailyContainer.appendChild(div);
+            } else {
+                hasWeekly = true;
+                weeklyContainer.appendChild(div);
+            }
         });
+
+        if (!hasDaily) dailyContainer.innerHTML = `<p style="text-align:center; opacity:0.6;">${this.t('active_goal_empty')}</p>`;
+        if (!hasWeekly) weeklyContainer.innerHTML = `<p style="text-align:center; opacity:0.6;">${this.t('active_goal_empty')}</p>`;
     },
 
     evaluateGoal: function(id) {
@@ -1154,7 +1231,7 @@ const app = {
 
                 div.innerHTML = `
                     <div class="entry-header">
-                        <span class="badge ${entry.type}">${entry.type.toUpperCase()}</span>
+                        <span class="badge ${entry.type}">${this.t('badge_' + entry.type) || entry.type.toUpperCase()}</span>
                         <small>${timeStr} ${emojiHtml}</small>
                     </div>
                     <p id="entry-text-${entry.id}">${entry.text}</p>
