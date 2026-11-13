@@ -1,49 +1,30 @@
 # 🌱 Re:Mindful – Mindfulness & Personal Growth
 
-[![Version](https://img.shields.io/badge/version-2.3.0.0-blue.svg)](https://github.com/tsvie/ReMindful_2/releases)
+[![Version](https://img.shields.io/badge/version-2.5.1.0.0-blue.svg)](https://github.com/tsvie/ReMindful_2/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-Android-green.svg)](https://github.com/tsvie/ReMindful_2)
 
 *(🇬🇧 English description below)*
 
-<div align="center">
-  <img src="docs/images/1.jpg" width="18%" alt="Onboarding Start" style="margin: 0 5px;"/>
-  <img src="docs/images/2.jpg" width="18%" alt="Mood Tracker" style="margin: 0 5px;"/>
-  <img src="docs/images/3.jpg" width="18%" alt="Goals & NLP" style="margin: 0 5px;"/>
-  <img src="docs/images/4.jpg" width="18%" alt="Celebrate Success" style="margin: 0 5px;"/>
-  <img src="docs/images/5.jpg" width="18%" alt="PDF Export" style="margin: 0 5px;"/>
-  <br>
-  <img src="docs/images/6.jpg" width="18%" alt="Settings & Colors" style="margin: 0 5px;"/>
-  <img src="docs/images/7.jpg" width="18%" alt="Daily Reminders" style="margin: 0 5px;"/>
-  <img src="docs/images/8.jpg" width="18%" alt="Welcome Splash" style="margin: 0 5px;"/>
-</div>
-
 ## 🇩🇪 Deutsch
 
-**Re:Mindful** ist eine datenschutzfreundliche, 100% offline funktionierende Tagebuch- und Achtsamkeits-App für Android. Sie hilft dir bei der Selbstreflexion, der Zielsetzung und dabei, kleine Erfolge im Alltag bewusst zu feiern.
+**Re:Mindful** ist eine datenschutzfreundliche, 100% offline funktionierende Tagebuch- und Achtsamkeits-App für Android. Sie hilft dir bei der Selbstreflexion, der flexiblen Zielsetzung mit Timern und dabei, kleine Erfolge im Alltag bewusst zu feiern.
 
-### 📱 Screenshots
-<p align="center">
-  <img src="assets/screenshots/screen_1.png" width="23%" />
-  <img src="assets/screenshots/screen_3.png" width="23%" />
-  <img src="assets/screenshots/screen_4.png" width="23%" />
-  <img src="assets/screenshots/screen_5.png" width="23%" />
-</p>
-
-### ✨ Hauptfunktionen
-* **Offline-First & Privacy by Design:** Alle Daten werden ausschließlich lokal auf deinem Gerät gespeichert.
-* **Intelligentes NLP (0-MB KI):** Die App zerlegt überwältigende Ziele in 11 Kategorien (wie "Aufräumen" oder "Steuern") in machbare, völlig druckfreie Mikroziele.
-* **Mood-Tracker & Emotionale Reflexion:** Dokumentiere deine Stimmung inkl. zusätzlicher Notizen. Das NLP hilft dir dabei, komplexe Gefühle in Worte zu fassen.
-* **Swipe-to-Navigate:** Wechsle intuitiv durch Wischen nach links oder rechts durch die verschiedenen Ansichten.
-* **Dynamisches Erscheinungsbild:** Wähle zwischen Dark-, Light- oder System-Mode, gepaart mit 6 wunderschönen "Material You"-Farbpaletten.
-* **Passwortschutz (App Lock):** Sperre deine intimsten Gedanken auf Wunsch vor unbefugten Blicken (wird direkt im 2-Step-Onboarding abgefragt).
-* **Tagebuch & PDF-Export:** Exportiere deine Einträge chronologisch als formatiertes PDF-Dokument (inkl. deutschem Datumsformat).
-* **Zweisprachig (i18n):** Vollständig in Deutsch und Englisch verfügbar.
+### ✨ Hauptfunktionen & Neuerung Highlights
+* **Flexible Ziel-Timer & Automatische Auswertung:** Versehen Tages- (Standard: 24 Std., variabel 1h–6d 23h) oder Wochenziele (Standard: 7 Tage, variabel 7d 1h–13d 23h) mit individuellen Ablaufzeiten. Beim Öffnen des Ziele-Tabs prüft die App abgelaufene Ziele automatisch und lässt dich diese sofort auswerten ("Voll", "Teilweise", "Nicht erreicht") oder überspringen.
+* **Übersichtliche Ziele-Struktur & Nachbearbeitung:** Tages- und Wochenziele werden sauber in eigenen Abschnitten dargestellt. Über einen eigenen "Bearbeiten"-Button kannst du Ziele, Teilziele und den Timer jederzeit nachträglich anpassen.
+* **Direktes Speichern & NLP-Mikroziele:** Speichere Ziele direkt per Knopfdruck oder zerlege große Vorhaben in 11 Kategorien (z.B. Haushalt, Sport, Lernen) in winzige, druckfreie Schritte.
+* **Mood-Tracker & Emotionale Reflexion:** Dokumentiere deine Stimmung inkl. Positiv/Negativ-Reflexion und Notizen. Die "Gefühle in Worte fassen"-Funktion hilft dir, Emotionen präzise zu beschreiben.
+* **Swipe-to-Navigate:** Wechsle intuitiv durch leichtes Wischen nach links oder rechts zwischen den einzelnen Bereichen.
+* **2-Step Onboarding:** Schneller Einstieg mit zweistufiger Ersteinrichtung (Sprache, Name, Passwortschutz & Uhrzeit für tägliche Erinnerungen inkl. Zurück-Button).
+* **Dynamisches Design & Gefüllte Buttons:** Wähle zwischen Dark-, Light- oder System-Mode sowie 6 harmonischen "Material You"-Farbwelten mit ausgefüllten, elegant abgestimmten Buttons.
+* **Tagebuch & PDF-Export:** Exportiere deine Einträge chronologisch als formatiertes PDF-Dokument direkt in deinen Downloads-Ordner.
+* **Offline-First & Privacy by Design:** Alle Daten bleiben 100% lokal auf deinem Gerät. Keine Cloud, kein Tracking, kein Zwang.
 
 ### 🚀 Installation
 Du kannst die fertige App direkt installieren, ohne sie selbst kompilieren zu müssen:
 1. Gehe zu den [Releases](https://github.com/tsvie/ReMindful_2/releases/latest).
-2. Lade dir die neueste `app-release.apk` (v2.3.0.0) herunter.
+2. Lade dir die neueste `app-release.apk` (v2.5.1.0.0) herunter.
 3. Führe die Datei auf deinem Android Smartphone aus.
 
 ### 🛠 Tech-Stack
@@ -56,30 +37,23 @@ Du kannst die fertige App direkt installieren, ohne sie selbst kompilieren zu m�
 
 ## 🇬🇧 English
 
-**Re:Mindful** is a privacy-first, 100% offline journaling and mindfulness app for Android. It assists you with self-reflection, goal setting, and consciously celebrating small everyday successes.
+**Re:Mindful** is a privacy-first, 100% offline journaling and mindfulness app for Android. It assists you with self-reflection, goal setting with custom timers, and consciously celebrating small everyday successes.
 
-### 📱 Screenshots
-<p align="center">
-  <img src="assets/screenshots/screen_1.png" width="23%" />
-  <img src="assets/screenshots/screen_3.png" width="23%" />
-  <img src="assets/screenshots/screen_4.png" width="23%" />
-  <img src="assets/screenshots/screen_5.png" width="23%" />
-</p>
-
-### ✨ Key Features
-* **Offline-First & Privacy by Design:** All data is stored exclusively locally on your device.
-* **Smart NLP (0-MB AI):** The app breaks down overwhelming goals across 11 categories into actionable, pressure-free micro-steps.
-* **Mood Tracker & Emotional Reflection:** Document your mood including additional notes. The NLP helps you put complex feelings into words.
-* **Swipe-to-Navigate:** Move intuitively between tabs by simply swiping left or right.
-* **Dynamic Appearance:** Choose between Dark, Light, or System modes paired with 6 beautiful "Material You" color palettes.
-* **Password Protection (App Lock):** Secure your most intimate thoughts from prying eyes (set up via a 2-step onboarding).
-* **Journal & PDF Export:** Export your entries chronologically as a formatted PDF document.
-* **Bilingual (i18n):** Fully available in English and German.
+### ✨ Key Features & Latest Highlights
+* **Custom Goal Timers & Automatic Evaluation:** Set custom expiration timers for Daily (Default: 24h, 1h–6d 23h) and Weekly goals (Default: 7d, 7d 1h–13d 23h). Upon opening the Goals tab, expired goals are automatically detected for evaluation ("Achieved", "Partially", "Not achieved") or can be skipped for later.
+* **Organized Goal Columns & Easy Editing:** Daily and Weekly goals are cleanly separated into dedicated sections. Edit goal titles, steps, and timers at any time with a single tap.
+* **Direct Add & Smart Micro-Goals (NLP):** Save goals directly or use the built-in NLP engine across 11 categories to break down overwhelming tasks into effortless micro-steps.
+* **Mood Tracker & Emotional Reflection:** Record your mood along with positive/negative notes. The "Put feelings into words" assistant helps name complex emotions.
+* **Swipe-to-Navigate:** Seamlessly swipe left or right to switch between screens.
+* **Refined 2-Step Onboarding:** Simple setup flow covering Language, Name, Password protection, and Daily Reminders with full Back-button support.
+* **Dynamic Appearance & Filled Theme Buttons:** Material You theme integration with 6 custom color palettes and sleek filled buttons matching your chosen palette.
+* **Journal & PDF Export:** Export your formatted entries chronologically to a clean PDF saved straight to your Downloads folder.
+* **Offline-First & Privacy by Design:** All data remains 100% locally on your phone. No cloud, no analytics, no trackers.
 
 ### 🚀 Installation
 You can install the ready-to-use app without compiling it yourself:
 1. Go to the [Latest Release](https://github.com/tsvie/ReMindful_2/releases/latest) page.
-2. Download the latest `app-release.apk` (v2.3.0.0).
+2. Download the latest `app-release.apk` (v2.5.1.0.0).
 3. Run the file on your Android smartphone to install.
 
 ### 🛠 Tech Stack
@@ -89,4 +63,4 @@ You can install the ready-to-use app without compiling it yourself:
 > **Important Note:** Re:Mindful is designed for personal growth and self-reflection. It is not a medical device and does not replace professional therapy or a doctor.
 
 ---
-*Developed with 💚 by Tian Svenja Vieth.*
+*Developed with 💚 by Tian Svenja Vieth. Many thanks to L. for the ideas and feedback.*
