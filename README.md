@@ -1,6 +1,6 @@
 # 🌱 Re:Mindful – Mindfulness & Personal Growth
 
-[![Version](https://img.shields.io/badge/version-2.5.1.0.0-blue.svg)](https://github.com/tsvie/ReMindful_2/releases)
+[![Version](https://img.shields.io/badge/version-2.6.0.0-blue.svg)](https://github.com/tsvie/ReMindful_2/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-Android-green.svg)](https://github.com/tsvie/ReMindful_2)
 
@@ -8,11 +8,13 @@
 
 ## 🇩🇪 Deutsch
 
-**Re:Mindful** ist eine datenschutzfreundliche, 100% offline funktionierende Tagebuch- und Achtsamkeits-App für Android. Sie hilft dir bei der Selbstreflexion, der flexiblen Zielsetzung mit Timern und dabei, kleine Erfolge im Alltag bewusst zu feiern.
+**Re:Mindful** ist eine datenschutzfreundliche, 100% offline funktionierende Tagebuch- und Achtsamkeits-App für Android. Sie hilft dir bei der Selbstreflexion, der flexiblen Zielsetzung mit Echtzeit-Timern und dabei, kleine Erfolge im Alltag bewusst zu feiern.
 
-### ✨ Hauptfunktionen & Neuerung Highlights
-* **Flexible Ziel-Timer & Automatische Auswertung:** Versehen Tages- (Standard: 24 Std., variabel 1h–6d 23h) oder Wochenziele (Standard: 7 Tage, variabel 7d 1h–13d 23h) mit individuellen Ablaufzeiten. Beim Öffnen des Ziele-Tabs prüft die App abgelaufene Ziele automatisch und lässt dich diese sofort auswerten ("Voll", "Teilweise", "Nicht erreicht") oder überspringen.
-* **Übersichtliche Ziele-Struktur & Nachbearbeitung:** Tages- und Wochenziele werden sauber in eigenen Abschnitten dargestellt. Über einen eigenen "Bearbeiten"-Button kannst du Ziele, Teilziele und den Timer jederzeit nachträglich anpassen.
+### ✨ Hauptfunktionen & Neuerung Highlights (v2.6.0.0)
+* **Echtzeit Live-Countdown & Flexible Timer:** Deine aktiven Ziel-Timer zählen ab sofort sekundengenau in Echtzeit rückwärts! Versehe Tagesziele (Standard: 24 Std., variabel 1 Min bis 6d 23h 59m) oder Wochenziele (Standard: 7 Tage, variabel 7d 1m bis 13d 23h 59m) mit individuellen Laufzeiten.
+* **Automatisches Auswertungs-Popup:** Beim Öffnen des Ziele-Tabs prüft die App abgelaufene Ziele automatisch und öffnet ein Popup zur sofortigen Bewertung ("Voll", "Teilweise", "Nicht erreicht") oder zum Überspringen.
+* **Timer neu stellen & Verlängern:** Du kannst abgelaufene Timer direkt im Popup oder auf der Zielkarte mit einem Klick neu stellen und verlängern.
+* **Übersichtliche Ziele-Struktur & Nachbearbeitung:** Tages- und Wochenziele werden übersichtlich in separaten Abschnitten aufgelistet. Über den "Bearbeiten"-Button lassen sich Titel, Teilziele und Timer jederzeit nachträglich anpassen.
 * **Direktes Speichern & NLP-Mikroziele:** Speichere Ziele direkt per Knopfdruck oder zerlege große Vorhaben in 11 Kategorien (z.B. Haushalt, Sport, Lernen) in winzige, druckfreie Schritte.
 * **Mood-Tracker & Emotionale Reflexion:** Dokumentiere deine Stimmung inkl. Positiv/Negativ-Reflexion und Notizen. Die "Gefühle in Worte fassen"-Funktion hilft dir, Emotionen präzise zu beschreiben.
 * **Swipe-to-Navigate:** Wechsle intuitiv durch leichtes Wischen nach links oder rechts zwischen den einzelnen Bereichen.
@@ -24,7 +26,7 @@
 ### 🚀 Installation
 Du kannst die fertige App direkt installieren, ohne sie selbst kompilieren zu müssen:
 1. Gehe zu den [Releases](https://github.com/tsvie/ReMindful_2/releases/latest).
-2. Lade dir die neueste `app-release.apk` (v2.5.1.0.0) herunter.
+2. Lade dir die neueste `app-release.apk` (v2.6.0.0) herunter.
 3. Führe die Datei auf deinem Android Smartphone aus.
 
 ### 🛠 Tech-Stack
@@ -37,11 +39,13 @@ Du kannst die fertige App direkt installieren, ohne sie selbst kompilieren zu m�
 
 ## 🇬🇧 English
 
-**Re:Mindful** is a privacy-first, 100% offline journaling and mindfulness app for Android. It assists you with self-reflection, goal setting with custom timers, and consciously celebrating small everyday successes.
+**Re:Mindful** is a privacy-first, 100% offline journaling and mindfulness app for Android. It assists you with self-reflection, goal setting with custom real-time timers, and consciously celebrating small everyday successes.
 
-### ✨ Key Features & Latest Highlights
-* **Custom Goal Timers & Automatic Evaluation:** Set custom expiration timers for Daily (Default: 24h, 1h–6d 23h) and Weekly goals (Default: 7d, 7d 1h–13d 23h). Upon opening the Goals tab, expired goals are automatically detected for evaluation ("Achieved", "Partially", "Not achieved") or can be skipped for later.
-* **Organized Goal Columns & Easy Editing:** Daily and Weekly goals are cleanly separated into dedicated sections. Edit goal titles, steps, and timers at any time with a single tap.
+### ✨ Key Features & Latest Highlights (v2.6.0.0)
+* **Real-time Live Countdown & Custom Timers:** Goal timers now count down live every second! Set custom timers for Daily goals (Default: 24h, 1 min to 6d 23h 59m) and Weekly goals (Default: 7d, 7d 1m to 13d 23h 59m).
+* **Automated Expiry Popup:** Upon switching to the Goals tab, the app automatically detects expired goals and displays a prompt for evaluation ("Achieved", "Partially", "Not achieved") or skipping.
+* **Reset & Extend Timers:** Easily reset or extend expired goal timers directly within the popup or on individual goal cards.
+* **Organized Goal Sections & Easy Editing:** Daily and Weekly goals are cleanly separated into dedicated lists. Edit goal titles, steps, and timers at any time.
 * **Direct Add & Smart Micro-Goals (NLP):** Save goals directly or use the built-in NLP engine across 11 categories to break down overwhelming tasks into effortless micro-steps.
 * **Mood Tracker & Emotional Reflection:** Record your mood along with positive/negative notes. The "Put feelings into words" assistant helps name complex emotions.
 * **Swipe-to-Navigate:** Seamlessly swipe left or right to switch between screens.
@@ -53,7 +57,7 @@ Du kannst die fertige App direkt installieren, ohne sie selbst kompilieren zu m�
 ### 🚀 Installation
 You can install the ready-to-use app without compiling it yourself:
 1. Go to the [Latest Release](https://github.com/tsvie/ReMindful_2/releases/latest) page.
-2. Download the latest `app-release.apk` (v2.5.1.0.0).
+2. Download the latest `app-release.apk` (v2.6.0.0).
 3. Run the file on your Android smartphone to install.
 
 ### 🛠 Tech Stack
