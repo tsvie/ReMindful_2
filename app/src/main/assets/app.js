@@ -488,6 +488,8 @@ const app = {
                 document.getElementById('screen-main').style.display = 'none';
             } else {
                 document.getElementById('screen-main').style.display = 'block';
+                this.renderActiveGoals();
+                this.renderJournal();
             }
         } else {
             document.getElementById('screen-onboarding').style.display = 'flex';
@@ -693,6 +695,8 @@ const app = {
             document.getElementById('screen-lock').style.display = 'none';
             document.getElementById('input-lock-pw').value = '';
             document.getElementById('screen-main').style.display = 'block';
+            this.renderActiveGoals();
+            this.renderJournal();
         } else {
             this.showToast(this.t('toast_pw_wrong'));
         }
@@ -760,9 +764,10 @@ const app = {
     },
     closeSplash: function() {
         document.getElementById('screen-splash').style.display = 'none';
-        document.getElementById('screen-main').style.display = 'flex';
+        document.getElementById('screen-main').style.display = 'block';
         this.switchTab('mood', document.querySelector('.bottom-nav button'));
         this.renderActiveGoals();
+        this.renderJournal();
     },
 
     // --- TABS ---
@@ -772,7 +777,10 @@ const app = {
         document.getElementById('tab-' + tabId).style.display = 'block';
         if(btnElement) btnElement.classList.add('active');
         if(tabId === 'journal') this.renderJournal();
-        if(tabId === 'goals') this.checkExpiredGoals();
+        if(tabId === 'goals') {
+            this.checkExpiredGoals();
+            this.renderActiveGoals();
+        }
         if(tabId === 'settings') {
             document.getElementById('settings-name').value = this.data.user.name;
             document.querySelectorAll('#tab-settings .lang-btn').forEach(b => b.classList.remove('active'));
