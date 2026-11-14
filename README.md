@@ -10,6 +10,20 @@
 
 **Re:Mindful** ist eine datenschutzfreundliche, 100% offline funktionierende Tagebuch- und Achtsamkeits-App für Android. Sie hilft dir bei der Selbstreflexion, der flexiblen Zielsetzung mit Echtzeit-Timern und dabei, kleine Erfolge im Alltag bewusst zu feiern.
 
+### 📱 Screenshots & Impressionen
+<p align="center">
+  <img src="docs/images/8.png" width="22%" alt="Onboarding" />
+  <img src="docs/images/7.png" width="22%" alt="Erinnerungen" />
+  <img src="docs/images/1.png" width="22%" alt="Gefühlstracker" />
+  <img src="docs/images/3.png" width="22%" alt="Ziele & NLP" />
+</p>
+<p align="center">
+  <img src="docs/images/4.png" width="22%" alt="Erfolge feiern" />
+  <img src="docs/images/2.png" width="22%" alt="Tagebuch & PDF" />
+  <img src="docs/images/5.png" width="22%" alt="Einstellungen" />
+  <img src="docs/images/6.png" width="22%" alt="Farbwelten" />
+</p>
+
 ### ✨ Hauptfunktionen & Neuerung Highlights (v2.6.0.0)
 * **Echtzeit Live-Countdown & Flexible Timer:** Deine aktiven Ziel-Timer zählen ab sofort sekundengenau in Echtzeit rückwärts! Versehe Tagesziele (Standard: 24 Std., variabel 1 Min bis 6d 23h 59m) oder Wochenziele (Standard: 7 Tage, variabel 7d 1m bis 13d 23h 59m) mit individuellen Laufzeiten.
 * **Automatisches Auswertungs-Popup:** Beim Öffnen des Ziele-Tabs prüft die App abgelaufene Ziele automatisch und öffnet ein Popup zur sofortigen Bewertung ("Voll", "Teilweise", "Nicht erreicht") oder zum Überspringen.
@@ -40,6 +54,20 @@ Du kannst die fertige App direkt installieren, ohne sie selbst kompilieren zu m�
 ## 🇬🇧 English
 
 **Re:Mindful** is a privacy-first, 100% offline journaling and mindfulness app for Android. It assists you with self-reflection, goal setting with custom real-time timers, and consciously celebrating small everyday successes.
+
+### 📱 Screenshots & Previews
+<p align="center">
+  <img src="docs/images/8.png" width="22%" alt="Onboarding" />
+  <img src="docs/images/7.png" width="22%" alt="Reminders" />
+  <img src="docs/images/1.png" width="22%" alt="Mood Tracker" />
+  <img src="docs/images/3.png" width="22%" alt="Goals & Timers" />
+</p>
+<p align="center">
+  <img src="docs/images/4.png" width="22%" alt="Celebrate Success" />
+  <img src="docs/images/2.png" width="22%" alt="Journal & PDF" />
+  <img src="docs/images/5.png" width="22%" alt="Setup & Themes" />
+  <img src="docs/images/6.png" width="22%" alt="Color Schemes" />
+</p>
 
 ### ✨ Key Features & Latest Highlights (v2.6.0.0)
 * **Real-time Live Countdown & Custom Timers:** Goal timers now count down live every second! Set custom timers for Daily goals (Default: 24h, 1 min to 6d 23h 59m) and Weekly goals (Default: 7d, 7d 1m to 13d 23h 59m).
